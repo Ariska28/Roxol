@@ -1,0 +1,14 @@
+body {
+  font-family: $font-base;
+  font-weight: 500;
+  line-height: 1.2;
+  background-color: rgb(85, 85, 97);
+
+  &.no-scroll {
+    overflow: hidden;
+  }
+}
+
+button, a {
+  cursor: pointer;
+}

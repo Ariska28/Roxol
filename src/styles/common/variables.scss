@@ -1,0 +1,29 @@
+$c-primary: #F0EEE9;
+$c-accent:  #FFDF00;
+$c-accent-hover: #F2D508;
+$c-text-gray: #9D9D9D;
+$c-text-dark: #0E0E0E;
+
+$c-white: #fff;
+$c-brown: #BEB9A7;
+$c-brown-2: #DFDDD7;
+$c-gray-2:#646464;
+
+
+$s-padding-x-desktop: px-to-vw(42);
+$s-header-height-desktop: px-to-vw(108);
+$s-header-height-mob: px-to-vw(69);
+
+$s-border-radius: 12px;
+
+$font-base: 'Int', Arial, sans-serif;
+
+:root {
+  --fz: .0521vw;
+}
+
+@include media-down(sm) {
+  :root {
+    --fz: .2778vw;
+  }
+}

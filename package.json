@@ -1,0 +1,18 @@
+{
+  "name": "my-project",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 3 versions, not dead",
+  "scripts": {
+    "start": "parcel ./src/index.html",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.11.0",
+    "parcel": "latest",
+    "sass": "^1.70.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.9",
+    "node-sass": "^9.0.0"
+  }
+}

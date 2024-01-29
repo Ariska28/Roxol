@@ -1,0 +1,1 @@
+{"mappings":"ACAA","sources":["src/styles/main.scss","src/styles/components/header.scss"],"sourcesContent":["@import './components/header.scss';\n",null],"names":[],"version":3,"file":"main.css.map","sourceRoot":"/__parcel_source_root/"}
