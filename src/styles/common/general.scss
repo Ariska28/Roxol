@@ -1,8 +1,7 @@
 body {
   font-family: $font-base;
+  color: $c-text-dark;
   font-weight: 500;
-  line-height: 1.2;
-  background-color: rgb(85, 85, 97);
 
   &.no-scroll {
     overflow: hidden;
@@ -11,4 +10,8 @@ body {
 
 button, a {
   cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
 }

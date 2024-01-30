@@ -579,6 +579,101 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"fFaKF":[function(require,module,exports) {
+var _header = require("./components/header");
+document.addEventListener("DOMContentLoaded", ()=>{
+    (0, _header.header)();
+});
+
+},{"./components/header":"d8aIH"}],"d8aIH":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "header", ()=>header);
+function header() {
+    const headerMob = document.querySelector("[data-header-mobile]");
+    const burgerMob = headerMob?.querySelector("[data-header-mobile-burger]");
+    const sublistsMob = headerMob?.querySelectorAll("[data-header-mobile-sublist]");
+    burgerMob?.addEventListener("click", ()=>{
+        toggleMobileMenu(headerMob);
+        document.body.classList.add("no-scroll");
+        if (!headerMob?.classList.contains("is-open")) {
+            document.body.classList.remove("no-scroll");
+            closeAllSubMenus(sublistsMob);
+        }
+    });
+    sublistsMob?.forEach((subList)=>{
+        openSubMenu(subList);
+        closeSubMenu(subList);
+    });
+    toggleDesktopSubMenus();
+}
+function closeAllSubMenus(subMenusList) {
+    subMenusList?.forEach((subList)=>{
+        subList?.classList.remove("is-open");
+    });
+}
+function toggleMobileMenu(mobMenu) {
+    mobMenu?.classList.toggle("is-open");
+}
+function openSubMenu(subMenu) {
+    const subListOpenBtn = subMenu?.querySelector("[data-header-mobile-sublist-open]");
+    subListOpenBtn.addEventListener("click", ()=>{
+        subMenu?.classList.add("is-open");
+    });
+}
+function closeSubMenu(subMenu) {
+    const subListCloseBtn = subMenu?.querySelector("[data-header-mobile-sublist-close]");
+    subListCloseBtn.addEventListener("click", ()=>{
+        subMenu?.classList.remove("is-open");
+    });
+}
+function toggleDesktopSubMenus() {
+    const header = document.querySelector("[data-header]");
+    const headerOpenContainers = header?.querySelectorAll("[data-header-open]");
+    headerOpenContainers.forEach((container)=>{
+        const headerOpenBtn = container?.querySelector("[data-header-open-btn]");
+        const headerCloseBtn = container?.querySelectorAll("[data-header-close-btn]");
+        headerOpenBtn?.addEventListener("click", ()=>{
+            container.classList.toggle("is-open");
+            document.body.classList.add("no-scroll");
+        });
+        headerCloseBtn?.forEach((closeBtn)=>{
+            closeBtn.addEventListener("click", ()=>{
+                container.classList.remove("is-open");
+                document.body.classList.remove("no-scroll");
+            });
+        });
+    });
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")
 
