@@ -78,17 +78,6 @@
   }
 }
 
-@mixin description-big {
-  font-weight: 500;
-  font-size: px-to-vw(20);
-  line-height: 130%;
-  letter-spacing: -.03em;
-
-  @include media-down(sm) {
-    font-size: px-to-vw(14);
-    letter-spacing: -.02em;
-  }
-}
 
 @mixin description-medium {
   font-weight: 400;
@@ -261,6 +250,10 @@
         transform: scale(1);
       }
     }
+  }
+
+  @include media-down(sm) {
+    border-radius: px-to-vw(6);
   }
 }
 
