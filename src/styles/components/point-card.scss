@@ -1,0 +1,48 @@
+.point-card {
+  background-color: $c-white;
+  padding: px-to-vw(24);
+  min-height: px-to-vw(354);
+  display: flex;
+  flex-direction: column;
+  border-radius: $s-border-radius;
+
+  @include media-down(sm) {
+    border-radius: $s-border-radius-mob;
+    min-height: px-to-vw(320);
+    padding: px-to-vw(16);
+  }
+}
+
+.point-card__point {
+  display: block;
+  width: px-to-vw(14);
+  height: px-to-vw(14);
+  border-radius: 50%;
+  background-color: $c-text-dark;
+
+  @include media-down(sm) {
+    width: px-to-vw(12);
+    height: px-to-vw(12);
+  }
+}
+
+.point-card__media {
+  display: flex;
+  margin: auto;
+
+  img {
+    margin: auto;
+    max-width: px-to-vw(100);
+    width: 100%;
+  }
+
+  @include media-down(sm) {
+    img {
+      max-width: px-to-vw(88);
+    }
+  }
+}
+
+.point-card__title {
+  @include title-4;
+}

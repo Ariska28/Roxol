@@ -4732,7 +4732,7 @@ function mobSplider(sliderAttr) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@splidejs/splide":"5CJev"}],"5CJev":[function(require,module,exports) {
+},{"@splidejs/splide":"5CJev","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5CJev":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "CLASSES", ()=>CLASSES);
