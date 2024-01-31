@@ -1,6 +1,7 @@
 body {
   font-family: $font-base;
   color: $c-text-dark;
+  background-color: $c-primary;
   font-weight: 500;
 
   &.no-scroll {

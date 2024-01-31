@@ -51,6 +51,8 @@ $height-submenus: px-to-vw(500);
     }
 
     .header__catalog-bg {
+      width: 100vw;
+      height: 100vh;
       z-index: 1;
       background-color: $c-text-dark;
     }
@@ -176,8 +178,8 @@ $height-submenus: px-to-vw(500);
   z-index: -1;
   background-color: transparent;
   opacity: 0.24;
-  width: 100vw;
-  height: 100vh;
+  width: 0;
+  height: 0;
   position: fixed;
   top: 0;
   left: 0;
@@ -341,6 +343,8 @@ $height-submenus: px-to-vw(500);
 
     .header__searching-bg {
       z-index: 1;
+      width: 100vw;
+      height: 100vh;
       background-color: $c-text-dark;
     }
   }
@@ -438,8 +442,8 @@ $height-submenus: px-to-vw(500);
   z-index: -1;
   background-color: transparent;
   opacity: 0.24;
-  width: 100vw;
-  height: 100vh;
+  width: 0;
+  height: 0;
   position: absolute;
   top: 0;
   left: 0;
