@@ -4,6 +4,7 @@
   min-height: px-to-vw(354);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   border-radius: $s-border-radius;
 
   @include media-down(sm) {
@@ -45,4 +46,17 @@
 
 .point-card__title {
   @include title-4;
+
+  margin-top: px-to-vw(40);
+
+  &--no-margin {
+    margin-top: 0;
+  }
+}
+
+.point-card__text {
+  @include paragraf-small;
+
+  margin-top: auto;
+  color: $c-gray-2;
 }

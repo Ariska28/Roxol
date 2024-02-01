@@ -11,16 +11,9 @@
 }
 
 .analogs__title {
-  @include title-2;
-
+  @include title-with-text;
+  
   margin-bottom: px-to-vw(60);
-
-  span {
-    @include description;
-    margin-right: 20%;
-    position: relative;
-    top: px-to-vw(-30);
-  }
 
   @include media-down(sm) {
     margin-bottom: px-to-vw(40);

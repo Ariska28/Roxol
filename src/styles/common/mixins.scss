@@ -278,3 +278,14 @@
     background-color: $c-accent-hover;
   }
 }
+
+@mixin title-with-text {
+  @include title-2;
+
+  span {
+    @include description;
+    margin-right: 20%;
+    position: relative;
+    top: px-to-vw(-30);
+  }
+}

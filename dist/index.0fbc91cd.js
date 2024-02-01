@@ -4715,8 +4715,9 @@ parcelHelpers.export(exports, "mobSplider", ()=>mobSplider);
 var _splide = require("@splidejs/splide");
 var _splideDefault = parcelHelpers.interopDefault(_splide);
 function mobSplider(sliderAttr) {
-    if (window.matchMedia("(max-width: 769px)").matches) {
-        const splide = new (0, _splideDefault.default)(`${sliderAttr}`, {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    if (window.matchMedia("(max-width: 769px)").matches) spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
             pagination: false,
             arrows: false,
             fixedWidth: "81%",
@@ -4729,7 +4730,7 @@ function mobSplider(sliderAttr) {
             bar.style.width = String(100 * rate) + "%";
         });
         splide.mount();
-    }
+    });
 }
 
 },{"@splidejs/splide":"5CJev","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5CJev":[function(require,module,exports) {

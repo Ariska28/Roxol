@@ -53,19 +53,13 @@
   margin-right: px-to-vw(-16);
 }
 
-.popular-purchase__slider-progress {
+
+
+.splide__slider-progress {
   display: none;
 
   @include media-down(sm) {
     display: block;
-    background: $c-gray-line;
     margin-top: px-to-vw(32);
   }
-}
-
-.popular-purchase__slider-progress__bar {
-  background: $c-text-dark;
-  height: 2px;
-  transition: width 400ms ease;
-  width: 0;
 }
