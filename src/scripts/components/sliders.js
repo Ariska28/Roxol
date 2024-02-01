@@ -2,12 +2,14 @@ import Splide from "@splidejs/splide";
 
 export function initProgressBar(slider) {
   const bar = slider.root.querySelector( '[data-slider-bar]' );
-      
-  slider.on('mounted move', function () {
-    const end  = slider.Components.Controller.getEnd() + 1;
-    const rate = Math.min( ( slider.index + 1 ) / end, 1 );
-    bar.style.width = String( 100 * rate ) + '%';
-  });
+
+  if(bar) {
+    slider.on('mounted move', function () {
+      const end  = slider.Components.Controller.getEnd() + 1;
+      const rate = Math.min( ( slider.index + 1 ) / end, 1 );
+      bar.style.width = String( 100 * rate ) + '%';
+    });
+  }
 }
 
 export function mobSplider(sliderAttr) {
@@ -51,4 +53,27 @@ export function desktopSplider(sliderAttr) {
       splide.mount();
     })
   }
+}
+
+export function spliderWithArrows(sliderAttr) {
+  const spleders =  document.querySelectorAll(`${sliderAttr}`);
+
+    spleders.forEach((el) => {
+      const splide = new Splide(el, {
+        pagination: false,
+        fixedWidth: '38.5%',
+        gap : '0px',
+        perMove: 1,
+        breakpoints: {
+          767: {
+            fixedWidth: '81%',
+            arrows:false
+          },
+        }
+      });
+      
+      initProgressBar(splide) 
+      
+      splide.mount();
+    })
 }

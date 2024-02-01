@@ -586,6 +586,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     (0, _header.header)();
     (0, _sliders.mobSplider)("[data-mobile-slider]");
     (0, _sliders.desktopSplider)("[data-slider-desktop]");
+    (0, _sliders.spliderWithArrows)("[data-slider]");
 // gsap.from("[data-hero-slider]", {
 //   x: 2000,
 //   duration: 3,
@@ -4715,11 +4716,12 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "initProgressBar", ()=>initProgressBar);
 parcelHelpers.export(exports, "mobSplider", ()=>mobSplider);
 parcelHelpers.export(exports, "desktopSplider", ()=>desktopSplider);
+parcelHelpers.export(exports, "spliderWithArrows", ()=>spliderWithArrows);
 var _splide = require("@splidejs/splide");
 var _splideDefault = parcelHelpers.interopDefault(_splide);
 function initProgressBar(slider) {
     const bar = slider.root.querySelector("[data-slider-bar]");
-    slider.on("mounted move", function() {
+    if (bar) slider.on("mounted move", function() {
         const end = slider.Components.Controller.getEnd() + 1;
         const rate = Math.min((slider.index + 1) / end, 1);
         bar.style.width = String(100 * rate) + "%";
@@ -4751,6 +4753,25 @@ function desktopSplider(sliderAttr) {
             wheelSleep: 1000,
             easing: "cubic-bezier(0.25, 1, 0.5, 1)",
             releaseWheel: true
+        });
+        initProgressBar(splide);
+        splide.mount();
+    });
+}
+function spliderWithArrows(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            fixedWidth: "38.5%",
+            gap: "0px",
+            perMove: 1,
+            breakpoints: {
+                767: {
+                    fixedWidth: "81%",
+                    arrows: false
+                }
+            }
         });
         initProgressBar(splide);
         splide.mount();
