@@ -27,6 +27,7 @@
 .industry-solutions__description {
   @include description;
 
+  display: block;
   margin-bottom: px-to-vw(40);
 
   @include media-down(sm) {

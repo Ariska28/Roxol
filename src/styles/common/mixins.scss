@@ -216,6 +216,7 @@
       width: px-to-vw(20);
       height: px-to-vw(20);
       background: url('../assets/images/btnArrow.svg') no-repeat center;
+      background-size: contain;
       transition: transform 0.2s ease-in-out;
     }
   
@@ -254,6 +255,14 @@
 
   @include media-down(sm) {
     border-radius: px-to-vw(6);
+
+    span {
+      &::after, 
+      &::before {
+        width: px-to-vw(10);
+        height: px-to-vw(10);
+      }
+    }
   }
 }
 
