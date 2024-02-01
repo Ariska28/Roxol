@@ -1,10 +1,11 @@
 import { header } from "./components/header";
 import { gsap } from "gsap";
-import { mobSplider } from "./components/mobSplider";
+import { mobSplider, desktopSplider } from "./components/sliders";
 
 document.addEventListener("DOMContentLoaded", () => {
   header();
   mobSplider('[data-mobile-slider]');
+  desktopSplider('[data-slider-desktop]')
 
   // gsap.from("[data-hero-slider]", {
   //   x: 2000,

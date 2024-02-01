@@ -66,3 +66,12 @@
     }
   }
 }
+
+.assortment__slider-progress {
+  display: none;
+
+  @include media-down(sm) {
+    display: block;
+    margin-top: px-to-vw(32);
+  }
+}
