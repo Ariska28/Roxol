@@ -55,7 +55,7 @@
   margin-right: px-to-vw(24) !important;
   transition: background-color 0.4s ease-in-out;
 
-  &.is-active {
+  &:nth-child(2n){
     background-color: $c-accent; 
   }
 
@@ -68,6 +68,10 @@
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    &:nth-child(2n){
+      background-color: $c-white; 
     }
   }
 }

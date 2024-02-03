@@ -10,6 +10,12 @@
       border-color: $c-accent;
       background-color: $c-accent;
     }
+
+    .card__media {
+      img {
+        transform: scale(1.1);
+      }
+    }
   }
 
   @include media-down(sm) {
@@ -37,8 +43,10 @@
 
 .card__media {
   display: flex;
+  overflow: hidden;
 
   img {
+    transition: transform 0.2s ease-in;
     max-width: px-to-vw(240);
     margin: auto;
   }

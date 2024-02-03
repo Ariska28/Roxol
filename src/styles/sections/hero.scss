@@ -1,7 +1,12 @@
 .hero__container {
   @include container;
 
+  padding-bottom: px-to-vw(42);
   position: relative;
+
+  @include media-down(sm) {
+    padding-bottom: 0;
+  }
 }
 
 .hero__slider {
@@ -9,6 +14,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   padding: px-to-vw(212) px-to-vw(52);
+  height:  calc(100vh - 150 * var(--fz));
   border-radius: $s-border-radius;
   display: flex;
   flex-direction: column;
@@ -19,7 +25,7 @@
     overflow: visible;
     margin-left: px-to-vw(-16);
     margin-right:px-to-vw(-16);
-    height: 90vh;
+    height:  calc(100vh - 69 * var(--fz));
     background-image: url('../assets/images/hero-slide-mob.jpg');
   }
 }
@@ -33,6 +39,7 @@
 
   @include media-down(sm) {
     width: 100%;
+    margin-bottom: px-to-vw(16);
   }
 }
 
@@ -56,16 +63,30 @@
   @include media-down(sm) {
     width: 100%;
     margin-top: auto;
+
+    span {
+      transform: translateX(0);
+      &::after,
+      &::before {
+        display: none;
+      }
+    }
+
+    &:hover {
+      span {
+        transform: translateX(0);
+      }
+    }
   }
 }
 
 .hero__line {
   height: 1px;
   left: 0;
-  right: 0;
+  width: px-to-vw(282);
   background-color: #606060;
   position: absolute;
-  bottom: px-to-vw(63);
+  bottom: px-to-vw(106);
   margin: 0 px-to-vw(126);
 
   @include media-down(sm) {

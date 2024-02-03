@@ -27,7 +27,6 @@
 .catalog-links__item-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: px-to-vw(32) 0 px-to-vw(40);
   transition: 0.2s padding ease-in;
   position: relative;
@@ -86,8 +85,12 @@
 
   color: $c-text-gray;
   position: relative;
-
+  
   transition: 0.2s color ease-in;
+
+  &:first-child {
+    width: 40.5%;
+  }
 
   span {
     @include description;
@@ -121,6 +124,7 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
+  margin-left: auto;
   transition: background-color 0.2s ease-in, border-color 0.2s ease-in;
 
   @include media-down(sm) {
