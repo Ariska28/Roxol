@@ -29,7 +29,7 @@ $s-border-radius-mob: 6px;
 $font-base: 'Int', Arial, sans-serif;
 
 :root {
-  --fz: .0521vw;
+  --fz: .0521vw; 
 }
 
 @include media-down(sm) {

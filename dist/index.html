@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -15,7 +15,7 @@
           </a>
         </div>
 
-        <div class="header__catalog" data-header-open="">
+        <div class="header__catalog" data-header-open=""> 
           <div class="header__catalog-bg" data-header-close-btn="">
           </div>
 
@@ -252,14 +252,14 @@
               ООО «РОКСОЛ». Поставка товаров по всей России
             </span>
           </div>
-        </div>
+        </div> 
 
         <div class="header__searching" data-header-open="">
 
           <div class="header__searching-bg" data-header-close-btn="">
           </div>
 
-          <button class="header__searching-btn" data-header-open-btn="">
+          <button class="header__searching-btn" data-header-open-btn="" data-header-hide-mobile="">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewbox="0 0 24 25" fill="none">
               <ellipse cx="11.058" cy="11.5652" rx="7.06194" ry="7.01251" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></ellipse>
               <path d="M20.0025 20.4473L16.0508 16.5233" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -352,31 +352,31 @@
                 <ul class="header__nav-sublist">
                   <li class="header__nav-sublist_item">
                     <a href="#">
-                      Опросный лист для подбора смазки
+                      Контакты
                     </a>
                   </li>
   
                   <li class="header__nav-sublist_item">
                     <a href="#">
-                      Контрактное производство
+                      Доставка
                     </a>
                   </li>
   
                   <li class="header__nav-sublist_item">
                     <a href="#">
-                      Закупаем
+                      Где купить
                     </a>
                   </li>
   
                   <li class="header__nav-sublist_item">
                     <a href="#">
-                      Статьи
+                      Общие условия продаж от 30.10.2019 
                     </a>
                   </li>
   
                   <li class="header__nav-sublist_item">
                     <a href="#">
-                      Новости
+                      Реквизиты компании 
                     </a>
                   </li>
                 </ul>
@@ -391,7 +391,7 @@
 
             <li class="header__nav-item">  
               <a href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" fill="none">
+                <svg class="header__nav-item__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="25" fill="none">
                   <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"></path>
                 </svg> 
 
@@ -425,9 +425,9 @@
 
                   <ul class="header__nav-mobile__sublist">
                     <li class="header__nav-mobile__sublist-item">
-                      <button>
+                      <a href="#">
                         Вся продукция
-                      </button>
+                      </a>
                     </li>
 
                     <li class="header__nav-mobile__sublist-item" data-header-mobile-sublist="">
@@ -545,9 +545,9 @@
                     </li>
 
                     <li class="header__nav-mobile__sublist-item">
-                      <button>
+                      <a href="#">
                         Пасты
-                      </button>
+                      </a>
                     </li>
 
                     <li class="header__nav-mobile__sublist-item">
@@ -579,13 +579,11 @@
                         Аналоги импортных смазок
                       </a>
                     </li>
-
-                    <li class="header__nav-mobile__sublist-item">
-                      <span> 
-                        ООО «РОКСОЛ». Поставка товаров по всей России
-                      </span>
-                    </li>
                   </ul>
+
+                  <div class="header__nav-mobile__signature">
+                    ООО «РОКСОЛ». Поставка товаров по всей России
+                  </div>
                 </div>
               </li>
 
@@ -601,24 +599,123 @@
                 </a>
               </li>
 
-              <li class="header__nav-mobile__list-item">
-                <a href="#">
-                  О компании
-                </a>
+              <li class="header__nav-mobile__list-item" data-header-mobile-sublist="">
+                <button data-header-mobile-sublist-open="">
+                  О компании                   
+                  
+                  <img src="/arrow.64aad014.svg" alt="">
+                </button>
+
+                <div class="header__nav-mobile__sublist-2-wr">
+                  <button class="header__nav-mobile__sublist-2-btn" data-header-mobile-sublist-close="">
+                    <img src="/arrow.64aad014.svg" alt="">
+
+                    Назад
+                  </button>
+
+                  <ul class="header__nav-mobile__sublist-2">
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        О компании
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Опросный лист для подбора смазки
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Контрактное производство
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Закупаем
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Статьи
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Новости
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+
+              <li class="header__nav-mobile__list-item" data-header-mobile-sublist="">
+                <button data-header-mobile-sublist-open="">
+                  Контакты                
+                  
+                  <img src="/arrow.64aad014.svg" alt="">
+                </button>
+
+                <div class="header__nav-mobile__sublist-2-wr">
+                  <button class="header__nav-mobile__sublist-2-btn" data-header-mobile-sublist-close="">
+                    <img src="/arrow.64aad014.svg" alt="">
+
+                    Назад
+                  </button>
+
+                  <ul class="header__nav-mobile__sublist-2">
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Контакты
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Доставка
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Где купить
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Общие условия продаж от 30.10.2019 
+                      </a>
+                    </li>
+
+                    <li class="header__nav-mobile__sublist-2-item">
+                      <a href="#">
+                        Реквизиты компании
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </li>
 
               <li class="header__nav-mobile__list-item">
                 <a href="#">
-                  Контакты
-                </a>
-              </li>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 20 20" fill="none">
+                    <rect x="2.5" y="4.16663" width="15" height="12.5" rx="4" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></rect>
+                    <path d="M17.5 7.91663L11.3113 10.5645C10.4738 10.9229 9.52618 10.9229 8.68869 10.5645L2.5 7.91663" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
 
-              <li class="header__nav-mobile__list-item">
-                <a href="#">
                   sales@rox-russia.ru
                 </a>
 
                 <a href="#">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 20 20" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.04646 10.9533C8.07146 9.97831 7.33646 8.88664 6.84813 7.77914C6.7448 7.54497 6.80563 7.27081 6.98646 7.08997L7.66896 6.40831C8.22813 5.84914 8.22813 5.05831 7.7398 4.56997L6.76146 3.59164C6.11063 2.94081 5.05563 2.94081 4.4048 3.59164L3.86146 4.13497C3.24396 4.75247 2.98646 5.64331 3.15313 6.52664C3.5648 8.70414 4.8298 11.0883 6.87063 13.1291C8.91146 15.17 11.2956 16.435 13.4731 16.8466C14.3565 17.0133 15.2473 16.7558 15.8648 16.1383L16.4073 15.5958C17.0581 14.945 17.0581 13.89 16.4073 13.2391L15.4298 12.2616C14.9415 11.7733 14.1498 11.7733 13.6623 12.2616L12.9098 13.015C12.729 13.1958 12.4548 13.2566 12.2206 13.1533C11.1131 12.6641 10.0215 11.9283 9.04646 10.9533Z" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                  
                   8 879 33 520 33
                 </a>
               </li>
@@ -627,6 +724,7 @@
         </div>
       </div>
     </header>
+
     <main>
       <section class="hero">
         <div class="hero__container">
@@ -645,8 +743,16 @@
              </span>
             </a>
           </div>
-          <div class="hero__line">
-            <span class="hero__line-mesure">
+          <div class="hero__line-wr">
+            <span class="hero__line-number hero__line-number--left">
+              01
+            </span>
+            <div class="hero__line">
+              <span class="hero__line-mesure">
+              </span>
+            </div>
+            <span class="hero__line-number hero__line-number--right">
+              02
             </span>
           </div>
         </div>
@@ -654,6 +760,9 @@
 
       <section class="catalog-links">
         <div class="catalog-links__container">
+          <h2 class="catalog-links__title-mobile">
+            Наша продукция
+          </h2>
           <ul class="catalog-links__list">
             <li class="catalog-links__item">
               <a class="catalog-links__item-link" href="#">
@@ -1161,7 +1270,7 @@
                     </span>
 
                     <h3 class="point-card__title">
-                      Надёжная работа оборудования
+                      Пластичные многоцелевые
                     </h3>
 
                     <div class="point-card__text">
@@ -1648,6 +1757,15 @@
             </ul>
           </div>
 
+          <div class="footer__content__address-mobile">
+            <h3 class="footer__content__address-title footer__title">
+              Адрес
+            </h3>
+
+            <address>
+              357340, Россия, Ставропольский край, г. Лермонтов, ул. Промышленная, д. 15/2
+            </address>
+          </div>
 
           <div class="footer__content-info">
             <div class="footer__content-info__map">
@@ -1738,6 +1856,7 @@
         </div>
       </div>
     </footer>
+    
     <script src="/index.0fbc91cd.js" defer=""></script>
   </body>
 </html>

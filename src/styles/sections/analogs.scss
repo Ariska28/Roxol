@@ -20,13 +20,12 @@
   }
 }
 
-
 .analogs__list {
   display: flex;
   flex-wrap: wrap;
   margin-left: px-to-vw(-12); 
   margin-right: px-to-vw(-12); 
-  margin-bottom: px-to-vw(60);
+  margin-bottom: px-to-vw(48);
 
   @include media-down(sm) {
     margin-left: 0; 

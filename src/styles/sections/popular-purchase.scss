@@ -40,17 +40,21 @@
   display: flex;
   flex-wrap: wrap;
   margin-left: px-to-vw(-12) !important;
+  margin-bottom: px-to-vw(-12) !important;
   margin-right: px-to-vw(-12) !important;
 
   @include media-down(sm) {
     flex-wrap: nowrap;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    margin-bottom: 0 !important;
   }
 }
 
 .popular-purchase__track {
-  margin-right: px-to-vw(-16);
+  @include media-down(sm) {
+    margin-right: px-to-vw(-16);
+  }
 }
 
 

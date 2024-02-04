@@ -63,7 +63,7 @@ export function spliderWithArrows(sliderAttr) {
         pagination: false,
         fixedWidth: '38.5%',
         gap : '0px',
-        perMove: 1,
+        perMove: 2,
         breakpoints: {
           767: {
             fixedWidth: '81%',

@@ -2,14 +2,17 @@ export function header() {
   const headerMob = document.querySelector('[data-header-mobile]');
   const burgerMob = headerMob?.querySelector('[data-header-mobile-burger]');
   const sublistsMob = headerMob?.querySelectorAll('[data-header-mobile-sublist]');
+  const elementsForHiding = document?.querySelectorAll('[data-header-hide-mobile]');
   
   burgerMob?.addEventListener("click", ()=> {
     toggleMobileMenu(headerMob);
 
-    document.body.classList.add("no-scroll")
+    document.body.classList.add("no-scroll");
+    hideElementsOnMobile(elementsForHiding);
 
     if(!headerMob?.classList.contains("is-open")) {
       document.body.classList.remove("no-scroll");
+      showHideElementsOnMobile(elementsForHiding);
 
       closeAllSubMenus(sublistsMob);
     }
@@ -28,6 +31,19 @@ function closeAllSubMenus(subMenusList) {
     subList?.classList.remove("is-open")
   })
 }
+
+function hideElementsOnMobile(elementsForHiding) {
+  elementsForHiding?.forEach((elementForHiding) => {
+    elementForHiding?.classList.add("is-hide")
+  })
+}
+
+function showHideElementsOnMobile(elementsForHiding) {
+  elementsForHiding?.forEach((elementForHiding) => {
+    elementForHiding?.classList.remove("is-hide")
+  })
+}
+
 
 function toggleMobileMenu(mobMenu) {
   mobMenu?.classList.toggle("is-open");
