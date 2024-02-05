@@ -503,6 +503,16 @@ ul {
   }
 }
 
+.header__logo {
+  display: flex;
+  align-items: center;
+}
+
+.header__logo a{
+  display: flex;
+  align-items: center;
+}
+
 .header__logo img {
   height: calc(42 * var(--fz));
   width: calc(120 * var(--fz));
