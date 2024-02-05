@@ -3,7 +3,7 @@
   "source": "src/index.html",
   "browserslist": "> 0.5%, last 3 versions, not dead",
   "scripts": {
-    "start": "parcel ./src/index.html",
+    "start": "parcel ./src/company.html",
     "build": "parcel build"
   },
   "devDependencies": {

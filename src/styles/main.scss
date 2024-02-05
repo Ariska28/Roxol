@@ -23,3 +23,127 @@
 @import './sections/clients.scss';
 @import './sections/about-company.scss';   
 @import './sections/company-news.scss';       
+
+.innovations {
+  margin-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    margin-bottom: $s-space-mobile;
+  }
+}
+
+.innovations__container {
+  @include container;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.innovations__header {
+  padding: px-to-vw(80) 0;
+  border-bottom: 1px solid $c-gray-line;
+
+  @include media-down(sm) {
+    padding: px-to-vw(40) 0 px-to-vw(16);
+    border-bottom: none;
+  }
+}
+
+.innovations__header-title {
+  @include title-1;
+
+  width: 90%;
+  @include media-down(sm) {
+    width: 100%;
+  }
+}
+
+.innovations__content {
+  margin-top: px-to-vw(32);
+  display: flex;
+  justify-content: space-between;
+
+  @include media-down(sm) {
+    margin-top: px-to-vw(0);
+  }
+}
+
+.innovations__content-column {
+  &:first-child {
+    width: 40.5%;
+  }
+
+  &:nth-child(2) {
+    width: 59.5%;
+  }
+
+  @include media-down(sm) {
+    &:first-child {
+      display: none;
+    }
+  
+    &:nth-child(2) {
+      width: 100%;
+      margin-bottom: px-to-vw(32);
+    }
+  }
+}
+
+.innovations__content-column__text {
+  @include paragraf-big;
+  
+  max-width: px-to-vw(590);
+}
+
+.innovations__content-media {
+  margin-left: auto;
+  margin-right: px-to-vw(-42);
+  margin-top: px-to-vw(80);
+  max-width: px-to-vw(1134);
+
+  @include media-down(sm) {
+    margin: 0;
+    max-width: 100%;
+  }
+}
+
+.innovations__content-media-desktop {
+  display: block;
+
+  @include media-down(sm) {
+    display: none;
+  }
+}
+
+.innovations__content-media-mob {
+  display: none;
+
+  @include media-down(sm) {
+    display: block;
+    width: 100%;
+  }
+}
+
+.links {
+  display: flex;
+  margin-top: px-to-vw(32);
+  color: $c-gray-2;
+
+  @include media-down(sm) {
+    margin-top: px-to-vw(20);
+  }
+}
+
+.links__item {
+  color: inherit;
+  display: block;
+  margin-right: px-to-vw(8);
+  font-size: px-to-w(14);
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -.02em;
+
+  &.is-active {
+    color: $c-text-dark;
+  }
+}
