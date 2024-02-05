@@ -4,15 +4,21 @@ $height-submenus: px-to-vw(550);
 .header {
   background-color: $c-primary;
   position: relative;
+  @include container; 
   z-index: 10;
+
+  &--no-border {
+    .header__container {
+      border-bottom: none;
+    }
+  }
 }
 
 .header__container {
-  @include container; 
-
   display: flex;
   align-items: center;
   height: $s-header-height-desktop;
+  border-bottom: 1px solid $c-gray-line;
 
   @include media-down(sm) {
     height: $s-header-height-mob;
@@ -20,6 +26,14 @@ $height-submenus: px-to-vw(550);
 }
 
 .header__logo {
+  display: flex;
+  align-items: center;
+
+  a {
+    display: flex;
+    align-items: center;
+  }
+  
   img {
     height: px-to-vw(42);
     width: px-to-vw(120);
