@@ -1,16 +1,5 @@
 import Splide from "@splidejs/splide";
 
-export function initProgressBar(slider) {
-  const bar = slider.root.querySelector( '[data-slider-bar]' );
-
-  if(bar) {
-    slider.on('mounted move', function () {
-      const end  = slider.Components.Controller.getEnd() + 1;
-      const rate = Math.min( ( slider.index + 1 ) / end, 1 );
-      bar.style.width = String( 100 * rate ) + '%';
-    });
-  }
-}
 
 export function mobSplider(sliderAttr) {
   const spleders =  document.querySelectorAll(`${sliderAttr}`);
@@ -76,4 +65,79 @@ export function spliderWithArrows(sliderAttr) {
       
       splide.mount();
     })
+}
+
+export function historySplider(sliderAttr) {
+  const spleders =  document.querySelectorAll(`${sliderAttr}`);
+
+  spleders.forEach((el) => {
+    const splide = new Splide(el, {
+      pagination: false,
+      fixedWidth: '100%',
+      gap : '0px',
+      perMove: 1,
+    });
+    
+    progressBarWithYears(splide) 
+    
+    splide.mount();
+  })
+}
+
+function progressBarWithYears(slider) {
+  const bar = slider.root.querySelector( '[data-slider-bar]' );
+  const line = slider.root.querySelector( '[data-slider-line]' );
+  const numbersContainer = slider.root.querySelector( '[data-slider-numbers]');
+  const dates = ['2018', '2017', '2016', '2015', '2014', '2012', '2010'];
+
+  if(bar) {
+    slider.on('mounted',() => { 
+      let sliderEnd = slider.Components.Controller.getEnd();
+
+      for(i=0; i <= sliderEnd; i++) {
+        let span = document.createElement('span');
+        span.innerHTML = dates[i];
+        numbersContainer.prepend(span);
+        span.style.right =  `${((100 / (sliderEnd)) * i)}%`;
+      }
+    })
+
+    slider.on('mounted move', (prevIndex, newIndex) => {
+      let numbersOnLine = Array.from(numbersContainer.querySelectorAll('span'));
+      let sliderEnd  = slider.Components.Controller.getEnd();
+      const rate = (100 / sliderEnd) * (slider.index);
+      bar.style.width = String(rate) + '%';
+
+      if(prevIndex >= newIndex) {
+        numbersOnLine[slider.index].style.color =  '#0E0E0E';
+      }  else {
+        numbersOnLine[slider.index+1].style.color =  '#9D9D9D';
+      }
+    });
+
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      slider.on('mounted',() => {
+        let sliderEnd  = slider.Components.Controller.getEnd();
+        line.style.width = `${(sliderEnd + 1)*50}vw` 
+      });
+
+      slider.on('mounted move', function (prevIndex, newIndex) {        
+        line.style.transform = `translateX(-${slider.index*50}vw)` 
+      });
+    }
+  }
+}
+
+function initProgressBar(slider) {
+  const bar = slider.root.querySelector( '[data-slider-bar]' );
+
+  if(bar) {
+    slider.on('mounted move', function () {
+      const end  = slider.Components.Controller.getEnd();
+      const rate = (100 / end) * (slider.index);
+      bar.style.width = String(rate) + '%';
+
+      console.log(rate)
+    });
+  }
 }

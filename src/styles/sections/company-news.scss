@@ -11,25 +11,7 @@
     top: calc(38 * var(--fz));
     right: calc(42 * var(--fz));
     position: absolute;
-    display: flex;
     transform: translateY(-50%);
-  }
-
-  .splide__arrow {
-    position: static;
-    transform: none !important;
-    width: px-to-vw(54);
-    height: px-to-vw(54);
-    border: 1px solid $c-text-gray;
-    background: transparent;
- 
-    svg {
-      max-height: px-to-vw(14);
-    }
-
-    &--prev {
-      margin-right: px-to-vw(16);
-    }
   }
 }
 

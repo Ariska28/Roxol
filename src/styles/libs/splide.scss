@@ -12,3 +12,44 @@
   transition: width 400ms ease;
   width: 0;
 }
+
+.splide__arrows {
+  display: flex; 
+}
+
+.splide__arrow {
+  position: static;
+  transform: none !important;
+  width: px-to-vw(52);
+  height: px-to-vw(52);
+  border: 1px solid $c-text-gray;
+  background: transparent;
+  opacity: 1;
+  transition: background-color 0.2s ease-in;
+
+  &:disabled {
+    opacity: 1;
+  }
+ 
+  svg {
+    max-height: px-to-vw(10);
+
+    path {
+      fill: transparent;
+      transition: stroke 0.2s ease-in;
+    }
+  }
+
+  &--prev {
+    margin-right: px-to-vw(16);
+  }
+
+  @include media-down(sm) {
+    width: px-to-vw(42);
+    height: px-to-vw(42);
+
+    &--prev {
+      margin-right: px-to-vw(12);
+    }
+  }
+}

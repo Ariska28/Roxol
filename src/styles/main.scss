@@ -25,35 +25,7 @@
 @import './sections/clients.scss';
 @import './sections/about-company.scss';   
 @import './sections/company-news.scss';  
-@import './sections/innovations.scss';      
+@import './sections/innovations.scss';   
+@import './sections/experience.scss';  
+@import './sections/company-history.scss'; 
 
-.experience {
-  margin-top: $s-space-desktop;
-  margin-bottom: $s-space-desktop;
-
-  @include media-down(sm) {
-    margin-top: $s-space-mobile;
-    margin-bottom: $s-space-mobile;
-  }
-}
-
-.experience__container {
-  @include container;
-}
-
-.experience__title {
-  @include title-with-text;  
-  margin-bottom: px-to-vw(60);
-
-  span {
-    margin-right: px-to-vw(564);
-  }
-
-  @include media-down(sm) {
-    margin-bottom: px-to-vw(40);
-
-    span {
-      margin-right: 0;
-    }
-  }
-} 
