@@ -1362,14 +1362,14 @@ ul {
 @media (width <= 767px) {
   .header__nav-mobile__sublist-wr {
     top: calc(69 * var(--fz));
-    padding: calc(16 * var(--fz)) calc(16 * var(--fz)) calc(32 * var(--fz));
+    padding: calc(16 * var(--fz)) calc(16 * var(--fz)) calc(64 * var(--fz));
     width: 100%;
   }
 }
 
 .header__nav-mobile__list {
   height: calc(100vh - 69 * var(--fz));
-  padding-bottom: calc(32 * var(--fz));
+  padding-bottom: calc(70 * var(--fz));
   flex-direction: column;
   display: flex;
 }
@@ -2190,9 +2190,16 @@ ul {
   .point-slider__track {
     margin-right: 0;
   }
+}
 
+.point-slider__list {
+  margin-right: calc(42 * var(--fz)) !important;
+}
+
+@media (width <= 767px) {
   .point-slider__list {
     display: block;
+    margin-right: 0 !important;
   }
 }
 
@@ -2975,7 +2982,7 @@ ul {
 
 @media (width <= 767px) {
   .popular-purchase__item {
-    width: 90%;
+    width: 85%;
     margin: 0;
   }
 }
@@ -3018,7 +3025,7 @@ ul {
 
 @media (width <= 767px) {
   .analogs {
-    margin: calc(100 * var(--fz)) 0;
+    margin: calc(122 * var(--fz)) 0 calc(100 * var(--fz));
   }
 }
 
@@ -3411,6 +3418,7 @@ ul {
   .industry-solutions__card-number {
     font-size: calc(14 * var(--fz));
     letter-spacing: -.02em;
+    font-size: calc(18 * var(--fz));
     margin-bottom: calc(20 * var(--fz));
   }
 }
@@ -3428,6 +3436,7 @@ ul {
   .industry-solutions__card-title {
     font-size: calc(26 * var(--fz));
     letter-spacing: -.03em;
+    width: 56%;
     line-height: 110%;
   }
 }
@@ -3483,7 +3492,7 @@ ul {
   .assortment__container {
     padding-left: calc(16 * var(--fz));
     padding-right: calc(16 * var(--fz));
-    padding-top: calc(100 * var(--fz));
+    padding-top: calc(120 * var(--fz));
     padding-bottom: calc(50 * var(--fz));
   }
 }
@@ -3553,7 +3562,7 @@ ul {
   .assortment__list {
     flex-wrap: nowrap;
     margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin-right: calc(16 * var(--fz)) !important;
     margin-bottom: calc(40 * var(--fz)) in !important;
   }
 
@@ -3569,7 +3578,6 @@ ul {
 
 @media (width <= 767px) {
   .assortment__list-item {
-    width: 100%;
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -3852,7 +3860,7 @@ ul {
 }
 
 .about-company__title span {
-  margin-right: 34%;
+  margin-right: 33%;
 }
 
 .about-company__title--mobile {
@@ -3922,7 +3930,7 @@ ul {
   font-weight: 500;
   font-size: calc(24 * var(--fz));
   letter-spacing: -.03em;
-  margin-bottom: calc(40 * var(--fz));
+  margin-bottom: calc(32 * var(--fz));
   line-height: 115%;
 }
 
@@ -4108,6 +4116,16 @@ ul {
 @media (width <= 767px) {
   .company-news__track {
     margin-right: calc(-16 * var(--fz));
+  }
+}
+
+.company-news__list {
+  margin-right: calc(42 * var(--fz)) !important;
+}
+
+@media (width <= 767px) {
+  .company-news__list {
+    margin-right: calc(16 * var(--fz)) !important;
   }
 }
 

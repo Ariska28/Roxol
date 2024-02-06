@@ -165,6 +165,7 @@
   z-index: 2;
 
   @include media-down(sm) {
+    font-size: px-to-vw(18);
     margin-bottom: px-to-vw(20);
   }
 }
@@ -173,6 +174,10 @@
   @include title-3;
   width: 60%;
   z-index: 2;
+
+  @include media-down(sm) {
+    width: 56%;
+  }
 }
 
 

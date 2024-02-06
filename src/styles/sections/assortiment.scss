@@ -5,7 +5,7 @@
   padding-bottom: px-to-vw(182);
 
   @include media-down(sm) {
-    padding-top: $s-space-mobile;
+    padding-top: px-to-vw(120);
     padding-bottom: px-to-vw(50);
   }
 }    
@@ -42,7 +42,7 @@
   @include media-down(sm) {
     flex-wrap: nowrap;
     margin-left: 0 !important; 
-    margin-right: 0 !important; 
+    margin-right: px-to-vw(16) !important; 
     margin-bottom: px-to-vw(40) in !important; 
   }
 }
@@ -58,7 +58,6 @@
   margin: 0 px-to-vw(12) px-to-vw(24); 
 
   @include media-down(sm) {
-    width: 100%;
     margin-top: 0;
     margin-left: 0;
     margin-bottom: 0;

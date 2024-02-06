@@ -4,7 +4,7 @@
   margin-bottom: px-to-vw(45);
 
   span {
-    margin-right: 34%;
+    margin-right: 33%;
   }
 
   &--mobile {
@@ -57,7 +57,7 @@
 .about-company__content-text {
   @include title-4;
 
-  margin-bottom: px-to-vw(40);
+  margin-bottom: px-to-vw(32);
 }
 
 .about-company__content-btn {

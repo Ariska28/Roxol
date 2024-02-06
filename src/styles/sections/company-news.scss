@@ -52,6 +52,14 @@
   }
 }
 
+.company-news__list {
+  margin-right: px-to-vw(42) !important;
+
+  @include media-down(sm) {
+    margin-right: px-to-vw(16) !important;
+  }
+}
+
 .company-news__list-item {
   margin-right: px-to-vw(24) !important;
 
