@@ -587,6 +587,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     (0, _sliders.mobSplider)("[data-mobile-slider]");
     (0, _sliders.desktopSplider)("[data-slider-desktop]");
     (0, _sliders.spliderWithArrows)("[data-slider]");
+    (0, _sliders.historySplider)("[data-slider-history]");
 // gsap.from("[data-hero-slider]", {
 //   x: 2000,
 //   duration: 3,
@@ -4726,27 +4727,19 @@ var CSSPlugin = {
 },{"./gsap-core.js":"05eeC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cxLY0":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "initProgressBar", ()=>initProgressBar);
 parcelHelpers.export(exports, "mobSplider", ()=>mobSplider);
 parcelHelpers.export(exports, "desktopSplider", ()=>desktopSplider);
 parcelHelpers.export(exports, "spliderWithArrows", ()=>spliderWithArrows);
+parcelHelpers.export(exports, "historySplider", ()=>historySplider);
 var _splide = require("@splidejs/splide");
 var _splideDefault = parcelHelpers.interopDefault(_splide);
-function initProgressBar(slider) {
-    const bar = slider.root.querySelector("[data-slider-bar]");
-    if (bar) slider.on("mounted move", function() {
-        const end = slider.Components.Controller.getEnd() + 1;
-        const rate = Math.min((slider.index + 1) / end, 1);
-        bar.style.width = String(100 * rate) + "%";
-    });
-}
 function mobSplider(sliderAttr) {
     const spleders = document.querySelectorAll(`${sliderAttr}`);
     if (window.matchMedia("(max-width: 769px)").matches) spleders.forEach((el)=>{
         const splide = new (0, _splideDefault.default)(el, {
             pagination: false,
             arrows: false,
-            fixedWidth: "81%",
+            fixedWidth: "85%",
             gap: "0px"
         });
         initProgressBar(splide);
@@ -4759,7 +4752,7 @@ function desktopSplider(sliderAttr) {
         const splide = new (0, _splideDefault.default)(el, {
             pagination: false,
             arrows: false,
-            fixedWidth: "40%",
+            fixedWidth: "38.4%",
             gap: "0px",
             wheel: true,
             perMove: 1,
@@ -4788,6 +4781,70 @@ function spliderWithArrows(sliderAttr) {
         });
         initProgressBar(splide);
         splide.mount();
+    });
+}
+function historySplider(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            fixedWidth: "100%",
+            gap: "0px",
+            perMove: 1
+        });
+        progressBarWithYears(splide);
+        splide.mount();
+    });
+}
+function progressBarWithYears(slider) {
+    const bar = slider.root.querySelector("[data-slider-bar]");
+    const line = slider.root.querySelector("[data-slider-line]");
+    const numbersContainer = slider.root.querySelector("[data-slider-numbers]");
+    const dates = [
+        "2018",
+        "2017",
+        "2016",
+        "2015",
+        "2014",
+        "2012",
+        "2010"
+    ];
+    if (bar) {
+        slider.on("mounted", ()=>{
+            let sliderEnd = slider.Components.Controller.getEnd();
+            for(i = 0; i <= sliderEnd; i++){
+                let span = document.createElement("span");
+                span.innerHTML = dates[i];
+                numbersContainer.prepend(span);
+                span.style.right = `${100 / sliderEnd * i}%`;
+            }
+        });
+        slider.on("mounted move", (prevIndex, newIndex)=>{
+            let numbersOnLine = Array.from(numbersContainer.querySelectorAll("span"));
+            let sliderEnd = slider.Components.Controller.getEnd();
+            const rate = 100 / sliderEnd * slider.index;
+            bar.style.width = String(rate) + "%";
+            if (prevIndex >= newIndex) numbersOnLine[slider.index].style.color = "#0E0E0E";
+            else numbersOnLine[slider.index + 1].style.color = "#9D9D9D";
+        });
+        if (window.matchMedia("(max-width: 767px)").matches) {
+            slider.on("mounted", ()=>{
+                let sliderEnd = slider.Components.Controller.getEnd();
+                line.style.width = `${(sliderEnd + 1) * 50}vw`;
+            });
+            slider.on("mounted move", function(prevIndex, newIndex) {
+                line.style.transform = `translateX(-${slider.index * 50}vw)`;
+            });
+        }
+    }
+}
+function initProgressBar(slider) {
+    const bar = slider.root.querySelector("[data-slider-bar]");
+    if (bar) slider.on("mounted move", function() {
+        const end = slider.Components.Controller.getEnd();
+        const rate = 100 / end * slider.index;
+        bar.style.width = String(rate) + "%";
+        console.log(rate);
     });
 }
 

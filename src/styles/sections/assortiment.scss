@@ -13,7 +13,15 @@
 .assortment__title {
   @include title-with-text;
 
+  span {
+    margin-right: 25%;
+  }
+
   margin-bottom: px-to-vw(60);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(40);
+  }
 }
 
 .assortment__slider {

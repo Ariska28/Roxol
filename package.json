@@ -3,7 +3,7 @@
   "source": "src/index.html",
   "browserslist": "> 0.5%, last 3 versions, not dead",
   "scripts": {
-    "start": "parcel ./src/company.html",
+    "start": "parcel",
     "build": "parcel build"
   },
   "devDependencies": {
@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.23.9",
+    "@parcel/compressor-brotli": "^2.11.0",
+    "@parcel/compressor-gzip": "^2.11.0",
     "@splidejs/splide": "^4.1.4",
     "gsap": "^3.12.5",
     "node-sass": "^9.0.0"

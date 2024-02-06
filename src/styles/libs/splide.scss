@@ -8,7 +8,7 @@
 
 .splide__slider-progress__bar {
   background: $c-text-dark;
-  height: 2px;
+  height: px-to-vw(2);
   transition: width 400ms ease;
   width: 0;
 }

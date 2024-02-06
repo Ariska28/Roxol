@@ -6,6 +6,19 @@
   span {
     margin-right: 34%;
   }
+
+  &--mobile {
+    display: none;
+  }
+
+  @include media-down(sm) {
+    display: none;
+    margin-bottom: px-to-vw(20);
+
+    &--mobile {
+      display: block;
+    }
+  }
 }
 
 .about-company {
@@ -44,7 +57,7 @@
 .about-company__content-text {
   @include title-4;
 
-  margin-bottom: px-to-vw(32);
+  margin-bottom: px-to-vw(40);
 }
 
 .about-company__content-btn {

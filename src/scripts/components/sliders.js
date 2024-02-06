@@ -9,7 +9,7 @@ export function mobSplider(sliderAttr) {
       const splide = new Splide(el, {
         pagination: false,
         arrows: false,
-        fixedWidth: '81%',
+        fixedWidth: '85%',
         gap : '0px',
       });
       
@@ -28,7 +28,7 @@ export function desktopSplider(sliderAttr) {
       const splide = new Splide(el, {
         pagination: false,
         arrows: false,
-        fixedWidth: '40%',
+        fixedWidth: '38.4%',
         gap : '0px',
         wheel       : true,
         perMove: 1,

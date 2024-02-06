@@ -30,6 +30,19 @@
   }
 }
 
+.ticker__media {
+  border-radius: $s-border-radius;
+  overflow: hidden;
+
+  @include media-down(sm) {
+    img {
+      height: px-to-vw(320);
+      object-fit: cover;
+      border-radius: $s-border-radius-mob;
+    }
+  }
+}
+
 .ticker__group-line {
   @include title-2;
   display: flex;

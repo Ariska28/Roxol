@@ -23,8 +23,8 @@ $s-space-mobile: px-to-vw(100);
 $s-header-height-desktop: px-to-vw(108);
 $s-header-height-mob: px-to-vw(69);
 
-$s-border-radius: 12px;
-$s-border-radius-mob: 6px;
+$s-border-radius: px-to-vw(12);
+$s-border-radius-mob: px-to-vw(6);
 
 $font-base: 'Int', Arial, sans-serif;
 

@@ -3,7 +3,11 @@
   background-color: $c-white;
   border-radius: $s-border-radius;
   padding: px-to-vw(24);
+  height: px-to-vw(572);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 
   &:hover {
     .card__arrow {
@@ -21,6 +25,18 @@
   @include media-down(sm) {
     border-radius: $s-border-radius-mob;
     padding: px-to-vw(16);
+    height: px-to-vw(461);
+  }
+}
+
+.card__group {
+  position: absolute;
+  top: px-to-vw(24);
+  left: px-to-vw(24);
+
+  @include media-down(sm) {
+    top: px-to-vw(16);
+    left: px-to-vw(16);
   }
 }
 
@@ -36,7 +52,7 @@
 }
 
 .card__description {
-  @include description-medium ;
+  @include description-medium;
 
   color: $c-gray-2;
 }
@@ -44,11 +60,18 @@
 .card__media {
   display: flex;
   overflow: hidden;
+  margin-top: px-to-vw(21);
 
   img {
     transition: transform 0.2s ease-in;
     max-width: px-to-vw(240);
     margin: auto;
+  }
+
+  @include media-down(sm) {
+    img {
+      max-width: px-to-vw(183);
+    }
   }
 }
 
@@ -69,7 +92,7 @@
   @include description-small;
 
   padding: px-to-vw(3) px-to-vw(10);
-  border-radius: 8px;
+  border-radius: px-to-vw(8);
   color: $c-text-dark;
   background-color: transparent;
   border: 1px solid $c-text-gray;
@@ -103,5 +126,7 @@
   @include media-down(sm) {
     bottom: px-to-vw(16);
     right: px-to-vw(16);
+    width: px-to-vw(28);
+    height: px-to-vw(28);
   }
 }

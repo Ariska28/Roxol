@@ -408,7 +408,7 @@
               </a>
             </li>
 
-            <li class="header__nav-item">  
+            <li class="header__nav-item header__nav-item--dark-hover">  
               <a href="#">
                 <svg class="header__nav-item__icon" 
                      xmlns="http://www.w3.org/2000/svg" 
@@ -417,7 +417,7 @@
                     fill="none"  
                 >
                   <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"/>
-                </svg> 
+                </svg>  
 
                 +7 (879) 33 520 33
               </a>
@@ -580,10 +580,38 @@
                       </div>
                     </li>
 
-                    <li class="header__nav-mobile__sublist-item">
-                      <a href="#">
+                    <li class="header__nav-mobile__sublist-item"
+                        data-header-mobile-sublist
+                    >
+                      <button data-header-mobile-sublist-open>
                         Пасты
-                      </a>
+
+                        <img src="./assets/images/arrow.svg" alt="">
+                      </button>
+
+                      <div class="header__nav-mobile__sublist-2-wr">
+                        <button class="header__nav-mobile__sublist-2-btn" 
+                                data-header-mobile-sublist-close
+                        >
+                          <img src="./assets/images/arrow.svg" alt="">
+
+                          Назад
+                        </button>
+
+                        <ul class="header__nav-mobile__sublist-2">
+                          <li class="header__nav-mobile__sublist-2-item">
+                            <a href="#">
+                              Пасты приработочные
+                            </a>
+                          </li>
+
+                          <li class="header__nav-mobile__sublist-2-item">
+                            <a href="#">
+                              Теплопроводные пасты  
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
                     </li>
 
                     <li class="header__nav-mobile__sublist-item">
@@ -772,7 +800,7 @@
       <section class="hero">
         <div class="hero__container">
           <div class="hero__slider" data-hero-slider>
-            <h1 class="hero__slider-title">
+            <h1 class="hero__slider-title">   
               Смазочные материалы ROX
             </h1>
 
@@ -983,13 +1011,15 @@
                   <a class="card"
                      href="#"
                   >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
@@ -1000,11 +1030,11 @@
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" type="button">
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" type="button">
                         10 кг
                       </button>
                     </div>
@@ -1228,7 +1258,7 @@
                 </span>
 
                 <div class="point-card__media">
-                  <img src="./assets/images/analogs-1.svg" alt="">
+                  <img src="./assets/images/analogs-1.png" alt="">
                 </div>
 
                 <h3 class="point-card__title point-card__title--no-margin">
@@ -1246,7 +1276,7 @@
                 </span>
 
                 <div class="point-card__media">
-                  <img src="./assets/images/analogs-2.svg" alt="">
+                  <img src="./assets/images/analogs-2.png" alt="">
                 </div>
 
                 <h3 class="point-card__title point-card__title--no-margin">
@@ -1261,7 +1291,7 @@
                 </span>
 
                 <div class="point-card__media">
-                  <img src="./assets/images/analogs-3.svg" alt="">
+                  <img src="./assets/images/analogs-3.png" alt="">
                 </div>
 
                 <h3 class="point-card__title point-card__title--no-margin">
@@ -1276,12 +1306,12 @@
                 </span>
 
                 <div class="point-card__media">
-                  <img src="./assets/images/analogs-4.svg" alt="">
+                  <img src="./assets/images/analogs-4.png" alt="">
                 </div>
 
                 <h3 class="point-card__title point-card__title--no-margin">
                   Надёжная работа оборудования
-                </h3>
+                </h3> 
               </div>
             </li>
           </ul>
@@ -1295,20 +1325,22 @@
           </a>
         </div>
       </section>
-
+ 
       <section class="industry-solutions">
         <div class="industry-solutions__container">
           <p class="industry-solutions__description">
-            Отраслевые решения
-          </p>
+            Отраслевые решения 
+          </p> 
 
           <h2 class="industry-solutions__title">
             Все отрасли промышленности нуждаются в использовании смазочных материалов, разработанных в соответствии с их специфичными требованиями
           </h2>
-          </div>
+          </div> 
 
         <div class="industry-solutions__cards">
           <a href="" class="industry-solutions__card">
+            <img src="./assets/images/indastry-1.png" alt="">
+
             <span class="industry-solutions__card-number">
               01
             </span>
@@ -1326,6 +1358,8 @@
           </a>
 
           <a  href="" class="industry-solutions__card">
+            <img src="./assets/images/industry.png" alt="">
+
             <span class="industry-solutions__card-number">
               02
             </span>
@@ -1340,11 +1374,30 @@
                 <path d="M6.28467 1.33383H18.6624L18.6607 13.719" stroke="#0E0E0E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
+          </a> 
+
+          <a  href="" class="industry-solutions__card">
+            <img src="./assets/images/industry-3.png" alt="">
+
+            <span class="industry-solutions__card-number">
+              03
+            </span>
+
+            <h3 class="industry-solutions__card-title">
+              Хлебопекарная промышленность
+            </h3>
+
+            <div class="industry-solutions__card-arrow">
+              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.6639 1.33381L1.33887 18.6716" stroke="#0E0E0E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6.28467 1.33383H18.6624L18.6607 13.719" stroke="#0E0E0E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
           </a>
 
-          <a  href="" class="industry-solutions__card industry-solutions__card--mobile">
+          <a  href="" class="industry-solutions__card industry-solutions__card--white">
             <h3 class="industry-solutions__card-title">
-              Пищевая промышленность
+              Смотреть все отрасли
             </h3>
 
             <div class="industry-solutions__card-arrow">
@@ -1593,7 +1646,7 @@
                 </span>
 
                 <h3 class="point-slider__list-item__title">
-                  Продукт с определёнными характеристиками под конкретного клиента
+                  Продукт под конкретного клиента с определёнными характеристиками 
                 </h3>
               </li>
 
@@ -1635,43 +1688,43 @@
 
           <ul class="cients__list">
             <li class="cients__list-item">
-              <img src="./assets/images/client-1.svg" alt="">
+              <img src="./assets/images/client-1.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-1.svg" alt="">
+              <img src="./assets/images/client-1.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-2.svg" alt="">
+              <img src="./assets/images/client-2.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-1.svg" alt="">
+              <img src="./assets/images/client-1.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-3.svg" alt="">
+              <img src="./assets/images/client-3.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-1.svg" alt="">
+              <img src="./assets/images/client-1.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-6.svg" alt="">
+              <img src="./assets/images/client-6.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-4.svg" alt="">
+              <img src="./assets/images/client-4.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-5.svg" alt="">
+              <img src="./assets/images/client-5.png" alt="">
             </li>
 
             <li class="cients__list-item">
-              <img src="./assets/images/client-3.svg" alt="">
+              <img src="./assets/images/client-3.png" alt="">
             </li>
           </ul>
         </div>
@@ -1680,7 +1733,13 @@
       <section class="about-company">
         <div class="about-company__container">
           <h2 class="about-company__title">
-            <span>О компании</span>Собираясь купить смазочные материалы в компании «Роксол», вы всегда можете рассчитывать на техническую поддержку и помощь наших инженеров и менеджеров в выборе
+            <span>О компании</span>
+            Собираясь купить смазочные материалы в компании «Роксол», вы всегда можете рассчитывать на техническую поддержку и помощь наших инженеров и менеджеров в выборе
+          </h2> 
+
+          <h2 class="about-company__title about-company__title--mobile">
+            <span>О компании</span>
+            Собираясь купить смазочные материалы в компании «Роксол», вы всегда можете рассчитывать на техническую поддержку и помощь наших инженеров и менеджеров в выборе. Мы всегда готовы предложить лучшие условия
           </h2>
 
           <div class="about-company__content-wr">
@@ -1986,11 +2045,11 @@
             &#169; 2023 ООО «Роксол». Все права защищены
           </span>
 
-          <span class="footer__bottom-item">
+          <a href="" class="footer__bottom-item"> 
             Пользовательское соглашение
           </span>
 
-          <span class="footer__bottom-item">
+          <a href=""  class="footer__bottom-item">
             Политика конфиденциальности
           </span>
 

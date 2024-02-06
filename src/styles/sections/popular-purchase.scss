@@ -18,6 +18,10 @@
   @include title-2;
 
   margin-bottom: px-to-vw(60);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(40);
+  }
 }
 
 .popular-purchase__item {
@@ -46,7 +50,7 @@
   @include media-down(sm) {
     flex-wrap: nowrap;
     margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin-right: px-to-vw(16) !important;
     margin-bottom: 0 !important;
   }
 }

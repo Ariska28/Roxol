@@ -48,7 +48,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 0px;
+    height: 0;
     background-color: $c-accent;
     z-index: 0;
     transition: 0.3s height ease-in;
@@ -125,6 +125,7 @@
 
   @include media-down(sm) {
     color: $c-text-dark-1;
+    max-width: px-to-vw(290);
 
     &:nth-child(2) {
       margin-left: 0;
@@ -185,9 +186,9 @@
   @include button-border;
 
   max-width: px-to-vw(348);
-  margin: px-to-vw(74) auto 0;
+  margin: px-to-vw(74) 0 0 px-to-vw(746);
 
   @include media-down(sm) {
-    margin-top: px-to-vw(40);
+    margin: px-to-vw(40) auto 0;
   }
 }
