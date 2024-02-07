@@ -660,6 +660,7 @@ $height-submenus: px-to-vw(550);
 
   &:last-child {
     margin-top: auto;
+    margin-bottom: px-to-vw(32);
 
     & > a {
       @include link-text;
@@ -817,6 +818,10 @@ $height-submenus: px-to-vw(550);
 }
 
 .header__nav-mobile__sublist-2-item {
+  
+  &:last-child {
+    margin-bottom: px-to-vw(32);
+  }
   & > a,
   & > button {
     @include button-reset-styles;

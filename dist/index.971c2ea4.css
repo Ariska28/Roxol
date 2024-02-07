@@ -1384,6 +1384,7 @@ ul {
 
 .header__nav-mobile__list-item:last-child {
   margin-top: auto;
+  margin-bottom: calc(32 * var(--fz));
 }
 
 .header__nav-mobile__list-item:last-child > a {
@@ -2543,7 +2544,7 @@ ul {
 
 .hero__line {
   width: calc(282 * var(--fz));
-  height: 1px-to-vw 1;
+  height: calc(1 * var(--fz));
   background-color: #606060;
   margin: auto;
   position: relative;
