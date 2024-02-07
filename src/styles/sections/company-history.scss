@@ -129,7 +129,7 @@
 
 .company-history__progress {
   position: relative;
-  margin-top: px-to-vw(40);
+  margin-top: px-to-vw(35);
   margin-bottom: px-to-vw(10);
   transition: transform 0.1s linear;
 
@@ -151,7 +151,7 @@
   }
 
   @include media-down(sm) {
-    margin-top: px-to-vw(28);
+    margin-top: px-to-vw(32);
   }
 }
 

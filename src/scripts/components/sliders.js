@@ -28,7 +28,7 @@ export function desktopSplider(sliderAttr) {
       const splide = new Splide(el, {
         pagination: false,
         arrows: false,
-        fixedWidth: '38.4%',
+        fixedWidth: '39%',
         gap : '0px',
         wheel       : true,
         perMove: 1,

@@ -647,7 +647,7 @@ $height-submenus: px-to-vw(550);
 .header__nav-mobile__list {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - calc(69 * var(--fz)));
+  height: calc(100vh - calc(16 * var(--fz)));
   padding-bottom: px-to-vw(70);
 }
 
@@ -818,7 +818,7 @@ $height-submenus: px-to-vw(550);
 }
 
 .header__nav-mobile__sublist-2-item {
-  
+
   &:last-child {
     margin-bottom: px-to-vw(32);
   }

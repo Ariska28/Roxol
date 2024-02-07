@@ -17,10 +17,11 @@
   margin-bottom: px-to-vw(60);
 
   span {
-    width: 40.5%;
+    margin-right: 30%;
   }
 
   @include media-down(sm) {
+    padding-top: px-to-vw(20);
     margin-bottom: px-to-vw(40);
 
     span {

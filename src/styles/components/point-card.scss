@@ -49,6 +49,10 @@
 
   margin-top: px-to-vw(40);
 
+  @include media-down(sm) {
+    margin-top: px-to-vw(32);
+  }
+
   &--no-margin {
     margin-top: 0;
   }

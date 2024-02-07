@@ -12,11 +12,11 @@
   color: inherit;
   display: block;
   margin-right: px-to-vw(8);
-  font-size: px-to-w(14);
+  font-size: px-to-vw(14);
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -.02em;
-
+  
   &.is-active {
     color: $c-text-dark;
   }
