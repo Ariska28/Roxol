@@ -301,6 +301,8 @@
   }
 
   @include media-down(sm) {
+    padding-top: px-to-vw(22);
+
     span {
       display: block;
       top: px-to-vw(-20);

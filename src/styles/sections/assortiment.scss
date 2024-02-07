@@ -5,7 +5,7 @@
   padding-bottom: px-to-vw(182);
 
   @include media-down(sm) {
-    padding-top: px-to-vw(120);
+    padding-top: px-to-vw(100);
     padding-bottom: px-to-vw(50);
   }
 }    

@@ -3032,7 +3032,7 @@ ul {
 
 @media (width <= 767px) {
   .analogs {
-    margin: calc(122 * var(--fz)) 0 calc(100 * var(--fz));
+    margin: calc(100 * var(--fz)) 0;
   }
 }
 
@@ -3077,6 +3077,13 @@ ul {
   .analogs__title span {
     font-size: calc(14 * var(--fz));
     letter-spacing: -.02em;
+  }
+
+  .analogs__title {
+    padding-top: calc(22 * var(--fz));
+  }
+
+  .analogs__title span {
     top: calc(-20 * var(--fz));
     display: block;
   }
@@ -3499,7 +3506,7 @@ ul {
   .assortment__container {
     padding-left: calc(16 * var(--fz));
     padding-right: calc(16 * var(--fz));
-    padding-top: calc(120 * var(--fz));
+    padding-top: calc(100 * var(--fz));
     padding-bottom: calc(50 * var(--fz));
   }
 }
@@ -3532,6 +3539,13 @@ ul {
   .assortment__title span {
     font-size: calc(14 * var(--fz));
     letter-spacing: -.02em;
+  }
+
+  .assortment__title {
+    padding-top: calc(22 * var(--fz));
+  }
+
+  .assortment__title span {
     top: calc(-20 * var(--fz));
     display: block;
   }
@@ -3861,6 +3875,13 @@ ul {
   .about-company__title span {
     font-size: calc(14 * var(--fz));
     letter-spacing: -.02em;
+  }
+
+  .about-company__title {
+    padding-top: calc(22 * var(--fz));
+  }
+
+  .about-company__title span {
     top: calc(-20 * var(--fz));
     display: block;
   }
@@ -4560,6 +4581,13 @@ ul {
   .experience__title span {
     font-size: calc(14 * var(--fz));
     letter-spacing: -.02em;
+  }
+
+  .experience__title {
+    padding-top: calc(22 * var(--fz));
+  }
+
+  .experience__title span {
     top: calc(-20 * var(--fz));
     display: block;
   }

@@ -2,7 +2,7 @@
   margin: $s-space-desktop 0 px-to-vw(340); 
 
   @include media-down(sm) {
-    margin: px-to-vw(122) 0 $s-space-mobile;
+    margin: $s-space-mobile 0 ;
   }
 }
 
