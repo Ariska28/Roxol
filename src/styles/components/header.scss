@@ -5,7 +5,7 @@ $height-submenus: px-to-vw(550);
   background-color: $c-primary;
   position: relative;
   @include container; 
-  z-index: 10;
+  z-index: 1000;
 
   &--no-border {
     .header__container {

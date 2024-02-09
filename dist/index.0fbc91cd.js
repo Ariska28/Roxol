@@ -582,12 +582,18 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var _header = require("./components/header");
 var _gsap = require("gsap");
 var _sliders = require("./components/sliders");
+var _controls = require("./components/controls");
+var _catalog = require("./components/catalog");
 document.addEventListener("DOMContentLoaded", ()=>{
     (0, _header.header)();
     (0, _sliders.mobSplider)("[data-mobile-slider]");
     (0, _sliders.desktopSplider)("[data-slider-desktop]");
     (0, _sliders.spliderWithArrows)("[data-slider]");
     (0, _sliders.historySplider)("[data-slider-history]");
+    (0, _controls.initRangeFunctional)("[data-range]");
+    (0, _catalog.toggleFilters)("[data-catalog-header]");
+    (0, _catalog.toggleLists)("[data-open-list]");
+    (0, _controls.initDropdown)("[data-dropdown]");
 // gsap.from("[data-hero-slider]", {
 //   x: 2000,
 //   duration: 3,
@@ -596,7 +602,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 // })
 });
 
-},{"./components/header":"d8aIH","gsap":"fPSuC","./components/sliders":"cxLY0"}],"d8aIH":[function(require,module,exports) {
+},{"./components/header":"d8aIH","gsap":"fPSuC","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl"}],"d8aIH":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "header", ()=>header);
@@ -7892,6 +7898,118 @@ var SplideRenderer = /*#__PURE__*/ function() {
     };
     return SplideRenderer;
 }();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hB6A6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "initRangeFunctional", ()=>initRangeFunctional);
+parcelHelpers.export(exports, "initDropdown", ()=>initDropdown);
+function initRangeFunctional(attr) {
+    let rangeMin = 100;
+    const rangeContainers = document.querySelectorAll(attr);
+    rangeContainers.forEach((rangeContainer)=>{
+        const range = rangeContainer.querySelector("[data-selected]");
+        const rangeInput = rangeContainer.querySelectorAll("[data-range-inputs] input");
+        const rangePrice = rangeContainer.querySelectorAll("[data-range-prices] input");
+        rangeInput.forEach((input)=>{
+            input.addEventListener("input", (e)=>{
+                let minRange = parseInt(rangeInput[0].value);
+                let maxRange = parseInt(rangeInput[1].value);
+                if (maxRange - minRange < rangeMin) {
+                    if (e.target.className === "min") rangeInput[0].value = maxRange - rangeMin;
+                    else rangeInput[1].value = minRange + rangeMin;
+                } else {
+                    rangePrice[0].value = minRange;
+                    rangePrice[1].value = maxRange;
+                    range.style.left = minRange / rangeInput[0].max * 100 + "%";
+                    range.style.right = 100 - maxRange / rangeInput[1].max * 100 + "%";
+                }
+            });
+        });
+        rangePrice.forEach((input)=>{
+            input.addEventListener("input", (e)=>{
+                let minPrice = rangePrice[0].value;
+                let maxPrice = rangePrice[1].value;
+                if (maxPrice - minPrice >= rangeMin && maxPrice <= rangeInput[1].max) {
+                    if (e.target.className === "min") {
+                        rangeInput[0].value = minPrice;
+                        range.style.left = minPrice / rangeInput[0].max * 100 + "%";
+                    } else {
+                        rangeInput[1].value = maxPrice;
+                        range.style.right = 100 - maxPrice / rangeInput[1].max * 100 + "%";
+                    }
+                }
+            });
+        });
+    });
+}
+function initDropdown(attr) {
+    const dropdowns = document.querySelectorAll(attr);
+    dropdowns.forEach((dropdown)=>{
+        const input = dropdown.querySelector("input");
+        const listOfOptions = dropdown.querySelectorAll("[data-dropdown-option]");
+        const body = document.body;
+        const toggleDropdown = (event)=>{
+            event.stopPropagation();
+            dropdown.classList.toggle("is-open");
+        };
+        const selectOption = (event)=>{
+            input.value = event.currentTarget.textContent;
+        };
+        const closeDropdownFromOutside = ()=>{
+            if (dropdown.classList.contains("is-open")) dropdown.classList.remove("is-open");
+        };
+        body.addEventListener("click", closeDropdownFromOutside);
+        listOfOptions.forEach((option)=>{
+            option.addEventListener("click", selectOption);
+        });
+        dropdown.addEventListener("click", toggleDropdown);
+    });
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j0LXl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "toggleFilters", ()=>toggleFilters);
+parcelHelpers.export(exports, "toggleLists", ()=>toggleLists);
+function toggleFilters(attr) {
+    const catalogContainer = document.querySelectorAll(attr);
+    catalogContainer.forEach((catalogContainerEl)=>{
+        const toggleFiltersBtn = catalogContainerEl.querySelector("[data-catalog-header-filters-btn]");
+        toggleFiltersBtn.addEventListener("click", ()=>{
+            toggleElememts(catalogContainerEl);
+        });
+    });
+}
+function toggleLists(attr) {
+    const openListContainer = document.querySelectorAll(attr);
+    openListContainer.forEach((openListContainerEl)=>{
+        const openListBtn = openListContainerEl.querySelector("[data-open-list-btn]");
+        const toggleListContainer = openListContainerEl.querySelector("[data-open-list-container]");
+        const closeBtn = toggleListContainer.querySelector("[data-open-list-container-close]");
+        openListBtn.addEventListener("click", ()=>{
+            openListContainerEl.classList.toggle("is-open");
+        });
+        document.addEventListener("click", (e)=>{
+            const target = e.target;
+            const its_menu = target == toggleListContainer || toggleListContainer.contains(target);
+            const its_menu_btn = target == openListBtn;
+            if (!its_menu && openListContainerEl.classList.contains("is-open") && !its_menu_btn) closeElememts(openListContainerEl);
+        });
+        closeBtn.addEventListener("click", (e)=>{
+            closeElememts(openListContainerEl);
+        });
+    });
+}
+function openElememts(container) {
+    container.classList.add("is-open");
+}
+function closeElememts(container) {
+    container.classList.remove("is-open");
+}
+function toggleElememts(container) {
+    container.classList.toggle("is-toggle");
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")
 

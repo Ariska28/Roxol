@@ -14,11 +14,11 @@
 }
 
 .innovations__header {
-  padding: px-to-vw(80) 0;
+  padding: 0 0 px-to-vw(80);
   border-bottom: 1px solid $c-gray-line;
 
   @include media-down(sm) {
-    padding: px-to-vw(40) 0 px-to-vw(16);
+    padding: 0 0 px-to-vw(16);
     border-bottom: none;
   }
 }

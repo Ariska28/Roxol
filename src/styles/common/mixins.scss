@@ -309,3 +309,29 @@
     }
   }
 }
+
+
+@mixin filter-btn($hover-color) {
+  @include button-reset-styles;
+
+  font-family: $font-base;
+  font-size: px-to-vw(18);
+  font-weight: 400;
+  line-height: 130%;
+  letter-spacing: -.03em;
+  padding: px-to-vw(8) px-to-vw(14);
+  border: 1px solid $c-gray-line;
+  border-radius: $s-border-radius;
+  transition: background-color 0.2s ease-in, border-color 0.2s ease-in;
+
+  &:hover, 
+  &:focus {
+    background-color: $hover-color;
+    border-color: $hover-color;
+  }
+
+  @include media-down(sm) {
+    font-size: px-to-vw(14);
+    padding: px-to-vw(6) px-to-vw(12);
+  }
+}

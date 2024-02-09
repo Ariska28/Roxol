@@ -1,0 +1,22 @@
+.products-info {
+  margin-left: $s-padding-x-desktop;
+  margin-right: $s-padding-x-desktop;
+  border-top: 1px solid $c-gray-line;
+
+  @include media-down(sm) {
+    margin-left: $s-padding-x-mob;
+    margin-right: $s-padding-x-mob;
+  }
+}
+
+.products-info__container {
+  max-width: px-to-vw(1092);
+  margin: auto;
+  padding-top: px-to-vw(80);
+  margin-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    padding-top: px-to-vw(40);
+    margin-bottom: $s-space-mobile;
+  }
+}
