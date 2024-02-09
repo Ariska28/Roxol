@@ -25,10 +25,18 @@
     @include paragraf-small; 
 
     color: $c-gray-2;
-    margin-bottom: px-to-vw(16); 
+    margin-bottom: px-to-vw(18); 
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    @include media-down(sm) {
+      margin-bottom: px-to-vw(13); 
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 

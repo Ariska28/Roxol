@@ -333,5 +333,6 @@
   @include media-down(sm) {
     font-size: px-to-vw(14);
     padding: px-to-vw(6) px-to-vw(12);
+    border-radius: $s-border-radius-mob;
   }
 }
