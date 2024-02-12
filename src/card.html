@@ -1207,45 +1207,45 @@
             </div>
           </div>
 
-          <div class="tabs" data-tabs>
-            <header class="tabs__header">
-              <button class="tabs__header-item is-active"
+          <div class="product-tabs" data-tabs>
+            <header class="product-tabs__header">
+              <button class="product-tabs__header-item is-active"
                       data-tabs-btn="reviews"
               >
                 Отзывы предприятий
               </button>
     
-              <button class="tabs__header-item"
+              <button class="product-tabs__header-item"
                       data-tabs-btn="questions"
               >
                 Вопросы о товаре
               </button>
             </header>
     
-            <div class="tabs__content">
-              <div class="tabs__content-tab">
-                <ul class="tabs__content-tab__list is-active" 
+            <div class="product-tabs__content">
+              <div class="product-tabs__content-tab">
+                <ul class="product-tabs__content-tab__list is-active" 
                     data-tabs-container="reviews"
                 >
-                  <li class="tabs__content-tab__item">
-                    <a class="tabs__content-tab__item-link">
+                  <li class="product-tabs__content-tab__item">
+                    <a class="product-tabs__content-tab__item-link">
                       <span>
                         ROX PU EP как решение проблем со смазкой подшипников насосного оборудования
                       </span>
     
-                      <div class="tabs__content-tab__item-arrow">
+                      <div class="product-tabs__content-tab__item-arrow">
                         <img src="./assets/images/arrow-thin.svg" alt="">
                       </div>
                     </a>
                   </li>
 
-                  <li class="tabs__content-tab__item">
-                    <a class="tabs__content-tab__item-link">
+                  <li class="product-tabs__content-tab__item">
+                    <a class="product-tabs__content-tab__item-link">
                       <span>
                         ROX PU EP как решение проблем со смазкой подшипников насосного оборудования
                       </span>
     
-                      <div class="tabs__content-tab__item-arrow">
+                      <div class="product-tabs__content-tab__item-arrow">
                        <img src="./assets/images/arrow-thin.svg" alt="">
                       </div>
                     </a>
@@ -1253,21 +1253,21 @@
                 </ul>
               </div>
     
-              <div class="tabs__content-tab__list tabs__content-tab__list--columns" 
+              <div class="product-tabs__content-tab__list product-tabs__content-tab__list--columns" 
                    data-tabs-container="questions"
               >
-                <div class="tabs__content-tab__questions">
-                  <span class="tabs__content-tab__questions-text">
+                <div class="product-tabs__content-tab__questions">
+                  <span class="product-tabs__content-tab__questions-text">
                     Ещё никто не задавал вопроса
                   </span>
                 </div>
 
-                <div class="tabs__content-tab__form">
-                  <h4 class="tabs__content-tab__form-title">
+                <div class="product-tabs__content-tab__form">
+                  <h4 class="product-tabs__content-tab__form-title">
                     Вопросы о товаре
                   </h4>
 
-                  <form class="tabs__content-tab__form-form">
+                  <form class="product-tabs__content-tab__form-form">
                     <label for="product-questions">
                       Вы можете задать свой вопрос о товаре, а наши менеджеры в кратчайшие сроки дадут ответ.
                     </label>
@@ -1284,6 +1284,60 @@
           </div>
         </div>
       </div>
+
+      <section class="feedback">
+        <div class="feedback__container">
+          <span class="feedback__text">
+            Форма обратной связи
+          </span>
+
+          <h2 class="feedback__title">
+            Вы можете задать любой интересующий вас вопрос и наши менеджеры проведут бесплатную  консультацию по продукту
+          </h2>
+
+          <form class="feedback__form">
+            <div class="feedback__form-item feedback__form-item--50">
+              <label for="name"></label>
+              <input type="text" 
+                     name="name" 
+                     id="name" 
+                     placeholder="Ваше имя*"
+                     required 
+              />
+            </div>
+            <div class="feedback__form-item feedback__form-item--50">
+              <label for="tel"></label>
+              <input type="tel" 
+                     name="tel" 
+                     id="tel" 
+                     placeholder="Телефон*"
+                     required 
+              />
+            </div>
+            <div class="feedback__form-item">
+              <label for="email"></label>
+              <input type="email" 
+                     name="email" 
+                     id="email" 
+                     placeholder="Email"
+              />
+            </div>
+            <div class="feedback__form-item">
+              <label for="email"></label>
+              <textarea name="message" 
+                        id="message" 
+                        placeholder="Ваше сообщение"></textarea>
+            </div>
+            <button class="feedback__form-btn" 
+                    type="submit"
+            >
+              <span>
+                Отправить
+              </span>
+            </button>
+          </form>
+        </div>
+      </section>
     </main>
     
     <footer class="footer">
