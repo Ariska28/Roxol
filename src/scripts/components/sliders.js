@@ -20,6 +20,19 @@ export function mobSplider(sliderAttr) {
   }
 }
 
+export function productSplider(sliderAttr) {
+  const spleders =  document.querySelectorAll(`${sliderAttr}`);
+
+    spleders.forEach((el) => {
+      const splide = new Splide(el, {
+        perPage: 1,
+        pagination: true,
+      });
+      
+      splide.mount();
+    })
+}
+
 export function desktopSplider(sliderAttr) {
   const spleders =  document.querySelectorAll(`${sliderAttr}`);
 

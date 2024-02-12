@@ -2,6 +2,7 @@
   display: flex;
   margin-top: px-to-vw(32);
   margin-bottom: px-to-vw(80);
+  flex-wrap: wrap;
   color: $c-gray-2;
 
   @include media-down(sm) {

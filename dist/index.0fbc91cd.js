@@ -584,16 +584,19 @@ var _gsap = require("gsap");
 var _sliders = require("./components/sliders");
 var _controls = require("./components/controls");
 var _catalog = require("./components/catalog");
+var _tabs = require("./components/tabs");
 document.addEventListener("DOMContentLoaded", ()=>{
     (0, _header.header)();
     (0, _sliders.mobSplider)("[data-mobile-slider]");
     (0, _sliders.desktopSplider)("[data-slider-desktop]");
     (0, _sliders.spliderWithArrows)("[data-slider]");
     (0, _sliders.historySplider)("[data-slider-history]");
+    (0, _sliders.productSplider)("[data-slider-product]");
     (0, _controls.initRangeFunctional)("[data-range]");
     (0, _catalog.toggleFilters)("[data-catalog-header]");
     (0, _catalog.toggleLists)("[data-open-list]");
     (0, _controls.initDropdown)("[data-dropdown]");
+    (0, _tabs.initTabs)("[data-tabs]");
 // gsap.from("[data-hero-slider]", {
 //   x: 2000,
 //   duration: 3,
@@ -602,7 +605,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 // })
 });
 
-},{"./components/header":"d8aIH","gsap":"fPSuC","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl"}],"d8aIH":[function(require,module,exports) {
+},{"./components/header":"d8aIH","gsap":"fPSuC","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl","./components/tabs":"hfO9E"}],"d8aIH":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "header", ()=>header);
@@ -4734,6 +4737,7 @@ var CSSPlugin = {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "mobSplider", ()=>mobSplider);
+parcelHelpers.export(exports, "productSplider", ()=>productSplider);
 parcelHelpers.export(exports, "desktopSplider", ()=>desktopSplider);
 parcelHelpers.export(exports, "spliderWithArrows", ()=>spliderWithArrows);
 parcelHelpers.export(exports, "historySplider", ()=>historySplider);
@@ -4749,6 +4753,16 @@ function mobSplider(sliderAttr) {
             gap: "0px"
         });
         initProgressBar(splide);
+        splide.mount();
+    });
+}
+function productSplider(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            perPage: 1,
+            pagination: true
+        });
         splide.mount();
     });
 }
@@ -8009,6 +8023,31 @@ function closeElememts(container) {
 }
 function toggleElememts(container) {
     container.classList.toggle("is-toggle");
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hfO9E":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "initTabs", ()=>initTabs);
+function initTabs(attr) {
+    const tabsConainers = document.querySelectorAll(attr);
+    tabsConainers.forEach((tabsConainer)=>{
+        const tabBtns = tabsConainer.querySelectorAll("[data-tabs-btn]");
+        const tabContainers = tabsConainer.querySelectorAll("[data-tabs-container]");
+        tabBtns.forEach((tabBtn)=>{
+            tabBtn.addEventListener("click", ()=>{
+                tabBtns.forEach((tabBtn)=>{
+                    tabBtn.classList.remove("is-active");
+                });
+                tabBtn.classList.add("is-active");
+                tabContainers.forEach((tabContainer)=>{
+                    console.log(tabContainer.getAttribute("data-tabs-container"));
+                    if (tabBtn.getAttribute("data-tabs-btn") === tabContainer.getAttribute("data-tabs-container")) tabContainer.classList.add("is-active");
+                    else tabContainer.classList.remove("is-active");
+                });
+            });
+        });
+    });
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")

@@ -1,6 +1,6 @@
 {
   "name": "my-project",
-  "source": ["src/index.html", "src/company.html", "src/catalog.html"], 
+  "source": ["src/index.html", "src/company.html", "src/catalog.html", "src/card.html"], 
   "browserslist": "> 0.5%, last 3 versions, not dead",
   "scripts": {
     "start": "parcel",
