@@ -1,0 +1,139 @@
+.sidebar {
+  position: fixed;
+  right: -200vw;
+  z-index: 10000;
+  top: 0;
+  transition: 0.2s right ease-in-out;
+
+  &.is-open {
+    right: 0;
+
+    .sidebar__close-area {
+      opacity: 0.24;
+      width: 100vw;
+      height: 100vh;
+    }
+  }
+}
+
+.sidebar__close-area {
+  width: 0vw;
+  height: 0vh;
+  background-color: $c-text-dark;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  transition: 0.2s opacity ease-in;
+} 
+
+.sidebar__text {
+  @include paragraf-small;
+  
+  color: $c-gray-2;
+}
+
+.sidebar__container {
+  padding: px-to-vw(52);
+  height: 100vh;
+  position: relative;
+  background-color: $c-white;
+  z-index: 100;
+  width: px-to-vw(696);
+  display: flex;
+  flex-direction: column;
+
+  @include media-down(sm) {
+    width: 100vw;
+    padding: px-to-vw(40) px-to-vw(16) px-to-vw(16);
+    overflow: auto;
+  }
+}
+
+.sidebar__sign {
+  @include description-small;
+
+  margin-top: auto;
+}
+
+.sidebar__close {
+  @include button-reset-styles;
+
+  top: 0;
+  right: 0;
+  position: absolute;
+
+  svg {
+    width: px-to-vw(52);
+    height: px-to-vw(52);
+  }
+
+  @include media-down(sm) {
+    svg {
+      width: px-to-vw(34);
+      height: px-to-vw(34);
+    }
+  }
+}
+
+.sidebar__title {
+  @include title-3;
+
+  margin-bottom: px-to-vw(40);
+
+  &--margin-small {
+    margin-bottom: px-to-vw(16);
+  }
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(32);
+
+
+  &--margin-small {
+    margin-bottom: px-to-vw(12);
+  }
+  }
+}
+
+.sidebar__list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: px-to-vw(40);
+
+  @include media-down(sm) {
+    margin-top: px-to-vw(32);
+  }
+}
+
+.sidebar__list-item {
+  margin-right: px-to-vw(16);
+  margin-bottom: px-to-vw(16);
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  img {
+    width: px-to-vw(120);
+    height: px-to-vw(60);
+    object-fit: contain;
+  }
+
+  @include media-down(sm) {
+    margin-right: px-to-vw(12);
+    margin-bottom: px-to-vw(12);
+  }
+}
+
+.sidebar__list-item__link {
+  display: flex;
+  padding: px-to-vw(10);
+  border-radius: $s-border-radius;
+  border: px-to-vw(1) solid $c-text-gray;
+  transition: border-color 0.2s ease-in;
+
+  &:hover {
+    border: px-to-vw(1) solid $c-text-dark;
+  }
+}

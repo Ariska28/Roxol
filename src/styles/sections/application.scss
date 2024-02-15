@@ -1,0 +1,63 @@
+.application {
+  background-color: $c-text-dark;
+  margin-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    margin-bottom: $s-space-mobile;
+  }  
+}
+
+.application__container { 
+  @include container;
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: $s-space-desktop;
+  padding-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    padding-top: $s-space-mobile;
+    padding-bottom: $s-space-mobile;
+  }
+}
+
+.application__title {
+  @include title-2;
+
+  color: $c-white;
+  width: 100%;
+  margin-bottom: px-to-vw(60);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(32);
+  }
+}
+
+.application__text {
+  @include description;
+
+  color: $c-white;
+  width: 40.5%;
+  display: block;
+
+  &--mobile {
+    display: none;
+  }
+
+  @include media-down(sm) {
+    width: 100%;
+    margin-bottom: px-to-vw(20);
+    display: none;
+
+    &--mobile {
+      display: block;
+    }
+  }
+}
+
+.application__form {
+  width: 39.2%;
+
+  @include media-down(sm) {
+    width: 100%;
+  }
+}

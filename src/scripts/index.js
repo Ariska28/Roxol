@@ -4,6 +4,7 @@ import { mobSplider, desktopSplider, spliderWithArrows, historySplider, productS
 import { initRangeFunctional, initDropdown } from "./components/controls";
 import { toggleFilters, toggleLists } from "./components/catalog";
 import { initTabs } from "./components/tabs";
+import { initSideBar } from "./components/sidebar";
 
 document.addEventListener("DOMContentLoaded", () => {
   header();
@@ -18,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
   toggleLists('[data-open-list]'); 
   initDropdown('[data-dropdown]'); 
   initTabs('[data-tabs]'); 
-
-  initSideBar()
+  initSideBar('[data-sidebar]');
+  toggleCardList('[data-card]');
 
   // gsap.from("[data-hero-slider]", {
   //   x: 2000,
@@ -30,29 +31,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-export function initSideBar() {
-  const sidebars = document.querySelectorAll('[data-sidebar]');
-  const openSidebarBtns = document.querySelectorAll('[data-sidebar-open]');
+export function toggleCardList(attr) {
+  const cards = document.querySelectorAll(attr);
 
-  sidebars.forEach((sidebar) => {
-    openSidebarBtns.forEach((openSidebarBtn) => {
-      const closeBtns = sidebar.querySelectorAll('[data-sidebar-close]');
+  cards.forEach((card) => {
+    const openBtn = card.querySelector('[data-card-open]');
+    const list = card.querySelector('[data-card-list]');
+    const listLength = Array.from(list.querySelectorAll('li')).length;
 
-      openSidebarBtn.addEventListener('click', () => {
-        console.log("click")
-        if(openSidebarBtn.getAttribute('data-sidebar-open') === sidebar.getAttribute('data-sidebar')) {
-          sidebar.classList.add('is-open');
-          document.body.classList.add('no-scroll');
-        }
-      })
+    openBtn.querySelector('span').textContent = `${listLength}`;
 
-      closeBtns.forEach((closeBtn) => {
-        closeBtn.addEventListener("click", () => {
-          sidebar.classList.remove('is-open');
-          document.body.classList.remove('no-scroll');
-        })
-      })
-    }) 
+    openBtn.addEventListener('mouseover', () => {
+      setTimeout(() => {
+        card.classList.add('is-open');
+      }, 10)
+    })
+
+    list.addEventListener('mouseleave', () => {
+      card.classList.remove('is-open');
+    })
+
+    window.addEventListener('click', function (e) {
+      if (!list.contains(e.target)) {
+          card.classList.remove('is-open');
+      }
+  });
   })
-
 }
