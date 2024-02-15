@@ -1,0 +1,38 @@
+.feedback {
+  background-color: $c-text-dark;
+}
+
+.feedback__container {
+  @include container;
+
+  max-width: px-to-vw(1564);
+  padding-top: px-to-vw(180);
+  padding-bottom: px-to-vw(180);
+  color: $c-white;
+
+  @include media-down(sm) {
+    padding-top: px-to-vw(100);
+    padding-bottom: px-to-vw(100);
+  }
+}
+
+.feedback__text {
+  @include description;
+
+  margin-bottom: px-to-vw(32);
+  display: block;
+  
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(20);
+  };
+}
+
+.feedback__title {
+  @include title-2;
+
+  margin-bottom: px-to-vw(60);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(32);
+  };
+}

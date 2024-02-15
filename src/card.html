@@ -798,6 +798,119 @@
 
     <main>
       <div class="product">
+        <div class="sidebar" data-sidebar="opt-price">
+          <div class="sidebar__close-area" data-sidebar-close>
+          </div>
+
+          <div class="sidebar__container">
+            <button class="sidebar__close" data-sidebar-close>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" fill="none">
+                <path d="M17.332 17.3329L34.6654 34.6662" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M34.6654 17.3329L17.332 34.6662" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+
+            <h2 class="sidebar__title">
+              Заполните форму для запроса оптовой цены
+            </h2>
+
+            <form class="form">
+              <div class="form__item">
+                <label for="name"></label>
+                <input type="text" 
+                       name="name" 
+                       id="name" 
+                       placeholder="Ваше имя*"
+                       required 
+                />
+              </div>
+              <div class="form__item">
+                <label for="tel"></label>
+                <input type="tel" 
+                       name="tel" 
+                       id="tel" 
+                       placeholder="Телефон*"
+                       required 
+                />
+              </div>
+              <div class="form__item">
+                <label for="email"></label>
+                <input type="email" 
+                       name="email" 
+                       id="email" 
+                       placeholder="Email"
+                />
+              </div>
+              <button class="form__btn" 
+                      type="submit"
+              >
+                <span>
+                  Отправить
+                </span>
+              </button>
+              <div class="form__checkbox form__checkbox--small-width">
+                <input type="checkbox" 
+                       id="send" 
+                       name="send" 
+                >
+                <label for="send">
+                  Нажимая на кнопку “Отправить” Вы даёте своё <a href=""> согласие на обработку введенной персональной информации </a>
+                </label>
+              </div>
+            </form>
+
+            <div class="sidebar__sign">
+              ООО «РОКСОЛ». Поставка товаров по всей России
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar" data-sidebar="buy-retail">
+          <div class="sidebar__close-area" data-sidebar-close>
+          </div>
+
+          <div class="sidebar__container">
+            <button class="sidebar__close" data-sidebar-close>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" fill="none">
+                <path d="M17.332 17.3329L34.6654 34.6662" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M34.6654 17.3329L17.332 34.6662" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+
+            <h2 class="sidebar__title sidebar__title--margin-small">
+              Купить в розницу
+            </h2>
+
+            <div class="sidebar__text">
+              Кликните на розничный магазин чтобы перейти к покупке
+            </div>
+
+            <ul class="sidebar__list">
+              <li class="sidebar__list-item">
+                <a href="/" class="sidebar__list-item__link">
+                  <img src="./assets/images/ozon.png" alt="">
+                </a>
+              </li>
+
+              <li class="sidebar__list-item">
+                <a href="/" class="sidebar__list-item__link">
+                  <img src="./assets/images/instruments.png" alt="">
+                </a>
+              </li>
+
+              <li class="sidebar__list-item">
+                <a href="/" class="sidebar__list-item__link">
+                  <img src="./assets/images/wb.png" alt="">
+                </a>
+              </li>
+            </ul>
+
+            <div class="sidebar__sign">
+              ООО «РОКСОЛ». Поставка товаров по всей России
+            </div>
+          </div>
+        </div>
+
         <div class="product__container">
           <div class="links">
             <a class="links__item" 
@@ -946,13 +1059,13 @@
                   Уточняйте у менеджера
                 </div>
   
-                <button class="product__columns-main__price-btn">
+                <button class="product__columns-main__price-btn" data-sidebar-open="opt-price">
                   <span>
                     Запросить оптовую цену
                   </span>
                 </button>
                 
-                <button class="product__columns-main__buy-btn">
+                <button class="product__columns-main__buy-btn" data-sidebar-open="buy-retail">
                   <span>
                     Купить в розницу
                   </span>
@@ -1193,13 +1306,13 @@
                 Уточняйте у менеджера
               </div>
 
-              <button class="product__columns-main__price-btn">
+              <button class="product__columns-main__price-btn" data-sidebar-open="opt-price">
                 <span>
                   Запросить оптовую цену
                 </span>
               </button>
               
-              <button class="product__columns-main__buy-btn">
+              <button class="product__columns-main__buy-btn" data-sidebar-open="buy-retail">
                 <span>
                   Купить в розницу
                 </span>
@@ -1295,8 +1408,8 @@
             Вы можете задать любой интересующий вас вопрос и наши менеджеры проведут бесплатную  консультацию по продукту
           </h2>
 
-          <form class="feedback__form">
-            <div class="feedback__form-item feedback__form-item--50">
+          <form class="form form--light">
+            <div class="form__item form__item--50">
               <label for="name"></label>
               <input type="text" 
                      name="name" 
@@ -1305,7 +1418,7 @@
                      required 
               />
             </div>
-            <div class="feedback__form-item feedback__form-item--50">
+            <div class="form__item form__item--50">
               <label for="tel"></label>
               <input type="tel" 
                      name="tel" 
@@ -1314,7 +1427,7 @@
                      required 
               />
             </div>
-            <div class="feedback__form-item">
+            <div class="form__item">
               <label for="email"></label>
               <input type="email" 
                      name="email" 
@@ -1322,13 +1435,13 @@
                      placeholder="Email"
               />
             </div>
-            <div class="feedback__form-item">
+            <div class="form__item">
               <label for="email"></label>
               <textarea name="message" 
                         id="message" 
                         placeholder="Ваше сообщение"></textarea>
             </div>
-            <button class="feedback__form-btn" 
+            <button class="form__btn" 
                     type="submit"
             >
               <span>
