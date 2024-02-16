@@ -1,4 +1,10 @@
 .text-editor {
+  h3 {
+    @include title-3;
+
+    margin-bottom: px-to-vw(24);
+  }
+
   h4 {
     @include title-4;
 
@@ -99,6 +105,13 @@
   .desktop {
     @include media-down(sm) {
       display: none;
+    }
+  }
+
+
+  &--big-text {
+    p, ul, li {
+      @include paragraf-big;
     }
   }
 }

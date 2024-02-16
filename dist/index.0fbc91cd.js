@@ -4820,7 +4820,7 @@ function spliderWithArrows(sliderAttr) {
             perMove: 2,
             breakpoints: {
                 767: {
-                    fixedWidth: "81%",
+                    fixedWidth: "85%",
                     arrows: false
                 }
             }

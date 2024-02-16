@@ -7,7 +7,7 @@
 
   @include media-down(sm) {
     margin-top: px-to-vw(20);
-    margin-bottom: px-to-vw(40);
+    margin-bottom: px-to-vw(36);
   }
 }
 
@@ -22,5 +22,9 @@
   
   &.is-active {
     color: $c-text-dark;
+  }
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(4);
   }
 }
