@@ -9186,7 +9186,7 @@ ul {
   }
 }
 
-.news__container {
+.grid__container {
   max-width: calc(1920 * var(--fz));
   padding: 0 calc(42 * var(--fz));
   margin: auto;
@@ -9194,14 +9194,14 @@ ul {
 }
 
 @media (width <= 767px) {
-  .news__container {
+  .grid__container {
     padding-left: calc(16 * var(--fz));
     padding-right: calc(16 * var(--fz));
     margin-bottom: calc(100 * var(--fz));
   }
 }
 
-.news-content__title {
+.grid-content__title {
   font-weight: 500;
   font-size: calc(96 * var(--fz));
   letter-spacing: -.06em;
@@ -9210,54 +9210,54 @@ ul {
 }
 
 @media (width <= 767px) {
-  .news-content__title {
+  .grid-content__title {
     font-size: calc(38 * var(--fz));
     margin-bottom: calc(40 * var(--fz));
   }
 }
 
-.news-content__list {
+.grid-content__list {
   margin: 0 calc(-12 * var(--fz)) calc(-80 * var(--fz));
   flex-wrap: wrap;
   display: flex;
 }
 
 @media (width <= 767px) {
-  .news-content__list {
+  .grid-content__list {
     margin: 0;
   }
 }
 
-.news-content__item {
+.grid-content__item {
   width: calc(20% - 24 * var(--fz));
   margin: 0 calc(12 * var(--fz)) calc(82 * var(--fz)) calc(12 * var(--fz));
 }
 
-.news-content__item:nth-child(3), .news-content__item:nth-child(6) {
+.grid-content__item:nth-child(3), .grid-content__item:nth-child(6) {
   margin-left: calc(20% + 12 * var(--fz));
 }
 
-.news-content__item:nth-child(7) {
+.grid-content__item:nth-child(7) {
   margin-right: calc(20% + 11 * var(--fz));
 }
 
-.news-content__item:nth-child(10), .news-content__item:nth-child(12), .news-content__item:nth-child(14) {
+.grid-content__item:nth-child(10), .grid-content__item:nth-child(12), .grid-content__item:nth-child(14) {
   margin-left: calc(20% + 12 * var(--fz));
 }
 
 @media (width <= 767px) {
-  .news-content__item {
+  .grid-content__item {
     margin-bottom: calc(32 * var(--fz));
     width: 100%;
   }
 
-  .news-content__item:nth-child(n) {
+  .grid-content__item:nth-child(n) {
     margin-left: 0;
     margin-right: 0;
   }
 }
 
-.news-content__item-link {
+.grid-content__item-link {
   margin-bottom: calc(20 * var(--fz));
   height: calc(440 * var(--fz));
   border-radius: calc(12 * var(--fz));
@@ -9266,7 +9266,7 @@ ul {
   overflow: hidden;
 }
 
-.news-content__item-link:before {
+.grid-content__item-link:before {
   content: "";
   opacity: 0;
   background: linear-gradient(#0000 0%, #0e0e0e99 113.11%);
@@ -9276,30 +9276,30 @@ ul {
   position: absolute;
 }
 
-.news-content__item-link:hover .news-content__item-circle, .news-content__item-link:hover:before {
+.grid-content__item-link:hover .grid-content__item-circle, .grid-content__item-link:hover:before {
   opacity: 1;
 }
 
 @media (width <= 767px) {
-  .news-content__item-link {
+  .grid-content__item-link {
     height: calc(240 * var(--fz));
     margin-bottom: calc(12 * var(--fz));
   }
 }
 
-.news-content__item-link__media img {
+.grid-content__item-link__media img {
   height: calc(440 * var(--fz));
   object-fit: cover;
   width: 100%;
 }
 
 @media (width <= 767px) {
-  .news-content__item-link__media img {
+  .grid-content__item-link__media img {
     height: calc(240 * var(--fz));
   }
 }
 
-.news-content__item-date {
+.grid-content__item-date {
   font-weight: 400;
   font-size: calc(18 * var(--fz));
   letter-spacing: -.03em;
@@ -9309,13 +9309,13 @@ ul {
 }
 
 @media (width <= 767px) {
-  .news-content__item-date {
+  .grid-content__item-date {
     font-size: calc(15 * var(--fz));
     line-height: 140%;
   }
 }
 
-.news-content__item-title {
+.grid-content__item-title {
   font-weight: 500;
   font-size: calc(24 * var(--fz));
   letter-spacing: -.03em;
@@ -9324,12 +9324,12 @@ ul {
 }
 
 @media (width <= 767px) {
-  .news-content__item-title {
+  .grid-content__item-title {
     font-size: calc(20 * var(--fz));
   }
 }
 
-.news-content__item-circle {
+.grid-content__item-circle {
   bottom: calc(24 * var(--fz));
   right: calc(24 * var(--fz));
   width: calc(52 * var(--fz));
@@ -9345,12 +9345,12 @@ ul {
   position: absolute;
 }
 
-.news-content__item-circle img {
+.grid-content__item-circle img {
   width: calc(9 * var(--fz));
   height: calc(9 * var(--fz));
 }
 
-.news-content__pagination {
+.grid-content__pagination {
   margin-top: calc(58 * var(--fz));
   justify-content: center;
   align-items: center;
@@ -9358,7 +9358,7 @@ ul {
 }
 
 @media (width <= 767px) {
-  .news-content__pagination {
+  .grid-content__pagination {
     margin-top: calc(8 * var(--fz));
   }
 }
