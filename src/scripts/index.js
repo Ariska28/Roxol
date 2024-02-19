@@ -5,6 +5,8 @@ import { initRangeFunctional, initDropdown } from "./components/controls";
 import { toggleFilters, toggleLists } from "./components/catalog";
 import { initTabs } from "./components/tabs";
 import { initSideBar } from "./components/sidebar";
+import { toggleCardList } from "./components/toggleCardsList";
+import { matchImagesWithLinks } from "./components/matchImagesWithLinks";
 
 document.addEventListener("DOMContentLoaded", () => {
   header();
@@ -21,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initTabs('[data-tabs]'); 
   initSideBar('[data-sidebar]');
   toggleCardList('[data-card]');
+  matchImagesWithLinks('[data-matches]');
 
   // gsap.from("[data-hero-slider]", {
   //   x: 2000,
@@ -30,31 +33,3 @@ document.addEventListener("DOMContentLoaded", () => {
   // })
 
 });
-
-export function toggleCardList(attr) {
-  const cards = document.querySelectorAll(attr);
-
-  cards.forEach((card) => {
-    const openBtn = card.querySelector('[data-card-open]');
-    const list = card.querySelector('[data-card-list]');
-    const listLength = Array.from(list.querySelectorAll('li')).length;
-
-    openBtn.querySelector('span').textContent = `${listLength}`;
-
-    openBtn.addEventListener('mouseover', () => {
-      setTimeout(() => {
-        card.classList.add('is-open');
-      }, 10)
-    })
-
-    list.addEventListener('mouseleave', () => {
-      card.classList.remove('is-open');
-    })
-
-    window.addEventListener('click', function (e) {
-      if (!list.contains(e.target)) {
-          card.classList.remove('is-open');
-      }
-  });
-  })
-}

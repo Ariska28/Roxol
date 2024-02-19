@@ -1,0 +1,33 @@
+.producing-products__container {
+  @include container;
+
+  margin-top: $s-space-desktop;
+  margin-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    margin-top: $s-space-mobile;
+    margin-bottom: $s-space-mobile;
+  }
+}
+
+.producing-producrs__title {
+  @include title-2;
+
+  max-width: px-to-vw(720);
+  margin-bottom: px-to-vw(60);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(40);
+  }
+}
+
+.producing-producrs__text-mobile {
+  display: none;
+
+  @include media-down(sm) {
+    @include description;
+
+    display: block;
+    margin-bottom: px-to-vw(24);
+  }
+}
