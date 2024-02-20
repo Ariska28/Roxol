@@ -28,17 +28,6 @@
   }
 }
 
-.card__group {
-  position: absolute;
-  top: px-to-vw(24);
-  left: px-to-vw(24);
-
-  @include media-down(sm) {
-    top: px-to-vw(16);
-    left: px-to-vw(16);
-  }
-}
-
 .card__title, 
 .card__text {
   @include title-5;

@@ -603,6 +603,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     (0, _sidebar.initSideBar)("[data-sidebar]");
     (0, _toggleCardsList.toggleCardList)("[data-card]");
     (0, _matchImagesWithLinks.matchImagesWithLinks)("[data-matches]");
+    (0, _sliders.spliderWithArrowsDesktop)("[data-slider-cards]");
 // gsap.from("[data-hero-slider]", {
 //   x: 2000,
 //   duration: 3,
@@ -4746,6 +4747,7 @@ parcelHelpers.export(exports, "mobSplider", ()=>mobSplider);
 parcelHelpers.export(exports, "productSplider", ()=>productSplider);
 parcelHelpers.export(exports, "desktopSplider", ()=>desktopSplider);
 parcelHelpers.export(exports, "spliderWithArrows", ()=>spliderWithArrows);
+parcelHelpers.export(exports, "spliderWithArrowsDesktop", ()=>spliderWithArrowsDesktop);
 parcelHelpers.export(exports, "historySplider", ()=>historySplider);
 var _splide = require("@splidejs/splide");
 var _splideDefault = parcelHelpers.interopDefault(_splide);
@@ -4807,6 +4809,20 @@ function spliderWithArrows(sliderAttr) {
         });
         initProgressBar(splide);
         splide.mount();
+    });
+}
+function spliderWithArrowsDesktop(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            gap: "calc(24 * var(--fz))",
+            perMove: 1,
+            perPage: 5
+        });
+        initProgressBar(splide);
+        splide.mount();
+        if (window.matchMedia("(max-width: 767px)").matches) splide.destroy();
     });
 }
 function historySplider(sliderAttr) {

@@ -19,6 +19,10 @@
 
   width: 80%;
 
+  &--full-width {
+    width: 100%;
+  }
+
   @include media-down(sm) {
     width: 100%;
   }
@@ -37,6 +41,31 @@
 
     &--mobile {
       display: flex;
+      margin-bottom: px-to-vw(100);
+    }
+  }
+}
+
+.article__back {
+  color: inherit;
+  display: flex;
+  align-items: center;
+  margin-bottom: px-to-vw(41);
+  font-weight: 500;
+  font-size: px-to-vw(14);
+  line-height: 150%;
+  letter-spacing: -.02em;
+
+  img {
+    transform: rotate(180deg);
+    margin-right: px-to-vw(14);
+  }
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(24);
+
+    img {
+      margin-right: px-to-vw(8);
     }
   }
 }
@@ -137,7 +166,7 @@
   margin: px-to-vw(80) auto $s-space-desktop;
 
   @include media-down(sm) {
-    margin-top: $s-space-mobile;
+    margin-top: px-to-vw(40);
     margin-bottom: $s-space-mobile;
   }
 }

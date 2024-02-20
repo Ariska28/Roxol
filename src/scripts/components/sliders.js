@@ -80,6 +80,29 @@ export function spliderWithArrows(sliderAttr) {
     })
 }
 
+export function spliderWithArrowsDesktop(sliderAttr) {
+  const spleders =  document.querySelectorAll(`${sliderAttr}`);
+
+  spleders.forEach((el) => {
+    const splide = new Splide(el, {
+      pagination: false,
+      gap : 'calc(24 * var(--fz))',
+      perMove: 1,
+      perPage: 5,
+    });
+    
+    initProgressBar(splide) 
+    
+    splide.mount();
+
+    if (window.matchMedia("(max-width: 767px)").matches) {
+      splide.destroy();
+    }
+  })
+
+
+}
+
 export function historySplider(sliderAttr) {
   const spleders =  document.querySelectorAll(`${sliderAttr}`);
 

@@ -1,6 +1,6 @@
 import { header } from "./components/header";
 import { gsap } from "gsap";
-import { mobSplider, desktopSplider, spliderWithArrows, historySplider, productSplider } from "./components/sliders";
+import { mobSplider, desktopSplider, spliderWithArrows, historySplider, productSplider, spliderWithArrowsDesktop } from "./components/sliders";
 import { initRangeFunctional, initDropdown } from "./components/controls";
 import { toggleFilters, toggleLists } from "./components/catalog";
 import { initTabs } from "./components/tabs";
@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSideBar('[data-sidebar]');
   toggleCardList('[data-card]');
   matchImagesWithLinks('[data-matches]');
+  spliderWithArrowsDesktop('[data-slider-cards]')
 
   // gsap.from("[data-hero-slider]", {
   //   x: 2000,

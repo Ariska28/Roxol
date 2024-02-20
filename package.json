@@ -1,6 +1,17 @@
 {
   "name": "my-project",
-  "source": ["src/index.html", "src/company.html", "src/catalog.html", "src/card.html", "src/analogs.html",  "src/analogs-card.html", "src/news.html", "src/article.html", "src/tribology.html", "src/industry-solutions.html"], 
+  "source": ["src/index.html", 
+             "src/company.html", 
+             "src/catalog.html", 
+             "src/card.html", 
+             "src/analogs.html",  
+             "src/analogs-card.html", 
+             "src/news.html", 
+             "src/article.html", 
+             "src/tribology.html", 
+             "src/industry-solutions.html", 
+             "src/metallurgical-industry.html"
+            ], 
   "browserslist": "> 0.5%, last 3 versions, not dead",
   "scripts": {
     "start": "parcel",
