@@ -1,0 +1,254 @@
+.contacts {
+  &--small-width {
+    .contacts__content {
+      justify-content: flex-start;
+    }
+
+    .contacts__content-left {
+      width: 40.6%;
+    }
+
+    .contacts__content-right {
+      width: 39.7%;
+    }
+  }
+
+  @include media-down(sm) {
+    &--small-width {
+      .contacts__content-left {
+        width: 100%;
+      }
+  
+      .contacts__content-right {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.contacts__container {
+  @include container;
+
+  margin-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    margin-bottom: $s-space-mobile;
+  }
+}
+
+.contacts__title {
+  @include title-1;
+
+  margin-bottom: px-to-vw(24);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(16);
+  }
+}
+
+.contacts__links {
+  display: flex;
+
+  margin-bottom: px-to-vw(52);
+
+  @include media-down(sm) {
+    flex-wrap: wrap;
+    margin-bottom: px-to-vw(36);
+  }
+}
+
+.contacts__content {
+  display: flex;
+  justify-content: space-between;
+
+  @include media-down(sm) {
+    flex-direction: column;
+  }
+}
+
+.contacts__content-left {
+  width: 39.25%;
+  padding-bottom: px-to-vw(58);
+
+  @include media-down(sm) {
+    width: 100%;
+    padding-bottom: 0;
+  }
+}
+
+.contacts__content-right {
+  width: 59.5%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  @include media-down(sm) {
+    width: 100%;
+  }
+}
+
+.contacts__content-right__col {
+  max-width: px-to-vw(720);
+
+  @include media-down(sm) {
+    width: 100%;
+
+    &:first-child {
+      margin-bottom: px-to-vw(24);
+    }
+  }
+}
+
+.contacts__content-right__title {
+  @include title-5;
+
+  margin-bottom: px-to-vw(12);
+}
+
+.contacts__content-right__text {
+  @include title-5;
+  
+  color: $c-gray-2;
+  margin-bottom: px-to-vw(24);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.contacts__content-right__media {
+  border-radius: $s-border-radius;
+  overflow: hidden;
+  background-color: aquamarine;
+  width: 100%;
+  height: 100%;
+  max-height: px-to-vw(760);
+
+  @include media-down(sm) {
+    height: px-to-vw(480);
+    min-height: auto;
+    border-radius: $s-border-radius-mob;
+  }
+}
+
+.contacts__line {
+  background-color: $c-gray-line;
+  color: $c-gray-line;
+  border: none;
+  height: px-to-vw(1);
+  margin-top: px-to-vw(32);
+  margin-bottom: px-to-vw(32);
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.contacts__content-left__title {
+  @include title-3;
+
+  margin-bottom: px-to-vw(40);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(32);
+  }
+}
+
+.contacts__content-left__title-2 {
+  @include title-4;
+
+  margin-bottom: px-to-vw(24);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(20);
+
+    &--big {
+      font-size: px-to-vw(24);
+    }
+  }
+}
+
+.contacts__content-left__links {
+  a {
+    @include title-5;
+
+    text-decoration: underline;
+    color: $c-gray-2;
+    margin-bottom: px-to-vw(12);
+    transition: color 0.2s ease-in;
+
+    &:hover {
+      color: $c-text-dark;
+    }
+  }
+}
+
+.contacts__content-left__info-item {
+  @include title-5;
+
+  color: $c-gray-2;
+  margin-bottom: px-to-vw(12);
+  max-width: px-to-vw(382);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  span {
+    color: $c-text-dark;
+  }
+
+  &--big-width {
+    max-width: px-to-vw(428);
+  }
+}
+
+.contacts__content-left__socials {
+  display: flex;
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(40);
+  }
+}
+
+.contacts__content-left__socials-link {
+  height: px-to-vw(41); 
+  width: px-to-vw(41);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: px-to-vw(1) solid $c-gray-line;
+  margin-right: px-to-vw(12);
+  transition: border-color 0.2s ease-in, background-color 0.2s ease-in;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  svg {
+    max-height: px-to-vw(17);
+    max-width: px-to-vw(21);
+
+    path {
+      transition: stroke 0.2s ease-in;
+      stroke: $c-text-dark;
+    }
+  }
+
+  &:hover {
+    border-color: $c-text-dark;
+    background-color: $c-text-dark;
+
+    svg {  
+      path {
+        stroke: $c-white;
+      }
+    }
+  }
+
+  @include media-down(sm) {
+    margin-top: px-to-vw(4);
+  }
+}
+

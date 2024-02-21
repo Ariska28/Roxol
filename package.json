@@ -11,7 +11,12 @@
              "src/tribology.html", 
              "src/industry-solutions.html", 
              "src/metallurgical-industry.html",
-             "src/contract-manufacturing.html"
+             "src/contract-manufacturing.html",
+             "src/contacts.html",
+             "src/delivery.html",
+             "src/where-buy.html",
+             "src/general-conditions.html",
+             "src/requisites.html"
             ], 
   "browserslist": "> 0.5%, last 3 versions, not dead",
   "scripts": {
