@@ -11760,6 +11760,12 @@ ul {
   border-bottom: calc(1 * var(--fz)) solid #c1c1c1;
 }
 
+@media (width <= 767px) {
+  .terms-of-use__header {
+    padding-bottom: calc(40 * var(--fz));
+  }
+}
+
 .terms-of-use__header-title {
   font-weight: 500;
   font-size: calc(96 * var(--fz));

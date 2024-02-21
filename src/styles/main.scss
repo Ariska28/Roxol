@@ -66,6 +66,10 @@
 .terms-of-use__header {
   padding-bottom: px-to-vw(60);
   border-bottom: px-to-vw(1) solid $c-gray-line;
+
+  @include media-down(sm) {
+    padding-bottom: px-to-vw(40);
+  }
 }
 
 .terms-of-use__header-title {
