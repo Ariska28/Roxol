@@ -80,6 +80,32 @@ export function spliderWithArrows(sliderAttr) {
     })
 }
 
+export function spliderVertical(sliderAttr) {
+  const spleders =  document.querySelectorAll(`${sliderAttr}`);
+
+    spleders.forEach((el) => {
+      const splide = new Splide(el, {
+        direction: 'ttb',
+        heightRatio: 1,
+        perPage: 2,
+        pagination: false,
+        gap : 'calc(24 *var(--fz))',
+        arrows: false,
+        wheel       : true,
+        releaseWheel: true,
+        perMove: 1,
+      });
+      
+      initProgressBar(splide) 
+      
+      splide.mount();
+
+      if (window.matchMedia("(max-width: 767px)").matches) {
+        splide.destroy();
+      }
+    })
+}
+
 export function spliderWithArrowsDesktop(sliderAttr) {
   const spleders =  document.querySelectorAll(`${sliderAttr}`);
 

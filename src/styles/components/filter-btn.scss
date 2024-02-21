@@ -1,0 +1,54 @@
+.filter-btn {
+  @include paragraf-small;
+  @include button-reset-styles;
+
+  font-family: $font-base;
+  font-size: px-to-vw(18);
+  font-weight: 400;
+  line-height: 130%;
+  letter-spacing: -.03em;
+  padding: px-to-vw(8) px-to-vw(14);
+  border: 1px solid $c-gray-line;
+  border-radius: $s-border-radius;
+  transition: background-color 0.2s ease-in, border-color 0.2s ease-in,color 0.2s ease-in;
+
+  &:hover, 
+  &:focus,
+  &.is-active  {
+    background-color: $c-brown;
+    border-color: $c-brown;
+  }
+
+  margin-right: px-to-vw(8);
+  margin-bottom: px-to-vw(8);
+
+  &--white-hover {
+    &:hover, 
+    &:focus,
+    &.is-active  {
+      background-color: $c-white;
+      border-color: $c-white;
+    }
+  }
+
+  &--dark {
+    border-color: $c-text-dark;
+    color: $c-text-dark;
+
+    &:hover, 
+    &:focus,
+    &.is-active {
+      background-color: $c-text-dark;
+      color: $c-white;
+      border-color: $c-text-dark;
+    }
+  }
+
+  @include media-down(sm) {
+    margin-right: px-to-vw(6);
+    margin-bottom: px-to-vw(6);
+    font-size: px-to-vw(14);
+    padding: px-to-vw(6) px-to-vw(12);
+    border-radius: $s-border-radius-mob;
+  }
+}

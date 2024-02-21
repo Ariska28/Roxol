@@ -48,14 +48,7 @@ $s-dropdown-height-mob: px-to-vw(60);
 }
 
 .catalog__filters-btn {
-  @include filter-btn($c-brown); 
-
-  margin-right: px-to-vw(8);
-  margin-bottom: px-to-vw(8);
-
   @include media-down(sm) {
-    margin-right: px-to-vw(6);
-    margin-bottom: px-to-vw(6);
     white-space: nowrap;
 
     &:last-child {
@@ -331,17 +324,6 @@ $s-dropdown-height-mob: px-to-vw(60);
   @include media-down(sm) {
     flex-wrap: wrap;
     margin-bottom: px-to-vw(16);
-  }
-}
-
-.catalog__content-header__settings-btn {
-  @include filter-btn($c-white);
-
-  margin-right: px-to-vw(8);
-
-  @include media-down(sm) {
-    margin-right: px-to-vw(6);
-    margin-bottom: px-to-vw(6);
   }
 }
 

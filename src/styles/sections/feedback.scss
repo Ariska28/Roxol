@@ -1,5 +1,11 @@
 .feedback {
   background-color: $c-text-dark;
+
+  margin-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    margin-bottom: $s-space-mobile;
+  }
 }
 
 .feedback__container {

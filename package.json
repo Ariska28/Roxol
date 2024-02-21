@@ -10,7 +10,8 @@
              "src/article.html", 
              "src/tribology.html", 
              "src/industry-solutions.html", 
-             "src/metallurgical-industry.html"
+             "src/metallurgical-industry.html",
+             "src/contract-manufacturing.html"
             ], 
   "browserslist": "> 0.5%, last 3 versions, not dead",
   "scripts": {

@@ -102,15 +102,7 @@
 }
 
 .product__columns-main__btn {
-  @include filter-btn($c-brown);
   @include paragraf-small;
-
-  margin-right: px-to-vw(8);
-
-  @include media-down(sm) {
-    margin-right: px-to-vw(6);
-    margin-bottom: px-to-vw(6);
-  }
 }
 
 .product__columns-main__title {
