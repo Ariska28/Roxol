@@ -59,3 +59,25 @@
 @import './sections/packaging.scss'; 
 @import './sections/contacts.scss'; 
 
+.terms-of-use__container {
+  @include container;
+}
+
+.terms-of-use__header {
+  padding-bottom: px-to-vw(60);
+  border-bottom: px-to-vw(1) solid $c-gray-line;
+}
+
+.terms-of-use__header-title {
+  @include title-1;
+}
+
+.terms-of-use__content {
+  max-width: px-to-vw(1092);
+  margin: px-to-vw(80) auto $s-space-desktop;
+
+  @include media-down(sm) {
+    margin-top: px-to-vw(40);
+    margin-bottom: $s-space-mobile;
+  }
+}

@@ -16,7 +16,8 @@
              "src/delivery.html",
              "src/where-buy.html",
              "src/general-conditions.html",
-             "src/requisites.html"
+             "src/requisites.html",
+             "src/terms-of-use.html"
             ], 
   "browserslist": "> 0.5%, last 3 versions, not dead",
   "scripts": {
