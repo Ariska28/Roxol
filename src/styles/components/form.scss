@@ -1,5 +1,5 @@
 $s-input-height-desktop: px-to-vw(72);
-$s-input-height-mobile: px-to-vw(58);
+$s-input-height-mobile: px-to-vw(53);
 
 .form {
   width: 100%;
@@ -27,13 +27,62 @@ $s-input-height-mobile: px-to-vw(58);
   }
 }
 
+.form__line {
+  width: 100%;
+  background-color: $c-gray-line;
+  color: $c-gray-line;
+  border: none;
+  height: px-to-vw(1);
+  margin-top: px-to-vw(40);
+  margin-bottom: px-to-vw(40);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  @include media-down(sm) {
+    margin-top: px-to-vw(32);
+    margin-bottom: px-to-vw(32);
+  }
+}
+
+.form__block {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  &--margin-bottom {
+    margin-bottom: px-to-vw(60);
+  }
+
+  @include media-down(sm) {
+    flex-direction: column;
+
+    &--margin-bottom {
+      margin-bottom: px-to-vw(32);
+    }
+  }
+}
+
+.form__block-text {
+  max-width: px-to-vw(586);
+
+  @include media-down(sm) {
+    width: 100%;
+  }
+}
+
+.form__block-fieldset {
+  width: 49.3%;
+
+  @include media-down(sm) {
+    width: 100%;
+  }
+}
+
 .form__item {
   width: 100%;
   margin-bottom: px-to-vw(20);
-
-  &--50 {
-    width: 49.3%;
-  }
 
   input, textarea {
     @include btn-text;
@@ -59,28 +108,58 @@ $s-input-height-mobile: px-to-vw(58);
     }
   }
 
+  textarea {
+    height: px-to-vw(140);
+  }
+
   input {
     height: $s-input-height-desktop;
   }
 
-  textarea {
-    height: px-to-vw(140);
+  &--50 {
+    width: 49.3%;
+  }
+
+  &--no-margin {
+    margin-bottom: 0;
+  }
+
+  &--multi-line {
+    textarea {
+      height: $s-input-height-desktop;
+    }
   }
 
   @include media-down(sm) {
     margin-bottom: px-to-vw(12);
 
-    &--50 {
-      width: 100%;
-    }
-
     input, textarea { 
       border-radius: $s-border-radius-mob;
-      padding: px-to-vw(18) px-to-vw(20);
+      padding: px-to-vw(18) px-to-vw(19);
     }
 
     input {
       height: $s-input-height-mobile;
+    }
+
+    &--50 {
+      width: 100%;
+    }
+
+    &--no-margin {
+      margin-bottom: 0;
+    }
+
+    &--multi-line-2-col {
+      textarea {
+        height: px-to-vw(74);
+      }
+    }
+
+    &--multi-line-4-col {
+      textarea {
+        height: px-to-vw(116);
+      }
     }
   };
 }
@@ -97,11 +176,20 @@ $s-input-height-mobile: px-to-vw(58);
   }
 }
 
+.form__block-title {
+  @include title-4;
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(24);
+  }
+}
+
 .form__checkbox {
   margin-top: px-to-vw(20);
   width: 100%;
   padding-left: px-to-vw(26);
   position: relative;
+  display: flex;
 
   &:last-child {
     padding-bottom: 0;
@@ -119,11 +207,8 @@ $s-input-height-mobile: px-to-vw(58);
     opacity: 0;
 
     & + label {
-      font-family: $font-base;
-      font-size: px-to-vw(14);
-      font-weight: 500;
-      line-height: 130%;
-      letter-spacing: -.02em;
+      @include btn-text;
+
       cursor: pointer;
       color: $c-gray-2;
       user-select: none;
@@ -139,7 +224,7 @@ $s-input-height-mobile: px-to-vw(58);
         height: px-to-vw(18);
         flex-shrink: 0;
         flex-grow: 0;
-        border: px-to-vw(1.5) solid $c-gray-2;
+        border: px-to-vw(2) solid $c-gray-2;
         border-radius: px-to-vw(3);
         margin-right: px-to-vw(12);
         background-repeat: no-repeat;
@@ -155,12 +240,57 @@ $s-input-height-mobile: px-to-vw(58);
   }
 
   &--small-width {
-    max-width: 76%;
+    input + label {
+      max-width: px-to-vw(480);
+    }
+  }
+
+  &--no-margin {
+    margin-top: 0;
+  }
+
+  &--small-text {
+    input + label {
+      font-size: px-to-vw(14);
+      font-weight: 500;
+      line-height: 130%;
+      letter-spacing: -.02em;
+    }
+  }
+
+  &--dark-label {
+    margin-top: px-to-vw(12);
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    input {
+      &:checked + label {
+        color: $c-text-dark;
+      }
+
+      & + label {
+        color: $c-text-gray;
+
+        &::before {
+          border-color: $c-text-gray;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
   }
 
   @include media-down(sm) {
+    margin-top: px-to-vw(16);
+
     &--small-width {
       max-width: 100%;
+    }
+
+    &--no-margin {
+      margin-top: 0;
     }
   }
 }
@@ -171,6 +301,13 @@ $s-input-height-mobile: px-to-vw(58);
   background-color: transparent;
   border-radius: $s-border-radius;
   position: relative;
+  margin-bottom: px-to-vw(20);
+
+  &--light {
+    .form__dropdown-options {
+      background-color: $c-white;
+    }
+  }
 
   &:hover {
     input {
@@ -199,9 +336,11 @@ $s-input-height-mobile: px-to-vw(58);
     }
 
     .form__dropdown-options {
+      z-index: 1000;
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
+      padding-top: px-to-vw(11);
     }    
   }
 
@@ -236,11 +375,16 @@ $s-input-height-mobile: px-to-vw(58);
     }
   }
 
+  &--50 {
+    width: 49.3%;
+  }
+
   @include media-down(sm) {
     border-radius: $s-border-radius-mob;
     min-width: 100%;
     height: $s-input-height-mobile;
     overflow: hidden;
+    margin-bottom: px-to-vw(12);
 
     input {
       height: $s-input-height-mobile;
@@ -254,7 +398,7 @@ $s-input-height-mobile: px-to-vw(58);
 
       .form__dropdown-options {
         position: static;
-        margin-top: $s-input-height-mobile;
+        margin-top: calc($s-input-height-mobile - px-to-vw(6));
         border-radius: 0 0 $s-border-radius-mob $s-border-radius-mob;
       }
 
@@ -263,12 +407,16 @@ $s-input-height-mobile: px-to-vw(58);
         padding-left: px-to-vw(16);          
       }
     }
+
+    &--50 {
+      width: 100%;
+    }
   }
 }
 
 .form__dropdown-arrow {
   position: absolute;
-  right: px-to-vw(16);
+  right: px-to-vw(32);
   z-index: 16;
   top: px-to-vw(24);
   transform: rotate(0deg);
@@ -290,6 +438,7 @@ $s-input-height-mobile: px-to-vw(58);
 
   @include media-down(sm) {
     top: px-to-vw(18);
+    right: px-to-vw(16);
   }
 }
 
@@ -299,7 +448,7 @@ $s-input-height-mobile: px-to-vw(58);
   border: px-to-vw(1) solid $c-text-dark;
   border-top: none;
   cursor: pointer;
-  background-color: $c-white;
+  background-color: $c-primary;
   outline: none;
   position: absolute;
   top: $s-input-height-mobile;
@@ -326,6 +475,6 @@ $s-input-height-mobile: px-to-vw(58);
   }
 
   @include media-down(sm) {
-    padding: px-to-vw(6) px-to-vw(16);
+    padding: px-to-vw(7) px-to-vw(16) px-to-vw(8);
   }
 }

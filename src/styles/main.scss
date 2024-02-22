@@ -58,30 +58,62 @@
 @import './sections/contract.scss'; 
 @import './sections/packaging.scss'; 
 @import './sections/contacts.scss'; 
+@import './sections/terms-of-use.scss'; 
+@import './sections/buy-in.scss'; 
 
-.terms-of-use__container {
+.questionnaire__container {
   @include container;
+
+  margin-bottom: $s-space-desktop;
+
+  @include media-down(sm) {
+    margin-bottom: $s-space-mobile;
+  }
 }
 
-.terms-of-use__header {
+.questionnaire__header {
   padding-bottom: px-to-vw(60);
   border-bottom: px-to-vw(1) solid $c-gray-line;
 
   @include media-down(sm) {
-    padding-bottom: px-to-vw(40);
+    padding-bottom: px-to-vw(44);
   }
 }
 
-.terms-of-use__header-title {
+.questionnaire__header-title {
   @include title-1;
+
+  max-width: px-to-vw(1201);
 }
 
-.terms-of-use__content {
-  max-width: px-to-vw(1092);
-  margin: px-to-vw(80) auto $s-space-desktop;
+.questionnaire__content {
+  display: flex;
+  justify-content: space-between;
+  padding-top: px-to-vw(40);
 
   @include media-down(sm) {
-    margin-top: px-to-vw(40);
-    margin-bottom: $s-space-mobile;
+    flex-direction: column;
+    padding-top: px-to-vw(32);
+  }
+}
+
+.questionnaire__content-text {
+  width: 19%;
+
+  p {
+    @include description;
+  }
+
+  @include media-down(sm) {
+    width: 100%;
+    margin-bottom: px-to-vw(24);
+  }
+}
+
+.questionnaire__content-form {
+  width: 79.75%;
+
+  @include media-down(sm) {
+    width: 100%;
   }
 }
