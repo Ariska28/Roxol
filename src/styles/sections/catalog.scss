@@ -293,7 +293,14 @@ $s-dropdown-height-mob: px-to-vw(60);
     input {
       min-width: 100%;
       height: px-to-vw(58);
+      padding: px-to-vw(20) px-to-vw(20) px-to-vw(20) px-to-vw(50);
       border-radius: $s-border-radius-mob;
+    }
+
+    svg {
+      width: px-to-vw(20);
+      height: px-to-vw(20);
+      left: px-to-vw(20);
     }
   }
 }

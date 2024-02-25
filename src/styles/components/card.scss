@@ -58,13 +58,17 @@
 
   @include media-down(sm) {
     img {
-      max-width: px-to-vw(183);
+      max-width: px-to-vw(191);
     }
   }
 }
 
 .card__type {
   margin-bottom: px-to-vw(20);
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(16);
+  }
 }
 
 .card__type-text {

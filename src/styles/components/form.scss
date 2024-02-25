@@ -174,6 +174,7 @@ $s-input-height-mobile: px-to-vw(53);
 
   @include media-down(sm) {
     min-width: 100%;
+    margin-top: px-to-vw(28);
   }
 }
 

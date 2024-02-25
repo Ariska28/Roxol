@@ -35,7 +35,7 @@
   &--big-space {
     .point-card__text {
       @include media-down(sm) {
-        margin-top: px-to-vw(80);
+        margin-top: px-to-vw(60);
       }
     }
   }
