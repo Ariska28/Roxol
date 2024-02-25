@@ -31,6 +31,7 @@
 .article__links {
   display: flex;
   align-items: center;
+  margin-bottom: px-to-vw(7);
 
   &--mobile {
     display: none;
@@ -78,7 +79,7 @@
   justify-content: center;
   border-radius: 50%;
   border: px-to-vw(1) solid $c-gray-line;
-  margin-right: px-to-vw(12);
+  margin-right: px-to-vw(14);
   transition: border-color 0.2s ease-in, background-color 0.2s ease-in;
 
   &:last-child {
@@ -123,10 +124,11 @@
   @include paragraf-small;
 
   color: $c-gray-2;
-  margin-right: px-to-vw(12);
+  margin-right: px-to-vw(22);
 
   @include media-down(sm) {
     margin-right: px-to-vw(20);
+    margrin-bottom: 0;
   }
 }
 

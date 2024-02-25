@@ -137,7 +137,7 @@
 .company-news__list-item__title {
   @include title-3;
 
-  width: 71%;
+  width: 73%;
   margin-bottom: px-to-vw(12);
 
   @include media-down(sm) {

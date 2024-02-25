@@ -7,6 +7,7 @@ import { initTabs } from "./components/tabs";
 import { initSideBar } from "./components/sidebar";
 import { toggleCardList } from "./components/toggleCardsList";
 import { matchImagesWithLinks } from "./components/matchImagesWithLinks";
+import { switchPrice } from "./components/switchPrice";
 
 document.addEventListener("DOMContentLoaded", () => {
   header();
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   matchImagesWithLinks('[data-matches]');
   spliderWithArrowsDesktop('[data-slider-cards]')
   spliderVertical('[data-slider-vertical]');
+  switchPrice('[data-product]'); 
 
   // gsap.from("[data-hero-slider]", {
   //   x: 2000,
@@ -35,3 +37,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // })
 
 });
+

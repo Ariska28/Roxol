@@ -63,7 +63,7 @@ export function spliderWithArrows(sliderAttr) {
     spleders.forEach((el) => {
       const splide = new Splide(el, {
         pagination: false,
-        fixedWidth: '38.5%',
+        fixedWidth: '39.2%',
         gap : '0px',
         perMove: 2,
         breakpoints: {

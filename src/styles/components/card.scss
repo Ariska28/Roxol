@@ -52,7 +52,7 @@
 
   img {
     transition: transform 0.2s ease-in;
-    max-width: px-to-vw(240);
+    max-width: px-to-vw(243);
     margin: auto;
   }
 
@@ -84,6 +84,8 @@
   color: $c-text-dark;
   background-color: transparent;
   border: 1px solid $c-text-gray;
+  position: relative;
+  z-index: 10;
   transition: background-color 0.2s ease-in, border-color 0.2s ease-in;
 
   &.is-active,

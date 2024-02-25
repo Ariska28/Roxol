@@ -82,6 +82,7 @@ $s-input-height-mobile: px-to-vw(53);
 
 .form__item {
   width: 100%;
+  display: flex;
   margin-bottom: px-to-vw(20);
 
   input, textarea {
@@ -169,7 +170,7 @@ $s-input-height-mobile: px-to-vw(53);
 
   width: auto;
   min-width: px-to-vw(348);
-  margin-top: px-to-vw(20);
+  margin-top: px-to-vw(14);
 
   @include media-down(sm) {
     min-width: 100%;
@@ -241,7 +242,7 @@ $s-input-height-mobile: px-to-vw(53);
 
   &--small-width {
     input + label {
-      max-width: px-to-vw(480);
+      max-width: px-to-vw(474);
     }
   }
 
@@ -463,7 +464,7 @@ $s-input-height-mobile: px-to-vw(53);
 .form__dropdown-option {
   @include link-text;
   
-  padding: px-to-vw(12) px-to-vw(27) px-to-vw(12) px-to-vw(32);
+  padding: px-to-vw(14) px-to-vw(27) px-to-vw(11) px-to-vw(32);
   border-radius: $s-border-radius-mob;
   transition: all 0.2s ease;
   position: relative;

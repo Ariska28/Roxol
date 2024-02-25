@@ -7,8 +7,8 @@
   font-weight: 400;
   line-height: 130%;
   letter-spacing: -.03em;
-  padding: px-to-vw(8) px-to-vw(14);
-  border: 1px solid $c-gray-line;
+  padding: px-to-vw(8) px-to-vw(14) px-to-vw(7);
+  border: px-to-vw(1) solid $c-gray-line;
   border-radius: $s-border-radius;
   transition: background-color 0.2s ease-in, border-color 0.2s ease-in,color 0.2s ease-in;
 
@@ -20,7 +20,7 @@
   }
 
   margin-right: px-to-vw(8);
-  margin-bottom: px-to-vw(8);
+  margin-bottom: px-to-vw(6);
 
   &--white-hover {
     &:hover, 

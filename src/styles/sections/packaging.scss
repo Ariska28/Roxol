@@ -57,7 +57,7 @@
 }
 
 .packaging__list-item {
-  width: calc(20% - calc(24 * var(--fz)));
+  width: calc(20% - calc(12 * var(--fz)));
   margin: 0 px-to-vw(12);
 
   &:nth-child(2) {

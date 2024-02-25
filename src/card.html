@@ -301,20 +301,22 @@
         </div>
 
         <nav class="header__nav">
-          <ul class="header__nav-list">
-            <li class="header__nav-item">
+          <div class="header__nav-block">
+            <div class="header__nav-item">
               <a href="#">
                 Аналоги
               </a>
-            </li>
+            </div>
 
-            <li class="header__nav-item">
+            <div class="header__nav-item">
               <a href="#">
                 Отраслевые решения
               </a>
-            </li>
+            </div>
+          </div>
 
-            <li class="header__nav-item">
+          <div class="header__nav-block">
+            <div class="header__nav-item">
               <a href="#">
                 О компании
 
@@ -356,9 +358,9 @@
                   </li>
                 </ul>
               </div>
-            </li>
+            </div>
 
-            <li class="header__nav-item">
+            <div class="header__nav-item">
               <a href="#">
                 Контакты
 
@@ -400,29 +402,29 @@
                   </li>
                 </ul>
               </div>
-            </li>
+            </div>
+          </div>
 
-            <li class="header__nav-item">
-              <a href="#">
-                sales@rox-russia.ru
-              </a>
-            </li>
+          <div class="header__nav-item">
+            <a href="#">
+              sales@rox-russia.ru
+            </a>
+          </div>
 
-            <li class="header__nav-item header__nav-item--dark-hover">  
-              <a href="#">
-                <svg class="header__nav-item__icon" 
-                     xmlns="http://www.w3.org/2000/svg" 
-                     width="24"
-                    height="25" 
-                    fill="none"  
-                >
-                  <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"/>
-                </svg>  
+          <div class="header__nav-item header__nav-item--dark-hover">  
+            <a href="#">
+              <svg class="header__nav-item__icon" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="24"
+                  height="25" 
+                  fill="none"  
+              >
+                <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"/>
+              </svg>  
 
-                +7 (879) 33 520 33
-              </a>
-            </li>
-          </ul>
+              +7 (879) 33 520 33
+            </a>
+          </div>
         </nav>
 
         <div class="header__nav-mobile-wr"
@@ -977,8 +979,8 @@
                       </button>
 
                       <div class="product__columns-left__item-media">
-                        <img src="./assets/images/purchase.png" 
-                             alt=""
+                        <img src="./assets/images/card.png" 
+                             alt="" 
                         >
                       </div>
                     </li>
@@ -1001,9 +1003,9 @@
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> 
 
-              <div class="product__columns-main product__columns-main-mob">
+              <div class="product__columns-main product__columns-main-mob" data-product>
                 <h1 class="product__columns-main__title">
                   Смазка ПФМС-4С ТУ 6-02-917-79
                 </h1>
@@ -1013,10 +1015,10 @@
                 </div>
   
                 <div class="product__columns-main__btns">
-                  <button class="product__columns-main__btn">
+                  <button class="product__columns-main__btn filter-btn" data-product-price="Уточняйте у менеджера">
                     1 кг
                   </button>
-                  <button class="product__columns-main__btn">
+                  <button class="product__columns-main__btn filter-btn" data-product-price="Уточняйте у менеджера">
                     10 кг
                   </button>
                 </div>
@@ -1055,7 +1057,7 @@
                   Рекомендуемая розничная цена (зависит от объёма)
                 </div>
   
-                <div class="product__columns-main__text-2">
+                <div class="product__columns-main__text-2" data-product-text>
                   Уточняйте у менеджера
                 </div>
   
@@ -1073,7 +1075,7 @@
               </div>
 
               <div class="product__columns-left__info">
-                <div class="text-editor">
+                <div class="product__columns-left__info-block text-editor">
                   <h4 class="desktop">
                     Скачать лист технической информации
                   </h4>
@@ -1094,7 +1096,9 @@
                       </td>
                     </tr>
                   </table>
+                </div>
 
+                <div class="product__columns-left__info-block text-editor">
                   <h4>
                     Характеристики
                   </h4>
@@ -1160,7 +1164,9 @@
                       </td>
                     </tr>
                   </table>
+                </div>
 
+                <div class="product__columns-left__info-block text-editor">
                   <h4>
                     Информация о товаре
                   </h4>
@@ -1168,7 +1174,9 @@
                   <p>
                     Графитовая смазка с обширным температурным диапазоном и созданная на основе полиметилфенилсилоксана. Это обуславливает ее характерный черный цвет, высокую плотность, обширную сферу применения и диапазон рабочих температур при стабильной эксплуатации - 30 ÷ + 300 С и при кратковременной: - 30 ÷ + 400 С Силиконовая база и твердые добавки формируют консистентную основу, которая по своим физическим свойствам ставит ПФМС-4С на промежуточное место между консистентными смазками и пастами и обеспечивают следующие эксплуатационные качества продукта:
                   </p>
+                </div>
 
+                <div class="product__columns-left__info-block text-editor">
                   <h4>
                     Особенности смазки ПФМС-4С
                   </h4>
@@ -1176,6 +1184,10 @@
                   <ul>
                     <li>
                       Низкая испаряемость в пределах рабочих температур
+                    </li>
+
+                    <li>
+                      Хорошие противокоррозионные свойства
                     </li>
 
                     <li>
@@ -1190,7 +1202,9 @@
                       Влагостойкость
                     </li>
                   </ul>
+                </div>
 
+                <div class="product__columns-left__info-block text-editor">
                   <h4>
                     Графитовая смазка ПФМС-4С характеризуется химической и физической стабильностью и может применяться для обработки:
                   </h4>
@@ -1228,11 +1242,13 @@
                   <p>
                     Изготавливается по ТУ 6-02-917-1979.
                   </p>
+                </div>
 
+                <div class="product__columns-left__info-block text-editor">
                   <h4>
                     Купить смазку ПФМС-4 производимую компанией Роксол по традиционной рецептуре вы можете следуя алгоритму:
                   </h4>
-
+ 
                   <ol>
                     <li>
                       Направьте заявку на требуемое вам количество на электронную почту указанную в разделе Контакты, не забудь прикрепить к заявке реквизиты вашей организации, либо укажите что вы частное лицо.
@@ -1250,7 +1266,7 @@
               </div>
             </div>
 
-            <div class="product__columns-main">
+            <div class="product__columns-main" data-product>
               <h1 class="product__columns-main__title">
                 Смазка ПФМС-4С ТУ 6-02-917-79
               </h1>
@@ -1260,10 +1276,10 @@
               </div>
 
               <div class="product__columns-main__btns">
-                <button class="product__columns-main__btn filter-btn">
+                <button class="product__columns-main__btn filter-btn" data-product-price="Уточняйте у менеджера">
                   1 кг
                 </button>
-                <button class="product__columns-main__btn filter-btn">
+                <button class="product__columns-main__btn filter-btn" data-product-price="Уточняйте у менеджера">
                   10 кг
                 </button>
               </div>
@@ -1302,7 +1318,7 @@
                 Рекомендуемая розничная цена (зависит от объёма)
               </div>
 
-              <div class="product__columns-main__text-2">
+              <div class="product__columns-main__text-2" data-product-text>
                 Уточняйте у менеджера
               </div>
 

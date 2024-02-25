@@ -301,20 +301,22 @@
         </div>
 
         <nav class="header__nav">
-          <ul class="header__nav-list">
-            <li class="header__nav-item">
+          <div class="header__nav-block">
+            <div class="header__nav-item">
               <a href="#">
                 Аналоги
               </a>
-            </li>
+            </div>
 
-            <li class="header__nav-item">
+            <div class="header__nav-item">
               <a href="#">
                 Отраслевые решения
               </a>
-            </li>
+            </div>
+          </div>
 
-            <li class="header__nav-item">
+          <div class="header__nav-block">
+            <div class="header__nav-item">
               <a href="#">
                 О компании
 
@@ -356,9 +358,9 @@
                   </li>
                 </ul>
               </div>
-            </li>
+            </div>
 
-            <li class="header__nav-item">
+            <div class="header__nav-item">
               <a href="#">
                 Контакты
 
@@ -400,29 +402,29 @@
                   </li>
                 </ul>
               </div>
-            </li>
+            </div>
+          </div>
 
-            <li class="header__nav-item">
-              <a href="#">
-                sales@rox-russia.ru
-              </a>
-            </li>
+          <div class="header__nav-item">
+            <a href="#">
+              sales@rox-russia.ru
+            </a>
+          </div>
 
-            <li class="header__nav-item header__nav-item--dark-hover">  
-              <a href="#">
-                <svg class="header__nav-item__icon" 
-                     xmlns="http://www.w3.org/2000/svg" 
-                     width="24"
-                    height="25" 
-                    fill="none"  
-                >
-                  <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"/>
-                </svg>  
+          <div class="header__nav-item header__nav-item--dark-hover">  
+            <a href="#">
+              <svg class="header__nav-item__icon" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="24"
+                  height="25" 
+                  fill="none"  
+              >
+                <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"/>
+              </svg>  
 
-                +7 (879) 33 520 33
-              </a>
-            </li>
-          </ul>
+              +7 (879) 33 520 33
+            </a>
+          </div>
         </nav>
 
         <div class="header__nav-mobile-wr"
@@ -818,7 +820,7 @@
           <h1 class="catalog__title">
             Каталог
             <span class="catalog__title-count">
-              228 e
+              228
             </span>
           </h1>
 
@@ -1490,29 +1492,39 @@
 
               <ul class="catalog__content-cards">
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1521,7 +1533,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1532,29 +1544,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1563,7 +1585,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1574,29 +1596,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1605,7 +1637,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1616,29 +1648,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1647,7 +1689,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1658,29 +1700,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1689,7 +1741,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1700,29 +1752,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1731,7 +1793,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1742,29 +1804,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1773,7 +1845,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1784,29 +1856,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1815,7 +1897,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1826,29 +1908,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1857,7 +1949,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1868,29 +1960,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1899,7 +2001,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1910,29 +2012,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1941,7 +2053,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1952,29 +2064,39 @@
                 </li>
 
                 <li class="catalog__content-cards__item">
-                  <a class="card" href="#">
+                  <a class="card" data-product
+                      href="#"
+                  >
+                  <div class="card__group">
                     <h3 class="card__title">
                       Смазка ПФМС-4С
                     </h3>
     
-                    <p class="card__description">
+                    <p class="card__description ">
                       Термостойкая смазка
                     </p>
+                  </div>
     
                     <div class="card__media">
                       <img src="./assets/images/purchase.png" alt="">
                     </div>
     
                     <div class="card__type">
-                      <span class="card__type-text">
+                      <span  class="card__type-text">
                         Объём:
                       </span>
     
-                      <button class="card__type-btn is-active">
+                      <button class="card__type-btn is-active" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         1 кг
                       </button>
     
-                      <button class="card__type-btn">
+                      <button class="card__type-btn" 
+                              type="button" 
+                              data-product-price="По запросу"
+                      >
                         10 кг
                       </button>
                     </div>
@@ -1983,7 +2105,7 @@
                       Розничная цена
                     </p>
     
-                    <p class="card__text">
+                    <p class="card__text" data-product-text>
                       По запросу
                     </p>
                     
@@ -1991,7 +2113,7 @@
                       <img src="./assets/images/arrow-thin.svg" alt="">
                     </div>
                   </a>
-                </li>
+                </li>      
               </ul>
 
               <div class="catalog__content-pagination"> 

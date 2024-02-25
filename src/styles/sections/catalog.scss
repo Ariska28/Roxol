@@ -81,6 +81,7 @@ $s-dropdown-height-mob: px-to-vw(60);
       overflow: hidden;
       transform: translateY(0%);
       position: static;
+      z-index: 1;
     }
 
     .catalog__content-nav__btn {
@@ -119,6 +120,7 @@ $s-dropdown-height-mob: px-to-vw(60);
   padding: px-to-vw(20) px-to-vw(24);
   background-color: $c-brown-2;
   border-radius: $s-border-radius;
+  z-index: 2;
 
   @include media-down(sm) {
     border-radius: $s-border-radius-mob $s-border-radius-mob 0 0;
@@ -147,7 +149,7 @@ $s-dropdown-height-mob: px-to-vw(60);
   @include button-reset-styles;
   @include link-text;
 
-  padding: px-to-vw(10) px-to-vw(24);
+  padding: px-to-vw(10) px-to-vw(24) px-to-vw(10.5);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -319,7 +321,7 @@ $s-dropdown-height-mob: px-to-vw(60);
 
 .catalog__content-header__settings-btns { 
   display: flex;
-  margin-bottom: px-to-vw(32);
+  margin-bottom: px-to-vw(28);
 
   @include media-down(sm) {
     flex-wrap: wrap;
@@ -375,14 +377,14 @@ $s-dropdown-height-mob: px-to-vw(60);
 .catalog__content-header__settings-select__btn {
   @include button-reset-styles;
 
-  padding: px-to-vw(16) px-to-vw(32) px-to-vw(16) px-to-vw(24);
+  padding: px-to-vw(16) px-to-vw(32) px-to-vw(13.5) px-to-vw(24);
   border-radius: $s-border-radius;
   background-color: transparent;
-  border: 1px solid $c-gray-line;
+  border: px-to-vw(1) solid $c-gray-line;
   transition: background-color 0.2s ease-in;
 
   svg {
-    margin-left: px-to-vw(12);
+    margin-left: px-to-vw(5);
   }
 
   &:hover,

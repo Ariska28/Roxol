@@ -10,6 +10,7 @@
 }
 
 @mixin title-1 {
+  font-family: $font-base;
   font-weight: 500;
   font-size: px-to-vw(96);
   line-height: 90%;
@@ -21,6 +22,7 @@
 }
 
 @mixin title-2 {
+  font-family: $font-base;
   font-weight: 400;
   font-size: px-to-vw(75);
   line-height: 100%;
@@ -32,6 +34,7 @@
 }
 
 @mixin title-3 {
+  font-family: $font-base;
   font-weight: 400;
   font-size: px-to-vw(40);
   line-height: 100%;
@@ -45,6 +48,7 @@
 }
 
 @mixin title-4 {
+  font-family: $font-base;
   font-weight: 500;
   font-size: px-to-vw(24);
   line-height: 115%;
@@ -56,6 +60,7 @@
 }
 
 @mixin title-5 {
+  font-family: $font-base;
   font-weight: 500;
   font-size: px-to-vw(20);
   line-height: 120%;
@@ -67,6 +72,7 @@
 }
 
 @mixin description {
+  font-family: $font-base;
   font-weight: 500;
   font-size: px-to-vw(20);
   line-height: 130%;
@@ -80,6 +86,7 @@
 
 
 @mixin description-medium {
+  font-family: $font-base;
   font-weight: 400;
   font-size: px-to-vw(16);
   line-height: 130%;
@@ -91,6 +98,7 @@
 }
 
 @mixin description-small {
+  font-family: $font-base;
   font-weight: 400;
   font-size: px-to-vw(14);
   line-height: 130%;
@@ -103,6 +111,7 @@
 
 
 @mixin paragraf-big {
+  font-family: $font-base;
   font-weight: 400;
   font-size: px-to-vw(22);
   line-height: 130%;
@@ -115,9 +124,10 @@
 }
 
 @mixin paragraf-small {
+  font-family: $font-base;
   font-weight: 400;
   font-size: px-to-vw(18);
-  line-height: 130%;
+  line-height: 140%;
   letter-spacing: -.03em;
 
   @include media-down(sm) {
@@ -127,6 +137,7 @@
 }
 
 @mixin link-text {
+  font-family: $font-base;
   font-size: px-to-vw(18);
   line-height: 150%;
   letter-spacing: -.02em;
@@ -140,6 +151,7 @@
 }
 
 @mixin link-text-catalog {
+  font-family: $font-base;
   font-size: px-to-vw(24);
   line-height: 135%;
   letter-spacing: -.02em;

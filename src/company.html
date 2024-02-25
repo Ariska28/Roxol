@@ -12,10 +12,10 @@
     > 
       <div class="header__container">
         <div class="header__logo">
-          <a href="index.html">
+          <a href="#">
            <img src="./assets/images/mobile.svg">
-          </a>
-        </div>
+          </a>  
+        </div>  
 
         <div class="header__catalog" 
              data-header-open
@@ -267,15 +267,15 @@
         >
 
           <div class="header__searching-bg"
-               data-header-close-btn 
+               data-header-close-btn
           >
           </div>
 
-          <button class="header__searching-btn"  
+          <button class="header__searching-btn" 
                   data-header-open-btn
                   data-header-hide-mobile
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 25" fill="none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
               <ellipse cx="11.058" cy="11.5652" rx="7.06194" ry="7.01251" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M20.0025 20.4473L16.0508 16.5233" stroke="#0E0E0E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -301,20 +301,22 @@
         </div>
 
         <nav class="header__nav">
-          <ul class="header__nav-list">
-            <li class="header__nav-item">
+          <div class="header__nav-block">
+            <div class="header__nav-item">
               <a href="#">
                 Аналоги
               </a>
-            </li>
+            </div>
 
-            <li class="header__nav-item">
+            <div class="header__nav-item">
               <a href="#">
                 Отраслевые решения
               </a>
-            </li>
+            </div>
+          </div>
 
-            <li class="header__nav-item">
+          <div class="header__nav-block">
+            <div class="header__nav-item">
               <a href="#">
                 О компании
 
@@ -356,9 +358,9 @@
                   </li>
                 </ul>
               </div>
-            </li>
+            </div>
 
-            <li class="header__nav-item">
+            <div class="header__nav-item">
               <a href="#">
                 Контакты
 
@@ -400,29 +402,29 @@
                   </li>
                 </ul>
               </div>
-            </li>
+            </div>
+          </div>
 
-            <li class="header__nav-item">
-              <a href="#">
-                sales@rox-russia.ru
-              </a>
-            </li>
+          <div class="header__nav-item">
+            <a href="#">
+              sales@rox-russia.ru
+            </a>
+          </div>
 
-            <li class="header__nav-item">  
-              <a href="#">
-                <svg class="header__nav-item__icon" 
-                     xmlns="http://www.w3.org/2000/svg" 
-                     width="24"
-                    height="25" 
-                    fill="none"  
-                >
-                  <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"/>
-                </svg> 
+          <div class="header__nav-item header__nav-item--dark-hover">  
+            <a href="#">
+              <svg class="header__nav-item__icon" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="24"
+                  height="25" 
+                  fill="none"  
+              >
+                <path stroke="#0E0E0E" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.86 13.64a12.63 12.63 0 0 1-2.64-3.8.75.75 0 0 1 .16-.83l.82-.82c.67-.67.67-1.62.09-2.2L8.1 4.8a2 2 0 0 0-2.82 0l-.66.65a3.2 3.2 0 0 0-.85 2.87c.5 2.62 2.02 5.48 4.46 7.92a15.71 15.71 0 0 0 7.93 4.47 3.2 3.2 0 0 0 2.87-.85l.65-.66a2 2 0 0 0 0-2.82l-1.17-1.18a1.5 1.5 0 0 0-2.13 0l-.9.9a.75.75 0 0 1-.83.17 12.66 12.66 0 0 1-3.8-2.64Z" clip-rule="evenodd"/>
+              </svg>  
 
-                +7 (879) 33 520 33
-              </a>
-            </li>
-          </ul>
+              +7 (879) 33 520 33
+            </a>
+          </div>
         </nav>
 
         <div class="header__nav-mobile-wr"
@@ -580,10 +582,38 @@
                       </div>
                     </li>
 
-                    <li class="header__nav-mobile__sublist-item">
-                      <a href="#">
+                    <li class="header__nav-mobile__sublist-item"
+                        data-header-mobile-sublist
+                    >
+                      <button data-header-mobile-sublist-open>
                         Пасты
-                      </a>
+
+                        <img src="./assets/images/arrow.svg" alt="">
+                      </button>
+
+                      <div class="header__nav-mobile__sublist-2-wr">
+                        <button class="header__nav-mobile__sublist-2-btn" 
+                                data-header-mobile-sublist-close
+                        >
+                          <img src="./assets/images/arrow.svg" alt="">
+
+                          Назад
+                        </button>
+
+                        <ul class="header__nav-mobile__sublist-2">
+                          <li class="header__nav-mobile__sublist-2-item">
+                            <a href="#">
+                              Пасты приработочные
+                            </a>
+                          </li>
+
+                          <li class="header__nav-mobile__sublist-2-item">
+                            <a href="#">
+                              Теплопроводные пасты  
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
                     </li>
 
                     <li class="header__nav-mobile__sublist-item">
@@ -1072,9 +1102,6 @@
               <ul class="why-work__list splide__list">
                 <li class="why-work__list-item  splide__slide">
                   <div class="point-card">
-                    <span class="point-card__point">
-                    </span>
-
                     <h3 class="point-card__title">
                       Качество
                     </h3>
@@ -1087,9 +1114,6 @@
 
                 <li class="why-work__list-item  splide__slide">
                   <div class="point-card">
-                    <span class="point-card__point">
-                    </span>
-
                     <h3 class="point-card__title">
                       Продукты
                     </h3>
@@ -1100,14 +1124,8 @@
                   </div>
                 </li>
 
-                <li class="why-work__list-item why-work__list-item--empty">
-                </li>
-
                 <li class="why-work__list-item  splide__slide">
                   <div class="point-card">
-                    <span class="point-card__point">
-                    </span>
-
                     <h3 class="point-card__title">
                       Надёжность
                     </h3>
@@ -1120,9 +1138,6 @@
 
                 <li class="why-work__list-item  splide__slide">
                   <div class="point-card">
-                    <span class="point-card__point">
-                    </span>
-
                     <h3 class="point-card__title">
                       Компетенции
                     </h3>
@@ -1135,9 +1150,6 @@
 
                 <li class="why-work__list-item  splide__slide">
                   <div class="point-card">
-                    <span class="point-card__point">
-                    </span>
-
                     <h3 class="point-card__title">
                       Качественные материалы
                     </h3>
@@ -1148,14 +1160,8 @@
                   </div>
                 </li>
 
-                <li class="why-work__list-item why-work__list-item--empty">
-                </li>
-
                 <li class="why-work__list-item  splide__slide">
                   <div class="point-card">
-                    <span class="point-card__point">
-                    </span>
-
                     <h3 class="point-card__title">
                       Сервис
                     </h3>
@@ -1168,9 +1174,6 @@
 
                 <li class="why-work__list-item  splide__slide">
                   <div class="point-card">
-                    <span class="point-card__point">
-                    </span>
-
                     <h3 class="point-card__title">
                       Разработка смазок под конкретные цели
                     </h3>

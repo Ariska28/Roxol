@@ -113,13 +113,13 @@
   padding: px-to-vw(4) 0 0;
 
   svg {
-    margin-left: px-to-vw(12);
+    margin-left: px-to-vw(9);
     vertical-align: middle;
   }
 }
 
 .brands__item-link {
-  padding: px-to-vw(4) 0;
+  padding: px-to-vw(4) 0 px-to-vw(2);
 
   &:first-child {
     padding-left: 0;

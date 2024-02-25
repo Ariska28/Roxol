@@ -36,7 +36,7 @@
 .for-your-brand__item-link {
   display: flex;
   align-items: flex-start;
-  padding: px-to-vw(25) 0 px-to-vw(24);
+  padding: px-to-vw(24) 0;
   transition: 0.2s padding ease-in;
   position: relative;
   color: $c-text-dark;

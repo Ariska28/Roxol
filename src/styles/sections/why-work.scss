@@ -54,6 +54,14 @@
   width: calc(20% - 24 * var(--fz));
   margin: 0 px-to-vw(12) px-to-vw(24); 
 
+  &:nth-child(2) {
+    margin-right: calc(20% + 12 * var(--fz));
+  }
+
+  &:nth-child(5) { 
+    margin-right: calc(20% + 12 * var(--fz));
+  }
+
   @include media-down(sm) {
     width: 100%;
     margin-top: 0;
@@ -63,13 +71,6 @@
 
     &:last-child {
       margin-bottom: 0;
-    }
-  }
-
-  &--empty {
-    @include media-down(sm) {
-      display: none;
-      margin: 0;
     }
   }
 }

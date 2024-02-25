@@ -57,7 +57,7 @@
 }
 
 .product__columns {
-  max-width: px-to-vw(1452);
+  max-width: px-to-vw(1480);
   margin: auto;
   display: flex;
   align-items: flex-start;
@@ -69,13 +69,46 @@
 }
 
 .product__columns-left {
-  width: 56%;
+  width: 53.5%;
 
   margin-right: px-to-vw(60);
 
   @include media-down(sm) {
     width: 100%;
     margin-right: 0;
+  }
+}
+
+.product__columns-left__info {
+  margin-right: px-to-vw(50);
+
+  @include media-down(sm) {
+    margin-right: 0;
+  }
+}
+
+.product__columns-left__info-block {
+  margin-bottom: px-to-vw(33);
+
+  &:first-child {
+    margin-bottom: px-to-vw(80);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @include media-down(sm) {
+    &:first-child {
+      display: none;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    margin-bottom: px-to-vw(32);
+
   }
 }
 
@@ -111,6 +144,7 @@
   margin-bottom: px-to-vw(40);
 
   @include media-down(sm) {
+    max-width: 80%;
     margin-bottom: px-to-vw(24);
   }
 }
@@ -126,10 +160,10 @@
 }
 
 .product__columns-main__btns {
-  margin-bottom: px-to-vw(32);
+  margin-bottom: px-to-vw(25);
 
   @include media-down(sm) {
-    margin-bottom: px-to-vw(24);
+    margin-bottom: px-to-vw(20);
   }
 }
 
@@ -150,6 +184,11 @@
     @include title-5;
 
     color: $c-gray-2;
+    margin-right: px-to-vw(5);
+  }
+
+  @include media-down(sm) {
+    margin-bottom: px-to-vw(10);
   }
 }
 
@@ -160,8 +199,9 @@
   margin-bottom: px-to-vw(12);
 
   @include media-down(sm) {
+    font-size: px-to-vw(18);
     margin-bottom: px-to-vw(8);
-    width: 80%;
+    width: 90%;
   }
 }
 
@@ -190,7 +230,7 @@
 
 .product__columns-left__item {
   max-width: px-to-vw(780);
-  max-height: px-to-vw(598);
+  height: px-to-vw(598);
   display: flex;
   flex-direction: column;
   background-color: $c-white;
@@ -199,6 +239,7 @@
   position: relative;
 
   @include media-down(sm) {
+    height: px-to-vw(360);
     padding: px-to-vw(20) px-to-vw(16);
   }
 }
@@ -256,11 +297,11 @@
 
 
 .product-tabs {
-  max-width: px-to-vw(1452);
-  margin: px-to-vw(80) auto $s-space-desktop;
+  max-width: px-to-vw(1480);
+  margin: px-to-vw(55) auto $s-space-desktop;
 
   @include media-down(sm) {
-    margin: px-to-vw(40) auto $s-space-mobile;
+    margin: px-to-vw(12) auto $s-space-mobile;
   }
 }
 
