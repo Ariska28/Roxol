@@ -94,9 +94,10 @@ $s-dropdown-height-mob: px-to-vw(60);
     margin-bottom: px-to-vw(12);
     order: 0;
     border-radius: $s-border-radius-mob; 
-    height: px-to-vw(60);
 
     &.is-toggle {
+      height: px-to-vw(60);
+
       .catalog__content-nav__list {
         z-index: -1;
         transform: translateY(-100%);

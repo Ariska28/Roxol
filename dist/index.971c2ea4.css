@@ -1730,8 +1730,8 @@ ul {
 }
 
 .footer__content-links__icon svg {
-  max-height: calc(18 * var(--fz));
-  max-width: calc(14 * var(--fz));
+  height: calc(18 * var(--fz));
+  width: calc(14 * var(--fz));
 }
 
 .footer__content-links__icon svg path {
@@ -1761,8 +1761,8 @@ ul {
   }
 
   .footer__content-links__icon svg {
-    max-height: calc(18 * var(--fz));
-    max-width: calc(18 * var(--fz));
+    height: calc(18 * var(--fz));
+    width: calc(18 * var(--fz));
   }
 
   .footer__content-links__icon svg path {
@@ -6540,9 +6540,12 @@ ul {
   .catalog__content-nav {
     margin-bottom: calc(12 * var(--fz));
     border-radius: calc(6 * var(--fz));
-    height: calc(60 * var(--fz));
     order: 0;
     width: 100%;
+  }
+
+  .catalog__content-nav.is-toggle {
+    height: calc(60 * var(--fz));
   }
 
   .catalog__content-nav.is-toggle .catalog__content-nav__list {
@@ -8692,7 +8695,7 @@ ul {
 
 .brands__item-links-wr {
   top: calc(296 * var(--fz));
-  padding: calc(22 * var(--fz)) calc(24 * var(--fz));
+  padding: calc(22 * var(--fz)) calc(24 * var(--fz)) calc(26 * var(--fz));
   border-radius: calc(12 * var(--fz));
   z-index: 5;
   background-color: #dfddd7;
@@ -8704,7 +8707,7 @@ ul {
 @media (width <= 767px) {
   .brands__item-links-wr {
     top: calc(245 * var(--fz));
-    padding: calc(15 * var(--fz)) calc(16 * var(--fz));
+    padding: calc(15 * var(--fz)) calc(16 * var(--fz)) calc(19 * var(--fz));
   }
 }
 
@@ -10039,8 +10042,8 @@ ul {
 }
 
 .article__links-icon svg {
-  max-height: calc(17 * var(--fz));
-  max-width: calc(21 * var(--fz));
+  height: calc(17 * var(--fz));
+  width: calc(21 * var(--fz));
 }
 
 .article__links-icon svg path {
@@ -11951,6 +11954,7 @@ ul {
 
 @media (width <= 767px) {
   .contacts__content-right {
+    margin-top: calc(40 * var(--fz));
     width: 100%;
   }
 }
@@ -12130,12 +12134,6 @@ ul {
   display: flex;
 }
 
-@media (width <= 767px) {
-  .contacts__content-left__socials {
-    margin-bottom: calc(40 * var(--fz));
-  }
-}
-
 .contacts__content-left__socials-link {
   height: calc(41 * var(--fz));
   width: calc(41 * var(--fz));
@@ -12153,8 +12151,8 @@ ul {
 }
 
 .contacts__content-left__socials-link svg {
-  max-height: calc(17 * var(--fz));
-  max-width: calc(21 * var(--fz));
+  height: calc(17 * var(--fz));
+  width: calc(21 * var(--fz));
 }
 
 .contacts__content-left__socials-link svg path {

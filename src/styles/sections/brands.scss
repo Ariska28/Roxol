@@ -73,14 +73,14 @@
   top: px-to-vw(296);
   left: 0;
   width: 100%;
-  padding: px-to-vw(22)  px-to-vw(24);
+  padding: px-to-vw(22)  px-to-vw(24) px-to-vw(26);
   border-radius: $s-border-radius;
   background-color: $c-brown-2;
   z-index: 5;
 
   @include media-down(sm) {
     top: px-to-vw(245);
-    padding: px-to-vw(15)  px-to-vw(16);
+    padding: px-to-vw(15)  px-to-vw(16) px-to-vw(19);
   }
 }
 

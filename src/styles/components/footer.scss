@@ -70,8 +70,9 @@ $column-width-3: 29%;
   transition: 0.2s background-color ease-in, 0.2s border-color ease-in;
 
   svg {
-    max-height: px-to-vw(18);
-    max-width: px-to-vw(14);
+    height: px-to-vw(18);
+    width: px-to-vw(14);
+
     path {
       transition: 0.2s stroke ease-in;
       stroke: $c-text-dark;
@@ -100,8 +101,8 @@ $column-width-3: 29%;
     height: px-to-vw(41);
 
     svg {
-      max-height: px-to-vw(18);
-      max-width: px-to-vw(18);
+      height: px-to-vw(18);
+      width: px-to-vw(18);
 
       path {
         stroke: $c-text-dark;

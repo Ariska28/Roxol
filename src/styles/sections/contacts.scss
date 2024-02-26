@@ -82,6 +82,7 @@
   flex-wrap: wrap;
 
   @include media-down(sm) {
+    margin-top: px-to-vw(40);
     width: 100%;
   }
 }
@@ -207,10 +208,6 @@
 
 .contacts__content-left__socials {
   display: flex;
-
-  @include media-down(sm) {
-    margin-bottom: px-to-vw(40);
-  }
 }
 
 .contacts__content-left__socials-link {
@@ -229,8 +226,8 @@
   }
 
   svg {
-    max-height: px-to-vw(17);
-    max-width: px-to-vw(21);
+    height: px-to-vw(17);
+    width: px-to-vw(21);
 
     path {
       transition: stroke 0.2s ease-in;

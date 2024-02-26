@@ -87,8 +87,8 @@
   }
 
   svg {
-    max-height: px-to-vw(17);
-    max-width: px-to-vw(21);
+    height: px-to-vw(17);
+    width: px-to-vw(21);
 
     path {
       transition: stroke 0.2s ease-in;
