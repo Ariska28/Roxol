@@ -5,8 +5,9 @@ export function toggleCardList(attr) {
     const openBtn = card.querySelector('[data-card-open]');
     const list = card.querySelector('[data-card-list]');
     const listLength = Array.from(list.querySelectorAll('li')).length;
+    const visibleItems = 2;
 
-    openBtn.querySelector('span').textContent = `${listLength}`;
+    openBtn.querySelector('span').textContent = `${listLength - visibleItems}`;
 
     openBtn.addEventListener('mouseover', () => {
       setTimeout(() => {
