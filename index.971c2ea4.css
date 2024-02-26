@@ -6787,7 +6787,7 @@ ul {
   width: calc(24 * var(--fz));
   height: calc(24 * var(--fz));
   left: calc(24 * var(--fz));
-  top: calc(18.5 * var(--fz));
+  top: calc(21.5 * var(--fz));
   position: absolute;
 }
 
@@ -6815,6 +6815,7 @@ ul {
     width: calc(20 * var(--fz));
     height: calc(20 * var(--fz));
     left: calc(20 * var(--fz));
+    top: calc(18.5 * var(--fz));
   }
 }
 
