@@ -85,6 +85,12 @@ $s-input-height-mobile: px-to-vw(53);
   display: flex;
   margin-bottom: px-to-vw(20);
 
+  &.is-error {
+    input, textarea {
+      border-color: $c-error;
+    }
+  }
+
   input, textarea {
     @include btn-text;
 

@@ -147,7 +147,7 @@
 .industry__box-links__item-arrow {
   width: px-to-vw(38);
   height: px-to-vw(38);
-  border: 1px solid $c-text-gray;
+  border: px-to-vw(1) solid $c-text-gray;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -262,7 +262,7 @@
     width: px-to-vw(34);
     height: px-to-vw(34);
     border-radius: 50%;
-    border: 1px solid $c-white;
+    border: px-to-vw(1) solid $c-white;
     display: flex;
     align-items: center;
     justify-content: center;

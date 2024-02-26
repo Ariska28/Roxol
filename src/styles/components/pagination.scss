@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid $c-gray-line;
+  border: px-to-vw(1) solid $c-gray-line;
   padding: px-to-vw(10) px-to-vw(17);
   border-radius: px-to-vw(6);
   font-size: px-to-vw(18);
@@ -52,7 +52,7 @@
   height: px-to-vw(42);
   text-align: center;
   border-radius: px-to-vw(6);
-  border: 1px solid $c-gray-line;
+  border: px-to-vw(1) solid $c-gray-line;
   color: $c-text-dark;
   font-family: $font-base;  
   font-size: px-to-vw(18);
@@ -71,7 +71,7 @@
   &:hover,
   &.is-active {
     background-color:  $c-text-dark;
-    border-color: 1px solid  $c-text-dark;
+    border-color: px-to-vw(1) solid  $c-text-dark;
     color: $c-brown-2;
   }
 

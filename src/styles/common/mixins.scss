@@ -283,7 +283,7 @@
 @mixin button-border {
   @include button-base;
 
-  border: 1px solid  $c-text-dark;
+  border: px-to-vw(1) solid  $c-text-dark;
   background-color: transparent;
 
   &::after {
@@ -294,7 +294,7 @@
 @mixin button-bg($color) {
   @include button-base;
 
-  border: 1px solid  $color;
+  border: px-to-vw(1) solid  $color;
   background-color: $color;
 
   &::after {

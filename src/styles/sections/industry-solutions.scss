@@ -189,7 +189,7 @@
   width: px-to-vw(60);
   height: px-to-vw(60);
   border-radius: 50%;
-  border: 1px solid $c-white;
+  border: px-to-vw(1) solid $c-white;
   display: flex;
   align-items: center;
   justify-content: center;

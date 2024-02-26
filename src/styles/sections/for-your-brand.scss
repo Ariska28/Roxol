@@ -20,10 +20,10 @@
 }
 
 .for-your-brand__item {
-  border-top: 1px solid $c-gray-line;
+  border-top: px-to-vw(1) solid $c-gray-line;
 
   &:last-child {
-    border-bottom: 1px solid $c-gray-line;
+    border-bottom: px-to-vw(1) solid $c-gray-line;
   }
 
   @include media-down(sm) {

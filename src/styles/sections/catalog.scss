@@ -250,7 +250,7 @@ $s-dropdown-height-mob: px-to-vw(60);
     border-radius: $s-border-radius;
     background-color: transparent;
     height: px-to-vw(67);
-    border: 1px solid $c-gray-line;
+    border: px-to-vw(1) solid $c-gray-line;
     padding: px-to-vw(20) px-to-vw(20) px-to-vw(20) px-to-vw(56);
     transition: border-color 0.2s ease-in;
 
@@ -277,7 +277,7 @@ $s-dropdown-height-mob: px-to-vw(60);
     height: px-to-vw(24);
     position: absolute;
     left: px-to-vw(24);
-    top: px-to-vw(21.5);
+    top: px-to-vw(18.5);
 
     * {
       transition: stroke 0.2s ease-in;

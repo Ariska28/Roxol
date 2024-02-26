@@ -22,7 +22,7 @@
   transform: none !important;
   width: px-to-vw(52);
   height: px-to-vw(52);
-  border: 1px solid $c-text-gray;
+  border: px-to-vw(1) solid $c-text-gray;
   background: transparent;
   opacity: 1;
   transition: background-color 0.2s ease-in;

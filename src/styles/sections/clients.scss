@@ -25,14 +25,14 @@
 .cients__list {
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 1px solid $c-gray-line;
-  border-left: 1px solid $c-gray-line;
+  border-bottom: px-to-vw(1) solid $c-gray-line;
+  border-left: px-to-vw(1) solid $c-gray-line;
 }
 
 .cients__list-item {
   width: 20%;
-  border-right: 1px solid $c-gray-line;
-  border-top: 1px solid $c-gray-line;
+  border-right: px-to-vw(1) solid $c-gray-line;
+  border-top: px-to-vw(1) solid $c-gray-line;
   height: px-to-vw(280);
   display: flex;
   justify-content: center;

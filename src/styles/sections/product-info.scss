@@ -1,7 +1,7 @@
 .products-info {
   margin-left: $s-padding-x-desktop;
   margin-right: $s-padding-x-desktop;
-  border-top: 1px solid $c-gray-line;
+  border-top: px-to-vw(1) solid $c-gray-line;
 
   @include media-down(sm) {
     margin-left: $s-padding-x-mob;

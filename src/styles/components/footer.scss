@@ -9,8 +9,8 @@ $column-width-3: 29%;
 .footer__content {
   display: flex;
   padding: px-to-vw(60) 0;
-  border-top: 1px solid $c-gray-line;
-  border-bottom: 1px solid $c-gray-line;
+  border-top: px-to-vw(1) solid $c-gray-line;
+  border-bottom: px-to-vw(1) solid $c-gray-line;
 
   @include media-down(sm) {
     flex-direction: column;
@@ -62,7 +62,7 @@ $column-width-3: 29%;
   height: px-to-vw(51);
   border-radius: 50%;
   background-color: transparent;
-  border: 1px solid $c-text-gray;
+  border: px-to-vw(1) solid $c-text-gray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,7 +96,7 @@ $column-width-3: 29%;
 
   @include media-down(sm) {
     background-color: transparent;
-    border: 1px solid $c-text-gray;
+    border: px-to-vw(1) solid $c-text-gray;
     width: px-to-vw(41);
     height: px-to-vw(41);
 
