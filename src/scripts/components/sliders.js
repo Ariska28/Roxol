@@ -1,4 +1,136 @@
 import Splide from "@splidejs/splide";
+import { Intersection } from '@splidejs/splide-extension-intersection';
+import { gsap } from "gsap";
+
+
+import { EventInterface } from '@splidejs/splide';
+
+export function MyTransition( Splide, Components ) {
+  const { bind } = EventInterface( Splide );
+  const { Move } = Components;
+  const { list } = Components.Elements;
+
+  let endCallback;
+
+  function mount() {
+    bind( list, 'transitionend', e => {
+      if ( e.target === list && endCallback ) {
+        // Removes the transition property
+        cancel();
+
+        // Calls the `done` callback
+        endCallback();
+      }
+    } );
+  }
+
+  function start( index, done ) {
+    // Converts the index to the position
+    const destination = Move.toPosition( index, true );
+
+    // Applies the CSS transition
+    list.style.transition = 'all 800ms ease-in-out';
+
+    // Moves the carousel to the destination.
+    Move.translate( destination );
+
+    // Keeps the callback to invoke later.
+    endCallback = done;
+  }
+
+  function cancel() {
+    list.style.transition = '';
+  }
+
+  return {
+    mount,
+    start,
+    cancel,
+  };
+}
+
+export function heroSplider(sliderAttr) {
+  const spliders =  document.querySelectorAll(`${sliderAttr}`);
+
+  spliders.forEach((splider) => {
+    const progressLine = document.querySelector('[data-slider-line-progress]');
+    const title = splider.querySelectorAll('[data-slider-title]');
+    const text = splider.querySelectorAll('[data-slider-text]');
+    const btn = splider.querySelectorAll('[data-slider-btn]');
+    const line = document.querySelector('[data-slider-line]');
+
+    const splide = new Splide(splider, {
+      type: 'loop',
+      interval: 4000,
+      perPage : 1,
+      arrows: false,
+      pagination: false,
+      pauseOnHover: false,
+      autoplay: 'pause',
+      intersection: {
+        inView: {
+          autoplay: "play",
+        },
+        outView: {
+          autoplay: 'pause',
+        },
+      },
+    });
+
+    splide.on('mounted', function () {
+      const tl = gsap.timeline({});
+
+      tl.from(title[0], {
+        opacity: 0,
+        delay: 1,
+        duration: 0.4,
+      })
+      
+      tl.from(text[0], {
+        opacity: 0,
+        duration: 0.4,
+      })
+      
+      tl.from(btn[0], {
+        translateY: 50,
+        opacity: 0,
+        duration: 0.3,
+      })
+      
+      tl.from(line, {
+        opacity: 0,
+        duration: 0.2,
+      })
+    });
+
+    splide.on('autoplay:playing', function ( rate ) {
+      progressLine.style.width = `${rate*100}%`
+    });
+
+    splide.mount({Intersection}, MyTransition);
+
+    splide.on('move', function (index) {
+      const tl = gsap.timeline({});
+
+      tl.from(title[index], {
+        opacity: 0,
+        delay: 0.7,
+        duration: 0.4,
+      })
+
+      tl.from(text[index], {
+        opacity: 0,
+        duration: 0.4,
+      })
+
+      tl.from(btn[index], {
+        translateY: 50,
+        opacity: 0,
+        duration: 0.3,
+      })
+    });
+  })
+}
 
 
 export function mobSplider(sliderAttr) {

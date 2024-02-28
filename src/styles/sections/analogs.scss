@@ -10,18 +10,16 @@
   @include container;
 }
 
-.analogs__title {
-  @include title-with-text;
-  
+.analogs__title {  
   margin-bottom: px-to-vw(60);
-
-  span {
-    margin-right: 23.5%;
-  }
 
   @include media-down(sm) {
     margin-bottom: px-to-vw(40);
   }
+}
+
+.analogs__title-subtitle {  
+  margin-right: px-to-vw(435);
 }
 
 .analogs__list {
@@ -61,8 +59,6 @@
 }
 
 .analogs__btn {
-  @include button-border;
-
   max-width: px-to-vw(348);
   margin: auto;
 }

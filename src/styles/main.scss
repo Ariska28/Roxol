@@ -62,3 +62,45 @@
 @import './sections/buy-in.scss'; 
 @import './sections/questionnaire.scss'; 
 @import './sections/error.scss'; 
+
+.title {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include media-down(sm) {
+    padding-top: px-to-vw(22);
+  }
+}
+.title-descriptor {
+  @include description;
+  display: block;
+}
+
+.title-line {
+  @include title-2;
+
+  display: block;
+}
+
+.title-line-wr {
+  @include title-2;
+  overflow: hidden;
+  display: block;
+  padding-bottom: px-to-vw(3);
+
+  &:first-child {
+    text-align: end;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.btn-border__wr {
+  overflow: hidden
+}
+
+.btn-border {
+  @include button-border;
+} 

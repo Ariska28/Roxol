@@ -17,7 +17,7 @@
 .popular-purchase__title {
   @include title-2;
 
-  margin-bottom: px-to-vw(60);
+  margin-bottom: px-to-vw(52);
 
   @include media-down(sm) {
     margin-bottom: px-to-vw(40);

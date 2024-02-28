@@ -6,6 +6,11 @@ $height-submenus: px-to-vw(550);
   position: relative;
   @include container; 
   z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transition: transform 0.2s ease-in-out;
 
   &--no-border {
     .header__container {
@@ -15,6 +20,14 @@ $height-submenus: px-to-vw(550);
     .header__nav-sublist {
       box-shadow: none;
     }
+  }
+
+  &.is-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
   }
 }
 

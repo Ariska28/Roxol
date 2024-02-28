@@ -1,7 +1,7 @@
 
 .ticker {
   margin-bottom: $s-space-desktop;
-  overflow: hidden;
+  scroll-behavior: smooth;
 
   @include media-down(sm) {
     margin-bottom: $s-space-mobile;
@@ -11,7 +11,12 @@
 .ticker__container {
   @include container;
 
+  display: flex;
+  height: 100vh;
   padding-top: px-to-vw(182);
+  padding-bottom: px-to-vw(182);
+  overflow-x: hidden;
+  position: relative;
 
   @include media-down(sm) {
     padding-top: px-to-vw(50);
@@ -19,7 +24,9 @@
 }
 
 .ticker__group {
-  padding-bottom: px-to-vw(365);
+  // margin-bottom: px-to-vw(365);
+  margin-top: auto;
+  margin-bottom: auto;
   margin-left:  px-to-vw(-42);
   margin-right: px-to-vw(-42);
 
@@ -33,6 +40,13 @@
 .ticker__media {
   border-radius: $s-border-radius;
   overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  z-index: 5;
 
   @include media-down(sm) {
     img {
@@ -49,6 +63,7 @@
   align-items: center;
   padding: px-to-vw(20) 0;
   border-top: px-to-vw(1) solid $c-gray-line;
+  width: 1000vw;
 
   &:last-child {
     border-bottom: px-to-vw(1) solid $c-gray-line;

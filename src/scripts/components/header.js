@@ -1,9 +1,12 @@
 export function header() {
+  const headerDesktop = document.querySelector('[data-header]');
   const headerMob = document.querySelector('[data-header-mobile]');
   const burgerMob = headerMob?.querySelector('[data-header-mobile-burger]');
   const sublistsMob = headerMob?.querySelectorAll('[data-header-mobile-sublist]');
   const elementsForHiding = document?.querySelectorAll('[data-header-hide-mobile]');
   
+  addStylesForHeadrScroll(headerDesktop);
+
   burgerMob?.addEventListener("click", ()=> {
     toggleMobileMenu(headerMob);
 
@@ -23,7 +26,7 @@ export function header() {
     closeSubMenu(subList);
   })
 
-  toggleDesktopSubMenus();
+  toggleDesktopSubMenus(headerDesktop);
 }
 
 function closeAllSubMenus(subMenusList) {
@@ -65,8 +68,7 @@ function closeSubMenu(subMenu) {
   })
 }
 
-function toggleDesktopSubMenus() {
-  const header = document.querySelector('[data-header]');
+function toggleDesktopSubMenus(header) {
   const headerOpenContainers = header?.querySelectorAll('[data-header-open]');
 
   headerOpenContainers.forEach((container)=> {
@@ -85,4 +87,30 @@ function toggleDesktopSubMenus() {
       })
     })
   })
+}
+
+function addStylesForHeadrScroll(header) {
+  let lastScrollTop = 0;
+  window.onscroll = onScroll;
+
+  function onScroll (e) {
+    let top = window.pageYOffset;
+
+    if(lastScrollTop > 1000) {
+      header.classList.add('is-fixed');
+    } else if (lastScrollTop < 900) {
+      header.classList.remove('is-fixed');
+    }
+
+    if (lastScrollTop > top ) {
+      header.style.transform = 'translateY(0)';
+
+      if(lastScrollTop < 1000  && lastScrollTop > 900) {
+        header.style.transform = 'translateY(-100%)';
+      }
+    } else {
+      header.style.transform = 'translateY(-100%)';
+    }
+    lastScrollTop = top;
+  }
 }

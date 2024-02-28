@@ -580,7 +580,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"fFaKF":[function(require,module,exports) {
 var _header = require("./components/header");
-var _gsap = require("gsap");
 var _sliders = require("./components/sliders");
 var _controls = require("./components/controls");
 var _catalog = require("./components/catalog");
@@ -589,8 +588,10 @@ var _sidebar = require("./components/sidebar");
 var _toggleCardsList = require("./components/toggleCardsList");
 var _matchImagesWithLinks = require("./components/matchImagesWithLinks");
 var _switchPrice = require("./components/switchPrice");
+var _appeareAnimations = require("./components/appeareAnimations");
 document.addEventListener("DOMContentLoaded", ()=>{
     (0, _header.header)();
+    (0, _sliders.heroSplider)("[data-hero-slider]");
     (0, _sliders.mobSplider)("[data-mobile-slider]");
     (0, _sliders.desktopSplider)("[data-slider-desktop]");
     (0, _sliders.spliderWithArrows)("[data-slider]");
@@ -607,23 +608,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
     (0, _sliders.spliderWithArrowsDesktop)("[data-slider-cards]");
     (0, _sliders.spliderVertical)("[data-slider-vertical]");
     (0, _switchPrice.switchPrice)("[data-product]");
-// gsap.from("[data-hero-slider]", {
-//   x: 2000,
-//   duration: 3,
-//   stagger: 3,
-//   repeat:Infinity
-// })
+    (0, _appeareAnimations.appearAnimations)();
 });
 
-},{"./components/header":"d8aIH","gsap":"fPSuC","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl","./components/tabs":"hfO9E","./components/sidebar":"5agWS","./components/toggleCardsList":"g9K2D","./components/matchImagesWithLinks":"gAZf2","./components/switchPrice":"2Bdls"}],"d8aIH":[function(require,module,exports) {
+},{"./components/header":"d8aIH","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl","./components/tabs":"hfO9E","./components/sidebar":"5agWS","./components/toggleCardsList":"g9K2D","./components/matchImagesWithLinks":"gAZf2","./components/switchPrice":"2Bdls","./components/appeareAnimations":"hsp1p"}],"d8aIH":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "header", ()=>header);
 function header() {
+    const headerDesktop = document.querySelector("[data-header]");
     const headerMob = document.querySelector("[data-header-mobile]");
     const burgerMob = headerMob?.querySelector("[data-header-mobile-burger]");
     const sublistsMob = headerMob?.querySelectorAll("[data-header-mobile-sublist]");
     const elementsForHiding = document?.querySelectorAll("[data-header-hide-mobile]");
+    addStylesForHeadrScroll(headerDesktop);
     burgerMob?.addEventListener("click", ()=>{
         toggleMobileMenu(headerMob);
         document.body.classList.add("no-scroll");
@@ -638,7 +636,7 @@ function header() {
         openSubMenu(subList);
         closeSubMenu(subList);
     });
-    toggleDesktopSubMenus();
+    toggleDesktopSubMenus(headerDesktop);
 }
 function closeAllSubMenus(subMenusList) {
     subMenusList?.forEach((subList)=>{
@@ -670,8 +668,7 @@ function closeSubMenu(subMenu) {
         subMenu?.classList.remove("is-open");
     });
 }
-function toggleDesktopSubMenus() {
-    const header = document.querySelector("[data-header]");
+function toggleDesktopSubMenus(header) {
     const headerOpenContainers = header?.querySelectorAll("[data-header-open]");
     headerOpenContainers.forEach((container)=>{
         const headerOpenBtn = container?.querySelector("[data-header-open-btn]");
@@ -687,6 +684,20 @@ function toggleDesktopSubMenus() {
             });
         });
     });
+}
+function addStylesForHeadrScroll(header) {
+    let lastScrollTop = 0;
+    window.onscroll = onScroll;
+    function onScroll(e) {
+        let top = window.pageYOffset;
+        if (lastScrollTop > 1000) header.classList.add("is-fixed");
+        else if (lastScrollTop < 900) header.classList.remove("is-fixed");
+        if (lastScrollTop > top) {
+            header.style.transform = "translateY(0)";
+            if (lastScrollTop < 1000 && lastScrollTop > 900) header.style.transform = "translateY(-100%)";
+        } else header.style.transform = "translateY(-100%)";
+        lastScrollTop = top;
+    }
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
@@ -719,7 +730,3592 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"fPSuC":[function(require,module,exports) {
+},{}],"cxLY0":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "MyTransition", ()=>MyTransition);
+parcelHelpers.export(exports, "heroSplider", ()=>heroSplider);
+parcelHelpers.export(exports, "mobSplider", ()=>mobSplider);
+parcelHelpers.export(exports, "productSplider", ()=>productSplider);
+parcelHelpers.export(exports, "desktopSplider", ()=>desktopSplider);
+parcelHelpers.export(exports, "spliderWithArrows", ()=>spliderWithArrows);
+parcelHelpers.export(exports, "spliderVertical", ()=>spliderVertical);
+parcelHelpers.export(exports, "spliderWithArrowsDesktop", ()=>spliderWithArrowsDesktop);
+parcelHelpers.export(exports, "historySplider", ()=>historySplider);
+var _splide = require("@splidejs/splide");
+var _splideDefault = parcelHelpers.interopDefault(_splide);
+var _splideExtensionIntersection = require("@splidejs/splide-extension-intersection");
+var _gsap = require("gsap");
+function MyTransition(Splide, Components) {
+    const { bind } = (0, _splide.EventInterface)(Splide);
+    const { Move } = Components;
+    const { list } = Components.Elements;
+    let endCallback;
+    function mount() {
+        bind(list, "transitionend", (e)=>{
+            if (e.target === list && endCallback) {
+                // Removes the transition property
+                cancel();
+                // Calls the `done` callback
+                endCallback();
+            }
+        });
+    }
+    function start(index, done) {
+        // Converts the index to the position
+        const destination = Move.toPosition(index, true);
+        // Applies the CSS transition
+        list.style.transition = "all 800ms ease-in-out";
+        // Moves the carousel to the destination.
+        Move.translate(destination);
+        // Keeps the callback to invoke later.
+        endCallback = done;
+    }
+    function cancel() {
+        list.style.transition = "";
+    }
+    return {
+        mount,
+        start,
+        cancel
+    };
+}
+function heroSplider(sliderAttr) {
+    const spliders = document.querySelectorAll(`${sliderAttr}`);
+    spliders.forEach((splider)=>{
+        const progressLine = document.querySelector("[data-slider-line-progress]");
+        const title = splider.querySelectorAll("[data-slider-title]");
+        const text = splider.querySelectorAll("[data-slider-text]");
+        const btn = splider.querySelectorAll("[data-slider-btn]");
+        const line = document.querySelector("[data-slider-line]");
+        const splide = new (0, _splideDefault.default)(splider, {
+            type: "loop",
+            interval: 4000,
+            perPage: 1,
+            arrows: false,
+            pagination: false,
+            pauseOnHover: false,
+            autoplay: "pause",
+            intersection: {
+                inView: {
+                    autoplay: "play"
+                },
+                outView: {
+                    autoplay: "pause"
+                }
+            }
+        });
+        splide.on("mounted", function() {
+            const tl = (0, _gsap.gsap).timeline({});
+            tl.from(title[0], {
+                opacity: 0,
+                delay: 1,
+                duration: 0.4
+            });
+            tl.from(text[0], {
+                opacity: 0,
+                duration: 0.4
+            });
+            tl.from(btn[0], {
+                translateY: 50,
+                opacity: 0,
+                duration: 0.3
+            });
+            tl.from(line, {
+                opacity: 0,
+                duration: 0.2
+            });
+        });
+        splide.on("autoplay:playing", function(rate) {
+            progressLine.style.width = `${rate * 100}%`;
+        });
+        splide.mount({
+            Intersection: (0, _splideExtensionIntersection.Intersection)
+        }, MyTransition);
+        splide.on("move", function(index) {
+            const tl = (0, _gsap.gsap).timeline({});
+            tl.from(title[index], {
+                opacity: 0,
+                delay: 0.7,
+                duration: 0.4
+            });
+            tl.from(text[index], {
+                opacity: 0,
+                duration: 0.4
+            });
+            tl.from(btn[index], {
+                translateY: 50,
+                opacity: 0,
+                duration: 0.3
+            });
+        });
+    });
+}
+function mobSplider(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    if (window.matchMedia("(max-width: 769px)").matches) spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            arrows: false,
+            fixedWidth: "85%",
+            gap: "0px"
+        });
+        initProgressBar(splide);
+        splide.mount();
+    });
+}
+function productSplider(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            perPage: 1,
+            pagination: true
+        });
+        splide.mount();
+    });
+}
+function desktopSplider(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    if (window.matchMedia("(min-width: 769px)").matches) spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            arrows: false,
+            fixedWidth: "39%",
+            gap: "0px",
+            wheel: true,
+            perMove: 1,
+            wheelSleep: 1000,
+            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+            releaseWheel: true
+        });
+        initProgressBar(splide);
+        splide.mount();
+    });
+}
+function spliderWithArrows(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            fixedWidth: "39.2%",
+            gap: "0px",
+            perMove: 2,
+            breakpoints: {
+                767: {
+                    fixedWidth: "85%",
+                    arrows: false
+                }
+            }
+        });
+        initProgressBar(splide);
+        splide.mount();
+    });
+}
+function spliderVertical(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            direction: "ttb",
+            heightRatio: 1,
+            perPage: 2,
+            pagination: false,
+            gap: "calc(24 *var(--fz))",
+            arrows: false,
+            wheel: true,
+            releaseWheel: true,
+            perMove: 1
+        });
+        initProgressBar(splide);
+        splide.mount();
+        if (window.matchMedia("(max-width: 767px)").matches) splide.destroy();
+    });
+}
+function spliderWithArrowsDesktop(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            gap: "calc(24 * var(--fz))",
+            perMove: 1,
+            perPage: 5
+        });
+        initProgressBar(splide);
+        splide.mount();
+        if (window.matchMedia("(max-width: 767px)").matches) splide.destroy();
+    });
+}
+function historySplider(sliderAttr) {
+    const spleders = document.querySelectorAll(`${sliderAttr}`);
+    spleders.forEach((el)=>{
+        const splide = new (0, _splideDefault.default)(el, {
+            pagination: false,
+            fixedWidth: "100%",
+            gap: "0px",
+            perMove: 1
+        });
+        progressBarWithYears(splide);
+        splide.mount();
+    });
+}
+function progressBarWithYears(slider) {
+    const bar = slider.root.querySelector("[data-slider-bar]");
+    const line = slider.root.querySelector("[data-slider-line]");
+    const numbersContainer = slider.root.querySelector("[data-slider-numbers]");
+    const dates = [
+        "2018",
+        "2017",
+        "2016",
+        "2015",
+        "2014",
+        "2012",
+        "2010"
+    ];
+    if (bar) {
+        slider.on("mounted", ()=>{
+            let sliderEnd = slider.Components.Controller.getEnd();
+            for(i = 0; i <= sliderEnd; i++){
+                let span = document.createElement("span");
+                span.innerHTML = dates[i];
+                numbersContainer.prepend(span);
+                span.style.right = `${100 / sliderEnd * i}%`;
+            }
+        });
+        slider.on("mounted move", (prevIndex, newIndex)=>{
+            let numbersOnLine = Array.from(numbersContainer.querySelectorAll("span"));
+            let sliderEnd = slider.Components.Controller.getEnd();
+            const rate = 100 / sliderEnd * slider.index;
+            bar.style.width = String(rate) + "%";
+            if (prevIndex >= newIndex) numbersOnLine[slider.index].style.color = "#0E0E0E";
+            else numbersOnLine[slider.index + 1].style.color = "#9D9D9D";
+        });
+        if (window.matchMedia("(max-width: 767px)").matches) {
+            slider.on("mounted", ()=>{
+                let sliderEnd = slider.Components.Controller.getEnd();
+                line.style.width = `${(sliderEnd + 1) * 50}vw`;
+            });
+            slider.on("mounted move", function(prevIndex, newIndex) {
+                line.style.transform = `translateX(-${slider.index * 50}vw)`;
+            });
+        }
+    }
+}
+function initProgressBar(slider) {
+    const bar = slider.root.querySelector("[data-slider-bar]");
+    if (bar) slider.on("mounted move", function() {
+        const end = slider.Components.Controller.getEnd();
+        const rate = 100 / end * slider.index;
+        bar.style.width = String(rate) + "%";
+        console.log(rate);
+    });
+}
+
+},{"@splidejs/splide":"5CJev","@splidejs/splide-extension-intersection":"kLFb5","gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5CJev":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "CLASSES", ()=>CLASSES);
+parcelHelpers.export(exports, "CLASS_ACTIVE", ()=>CLASS_ACTIVE);
+parcelHelpers.export(exports, "CLASS_ARROW", ()=>CLASS_ARROW);
+parcelHelpers.export(exports, "CLASS_ARROWS", ()=>CLASS_ARROWS);
+parcelHelpers.export(exports, "CLASS_ARROW_NEXT", ()=>CLASS_ARROW_NEXT);
+parcelHelpers.export(exports, "CLASS_ARROW_PREV", ()=>CLASS_ARROW_PREV);
+parcelHelpers.export(exports, "CLASS_CLONE", ()=>CLASS_CLONE);
+parcelHelpers.export(exports, "CLASS_CONTAINER", ()=>CLASS_CONTAINER);
+parcelHelpers.export(exports, "CLASS_FOCUS_IN", ()=>CLASS_FOCUS_IN);
+parcelHelpers.export(exports, "CLASS_INITIALIZED", ()=>CLASS_INITIALIZED);
+parcelHelpers.export(exports, "CLASS_LIST", ()=>CLASS_LIST);
+parcelHelpers.export(exports, "CLASS_LOADING", ()=>CLASS_LOADING);
+parcelHelpers.export(exports, "CLASS_NEXT", ()=>CLASS_NEXT);
+parcelHelpers.export(exports, "CLASS_OVERFLOW", ()=>CLASS_OVERFLOW);
+parcelHelpers.export(exports, "CLASS_PAGINATION", ()=>CLASS_PAGINATION);
+parcelHelpers.export(exports, "CLASS_PAGINATION_PAGE", ()=>CLASS_PAGINATION_PAGE);
+parcelHelpers.export(exports, "CLASS_PREV", ()=>CLASS_PREV);
+parcelHelpers.export(exports, "CLASS_PROGRESS", ()=>CLASS_PROGRESS);
+parcelHelpers.export(exports, "CLASS_PROGRESS_BAR", ()=>CLASS_PROGRESS_BAR);
+parcelHelpers.export(exports, "CLASS_ROOT", ()=>CLASS_ROOT);
+parcelHelpers.export(exports, "CLASS_SLIDE", ()=>CLASS_SLIDE);
+parcelHelpers.export(exports, "CLASS_SPINNER", ()=>CLASS_SPINNER);
+parcelHelpers.export(exports, "CLASS_SR", ()=>CLASS_SR);
+parcelHelpers.export(exports, "CLASS_TOGGLE", ()=>CLASS_TOGGLE);
+parcelHelpers.export(exports, "CLASS_TOGGLE_PAUSE", ()=>CLASS_TOGGLE_PAUSE);
+parcelHelpers.export(exports, "CLASS_TOGGLE_PLAY", ()=>CLASS_TOGGLE_PLAY);
+parcelHelpers.export(exports, "CLASS_TRACK", ()=>CLASS_TRACK);
+parcelHelpers.export(exports, "CLASS_VISIBLE", ()=>CLASS_VISIBLE);
+parcelHelpers.export(exports, "DEFAULTS", ()=>DEFAULTS);
+parcelHelpers.export(exports, "EVENT_ACTIVE", ()=>EVENT_ACTIVE);
+parcelHelpers.export(exports, "EVENT_ARROWS_MOUNTED", ()=>EVENT_ARROWS_MOUNTED);
+parcelHelpers.export(exports, "EVENT_ARROWS_UPDATED", ()=>EVENT_ARROWS_UPDATED);
+parcelHelpers.export(exports, "EVENT_AUTOPLAY_PAUSE", ()=>EVENT_AUTOPLAY_PAUSE);
+parcelHelpers.export(exports, "EVENT_AUTOPLAY_PLAY", ()=>EVENT_AUTOPLAY_PLAY);
+parcelHelpers.export(exports, "EVENT_AUTOPLAY_PLAYING", ()=>EVENT_AUTOPLAY_PLAYING);
+parcelHelpers.export(exports, "EVENT_CLICK", ()=>EVENT_CLICK);
+parcelHelpers.export(exports, "EVENT_DESTROY", ()=>EVENT_DESTROY);
+parcelHelpers.export(exports, "EVENT_DRAG", ()=>EVENT_DRAG);
+parcelHelpers.export(exports, "EVENT_DRAGGED", ()=>EVENT_DRAGGED);
+parcelHelpers.export(exports, "EVENT_DRAGGING", ()=>EVENT_DRAGGING);
+parcelHelpers.export(exports, "EVENT_END_INDEX_CHANGED", ()=>EVENT_END_INDEX_CHANGED);
+parcelHelpers.export(exports, "EVENT_HIDDEN", ()=>EVENT_HIDDEN);
+parcelHelpers.export(exports, "EVENT_INACTIVE", ()=>EVENT_INACTIVE);
+parcelHelpers.export(exports, "EVENT_LAZYLOAD_LOADED", ()=>EVENT_LAZYLOAD_LOADED);
+parcelHelpers.export(exports, "EVENT_MOUNTED", ()=>EVENT_MOUNTED);
+parcelHelpers.export(exports, "EVENT_MOVE", ()=>EVENT_MOVE);
+parcelHelpers.export(exports, "EVENT_MOVED", ()=>EVENT_MOVED);
+parcelHelpers.export(exports, "EVENT_NAVIGATION_MOUNTED", ()=>EVENT_NAVIGATION_MOUNTED);
+parcelHelpers.export(exports, "EVENT_OVERFLOW", ()=>EVENT_OVERFLOW);
+parcelHelpers.export(exports, "EVENT_PAGINATION_MOUNTED", ()=>EVENT_PAGINATION_MOUNTED);
+parcelHelpers.export(exports, "EVENT_PAGINATION_UPDATED", ()=>EVENT_PAGINATION_UPDATED);
+parcelHelpers.export(exports, "EVENT_READY", ()=>EVENT_READY);
+parcelHelpers.export(exports, "EVENT_REFRESH", ()=>EVENT_REFRESH);
+parcelHelpers.export(exports, "EVENT_RESIZE", ()=>EVENT_RESIZE);
+parcelHelpers.export(exports, "EVENT_RESIZED", ()=>EVENT_RESIZED);
+parcelHelpers.export(exports, "EVENT_SCROLL", ()=>EVENT_SCROLL);
+parcelHelpers.export(exports, "EVENT_SCROLLED", ()=>EVENT_SCROLLED);
+parcelHelpers.export(exports, "EVENT_SHIFTED", ()=>EVENT_SHIFTED);
+parcelHelpers.export(exports, "EVENT_SLIDE_KEYDOWN", ()=>EVENT_SLIDE_KEYDOWN);
+parcelHelpers.export(exports, "EVENT_UPDATED", ()=>EVENT_UPDATED);
+parcelHelpers.export(exports, "EVENT_VISIBLE", ()=>EVENT_VISIBLE);
+parcelHelpers.export(exports, "EventBinder", ()=>EventBinder);
+parcelHelpers.export(exports, "EventInterface", ()=>EventInterface);
+parcelHelpers.export(exports, "FADE", ()=>FADE);
+parcelHelpers.export(exports, "LOOP", ()=>LOOP);
+parcelHelpers.export(exports, "LTR", ()=>LTR);
+parcelHelpers.export(exports, "RTL", ()=>RTL);
+parcelHelpers.export(exports, "RequestInterval", ()=>RequestInterval);
+parcelHelpers.export(exports, "SLIDE", ()=>SLIDE);
+parcelHelpers.export(exports, "STATUS_CLASSES", ()=>STATUS_CLASSES);
+parcelHelpers.export(exports, "Splide", ()=>Splide);
+parcelHelpers.export(exports, "SplideRenderer", ()=>SplideRenderer);
+parcelHelpers.export(exports, "State", ()=>State);
+parcelHelpers.export(exports, "TTB", ()=>TTB);
+parcelHelpers.export(exports, "Throttle", ()=>Throttle);
+parcelHelpers.export(exports, "default", ()=>Splide);
+function _defineProperties(target, props) {
+    for(var i = 0; i < props.length; i++){
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+    }
+}
+function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    Object.defineProperty(Constructor, "prototype", {
+        writable: false
+    });
+    return Constructor;
+}
+/*!
+ * Splide.js
+ * Version  : 4.1.4
+ * License  : MIT
+ * Copyright: 2022 Naotoshi Fujita
+ */ var MEDIA_PREFERS_REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+var CREATED = 1;
+var MOUNTED = 2;
+var IDLE = 3;
+var MOVING = 4;
+var SCROLLING = 5;
+var DRAGGING = 6;
+var DESTROYED = 7;
+var STATES = {
+    CREATED: CREATED,
+    MOUNTED: MOUNTED,
+    IDLE: IDLE,
+    MOVING: MOVING,
+    SCROLLING: SCROLLING,
+    DRAGGING: DRAGGING,
+    DESTROYED: DESTROYED
+};
+function empty(array) {
+    array.length = 0;
+}
+function slice(arrayLike, start, end) {
+    return Array.prototype.slice.call(arrayLike, start, end);
+}
+function apply(func) {
+    return func.bind.apply(func, [
+        null
+    ].concat(slice(arguments, 1)));
+}
+var nextTick = setTimeout;
+var noop = function noop() {};
+function raf(func) {
+    return requestAnimationFrame(func);
+}
+function typeOf(type, subject) {
+    return typeof subject === type;
+}
+function isObject(subject) {
+    return !isNull(subject) && typeOf("object", subject);
+}
+var isArray = Array.isArray;
+var isFunction = apply(typeOf, "function");
+var isString = apply(typeOf, "string");
+var isUndefined = apply(typeOf, "undefined");
+function isNull(subject) {
+    return subject === null;
+}
+function isHTMLElement(subject) {
+    try {
+        return subject instanceof (subject.ownerDocument.defaultView || window).HTMLElement;
+    } catch (e) {
+        return false;
+    }
+}
+function toArray(value) {
+    return isArray(value) ? value : [
+        value
+    ];
+}
+function forEach(values, iteratee) {
+    toArray(values).forEach(iteratee);
+}
+function includes(array, value) {
+    return array.indexOf(value) > -1;
+}
+function push(array, items) {
+    array.push.apply(array, toArray(items));
+    return array;
+}
+function toggleClass(elm, classes, add) {
+    if (elm) forEach(classes, function(name) {
+        if (name) elm.classList[add ? "add" : "remove"](name);
+    });
+}
+function addClass(elm, classes) {
+    toggleClass(elm, isString(classes) ? classes.split(" ") : classes, true);
+}
+function append(parent, children) {
+    forEach(children, parent.appendChild.bind(parent));
+}
+function before(nodes, ref) {
+    forEach(nodes, function(node) {
+        var parent = (ref || node).parentNode;
+        if (parent) parent.insertBefore(node, ref);
+    });
+}
+function matches(elm, selector) {
+    return isHTMLElement(elm) && (elm["msMatchesSelector"] || elm.matches).call(elm, selector);
+}
+function children(parent, selector) {
+    var children2 = parent ? slice(parent.children) : [];
+    return selector ? children2.filter(function(child) {
+        return matches(child, selector);
+    }) : children2;
+}
+function child(parent, selector) {
+    return selector ? children(parent, selector)[0] : parent.firstElementChild;
+}
+var ownKeys = Object.keys;
+function forOwn(object, iteratee, right) {
+    if (object) (right ? ownKeys(object).reverse() : ownKeys(object)).forEach(function(key) {
+        key !== "__proto__" && iteratee(object[key], key);
+    });
+    return object;
+}
+function assign(object) {
+    slice(arguments, 1).forEach(function(source) {
+        forOwn(source, function(value, key) {
+            object[key] = source[key];
+        });
+    });
+    return object;
+}
+function merge(object) {
+    slice(arguments, 1).forEach(function(source) {
+        forOwn(source, function(value, key) {
+            if (isArray(value)) object[key] = value.slice();
+            else if (isObject(value)) object[key] = merge({}, isObject(object[key]) ? object[key] : {}, value);
+            else object[key] = value;
+        });
+    });
+    return object;
+}
+function omit(object, keys) {
+    forEach(keys || ownKeys(object), function(key) {
+        delete object[key];
+    });
+}
+function removeAttribute(elms, attrs) {
+    forEach(elms, function(elm) {
+        forEach(attrs, function(attr) {
+            elm && elm.removeAttribute(attr);
+        });
+    });
+}
+function setAttribute(elms, attrs, value) {
+    if (isObject(attrs)) forOwn(attrs, function(value2, name) {
+        setAttribute(elms, name, value2);
+    });
+    else forEach(elms, function(elm) {
+        isNull(value) || value === "" ? removeAttribute(elm, attrs) : elm.setAttribute(attrs, String(value));
+    });
+}
+function create(tag, attrs, parent) {
+    var elm = document.createElement(tag);
+    if (attrs) isString(attrs) ? addClass(elm, attrs) : setAttribute(elm, attrs);
+    parent && append(parent, elm);
+    return elm;
+}
+function style(elm, prop, value) {
+    if (isUndefined(value)) return getComputedStyle(elm)[prop];
+    if (!isNull(value)) elm.style[prop] = "" + value;
+}
+function display(elm, display2) {
+    style(elm, "display", display2);
+}
+function focus(elm) {
+    elm["setActive"] && elm["setActive"]() || elm.focus({
+        preventScroll: true
+    });
+}
+function getAttribute(elm, attr) {
+    return elm.getAttribute(attr);
+}
+function hasClass(elm, className) {
+    return elm && elm.classList.contains(className);
+}
+function rect(target) {
+    return target.getBoundingClientRect();
+}
+function remove(nodes) {
+    forEach(nodes, function(node) {
+        if (node && node.parentNode) node.parentNode.removeChild(node);
+    });
+}
+function parseHtml(html) {
+    return child(new DOMParser().parseFromString(html, "text/html").body);
+}
+function prevent(e, stopPropagation) {
+    e.preventDefault();
+    if (stopPropagation) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+    }
+}
+function query(parent, selector) {
+    return parent && parent.querySelector(selector);
+}
+function queryAll(parent, selector) {
+    return selector ? slice(parent.querySelectorAll(selector)) : [];
+}
+function removeClass(elm, classes) {
+    toggleClass(elm, classes, false);
+}
+function timeOf(e) {
+    return e.timeStamp;
+}
+function unit(value) {
+    return isString(value) ? value : value ? value + "px" : "";
+}
+var PROJECT_CODE = "splide";
+var DATA_ATTRIBUTE = "data-" + PROJECT_CODE;
+function assert(condition, message) {
+    if (!condition) throw new Error("[" + PROJECT_CODE + "] " + (message || ""));
+}
+var min = Math.min, max = Math.max, floor = Math.floor, ceil = Math.ceil, abs = Math.abs;
+function approximatelyEqual(x, y, epsilon) {
+    return abs(x - y) < epsilon;
+}
+function between(number, x, y, exclusive) {
+    var minimum = min(x, y);
+    var maximum = max(x, y);
+    return exclusive ? minimum < number && number < maximum : minimum <= number && number <= maximum;
+}
+function clamp(number, x, y) {
+    var minimum = min(x, y);
+    var maximum = max(x, y);
+    return min(max(minimum, number), maximum);
+}
+function sign(x) {
+    return +(x > 0) - +(x < 0);
+}
+function camelToKebab(string) {
+    return string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+}
+function format(string, replacements) {
+    forEach(replacements, function(replacement) {
+        string = string.replace("%s", "" + replacement);
+    });
+    return string;
+}
+function pad(number) {
+    return number < 10 ? "0" + number : "" + number;
+}
+var ids = {};
+function uniqueId(prefix) {
+    return "" + prefix + pad(ids[prefix] = (ids[prefix] || 0) + 1);
+}
+function EventBinder() {
+    var listeners = [];
+    function bind(targets, events, callback, options) {
+        forEachEvent(targets, events, function(target, event, namespace) {
+            var isEventTarget = "addEventListener" in target;
+            var remover = isEventTarget ? target.removeEventListener.bind(target, event, callback, options) : target["removeListener"].bind(target, callback);
+            isEventTarget ? target.addEventListener(event, callback, options) : target["addListener"](callback);
+            listeners.push([
+                target,
+                event,
+                namespace,
+                callback,
+                remover
+            ]);
+        });
+    }
+    function unbind(targets, events, callback) {
+        forEachEvent(targets, events, function(target, event, namespace) {
+            listeners = listeners.filter(function(listener) {
+                if (listener[0] === target && listener[1] === event && listener[2] === namespace && (!callback || listener[3] === callback)) {
+                    listener[4]();
+                    return false;
+                }
+                return true;
+            });
+        });
+    }
+    function dispatch(target, type, detail) {
+        var e;
+        var bubbles = true;
+        if (typeof CustomEvent === "function") e = new CustomEvent(type, {
+            bubbles: bubbles,
+            detail: detail
+        });
+        else {
+            e = document.createEvent("CustomEvent");
+            e.initCustomEvent(type, bubbles, false, detail);
+        }
+        target.dispatchEvent(e);
+        return e;
+    }
+    function forEachEvent(targets, events, iteratee) {
+        forEach(targets, function(target) {
+            target && forEach(events, function(events2) {
+                events2.split(" ").forEach(function(eventNS) {
+                    var fragment = eventNS.split(".");
+                    iteratee(target, fragment[0], fragment[1]);
+                });
+            });
+        });
+    }
+    function destroy() {
+        listeners.forEach(function(data) {
+            data[4]();
+        });
+        empty(listeners);
+    }
+    return {
+        bind: bind,
+        unbind: unbind,
+        dispatch: dispatch,
+        destroy: destroy
+    };
+}
+var EVENT_MOUNTED = "mounted";
+var EVENT_READY = "ready";
+var EVENT_MOVE = "move";
+var EVENT_MOVED = "moved";
+var EVENT_CLICK = "click";
+var EVENT_ACTIVE = "active";
+var EVENT_INACTIVE = "inactive";
+var EVENT_VISIBLE = "visible";
+var EVENT_HIDDEN = "hidden";
+var EVENT_REFRESH = "refresh";
+var EVENT_UPDATED = "updated";
+var EVENT_RESIZE = "resize";
+var EVENT_RESIZED = "resized";
+var EVENT_DRAG = "drag";
+var EVENT_DRAGGING = "dragging";
+var EVENT_DRAGGED = "dragged";
+var EVENT_SCROLL = "scroll";
+var EVENT_SCROLLED = "scrolled";
+var EVENT_OVERFLOW = "overflow";
+var EVENT_DESTROY = "destroy";
+var EVENT_ARROWS_MOUNTED = "arrows:mounted";
+var EVENT_ARROWS_UPDATED = "arrows:updated";
+var EVENT_PAGINATION_MOUNTED = "pagination:mounted";
+var EVENT_PAGINATION_UPDATED = "pagination:updated";
+var EVENT_NAVIGATION_MOUNTED = "navigation:mounted";
+var EVENT_AUTOPLAY_PLAY = "autoplay:play";
+var EVENT_AUTOPLAY_PLAYING = "autoplay:playing";
+var EVENT_AUTOPLAY_PAUSE = "autoplay:pause";
+var EVENT_LAZYLOAD_LOADED = "lazyload:loaded";
+var EVENT_SLIDE_KEYDOWN = "sk";
+var EVENT_SHIFTED = "sh";
+var EVENT_END_INDEX_CHANGED = "ei";
+function EventInterface(Splide2) {
+    var bus = Splide2 ? Splide2.event.bus : document.createDocumentFragment();
+    var binder = EventBinder();
+    function on(events, callback) {
+        binder.bind(bus, toArray(events).join(" "), function(e) {
+            callback.apply(callback, isArray(e.detail) ? e.detail : []);
+        });
+    }
+    function emit(event) {
+        binder.dispatch(bus, event, slice(arguments, 1));
+    }
+    if (Splide2) Splide2.event.on(EVENT_DESTROY, binder.destroy);
+    return assign(binder, {
+        bus: bus,
+        on: on,
+        off: apply(binder.unbind, bus),
+        emit: emit
+    });
+}
+function RequestInterval(interval, onInterval, onUpdate, limit) {
+    var now = Date.now;
+    var startTime;
+    var rate = 0;
+    var id;
+    var paused = true;
+    var count = 0;
+    function update() {
+        if (!paused) {
+            rate = interval ? min((now() - startTime) / interval, 1) : 1;
+            onUpdate && onUpdate(rate);
+            if (rate >= 1) {
+                onInterval();
+                startTime = now();
+                if (limit && ++count >= limit) return pause();
+            }
+            id = raf(update);
+        }
+    }
+    function start(resume) {
+        resume || cancel();
+        startTime = now() - (resume ? rate * interval : 0);
+        paused = false;
+        id = raf(update);
+    }
+    function pause() {
+        paused = true;
+    }
+    function rewind() {
+        startTime = now();
+        rate = 0;
+        if (onUpdate) onUpdate(rate);
+    }
+    function cancel() {
+        id && cancelAnimationFrame(id);
+        rate = 0;
+        id = 0;
+        paused = true;
+    }
+    function set(time) {
+        interval = time;
+    }
+    function isPaused() {
+        return paused;
+    }
+    return {
+        start: start,
+        rewind: rewind,
+        pause: pause,
+        cancel: cancel,
+        set: set,
+        isPaused: isPaused
+    };
+}
+function State(initialState) {
+    var state = initialState;
+    function set(value) {
+        state = value;
+    }
+    function is(states) {
+        return includes(toArray(states), state);
+    }
+    return {
+        set: set,
+        is: is
+    };
+}
+function Throttle(func, duration) {
+    var interval = RequestInterval(duration || 0, func, null, 1);
+    return function() {
+        interval.isPaused() && interval.start();
+    };
+}
+function Media(Splide2, Components2, options) {
+    var state = Splide2.state;
+    var breakpoints = options.breakpoints || {};
+    var reducedMotion = options.reducedMotion || {};
+    var binder = EventBinder();
+    var queries = [];
+    function setup() {
+        var isMin = options.mediaQuery === "min";
+        ownKeys(breakpoints).sort(function(n, m) {
+            return isMin ? +n - +m : +m - +n;
+        }).forEach(function(key) {
+            register(breakpoints[key], "(" + (isMin ? "min" : "max") + "-width:" + key + "px)");
+        });
+        register(reducedMotion, MEDIA_PREFERS_REDUCED_MOTION);
+        update();
+    }
+    function destroy(completely) {
+        if (completely) binder.destroy();
+    }
+    function register(options2, query) {
+        var queryList = matchMedia(query);
+        binder.bind(queryList, "change", update);
+        queries.push([
+            options2,
+            queryList
+        ]);
+    }
+    function update() {
+        var destroyed = state.is(DESTROYED);
+        var direction = options.direction;
+        var merged = queries.reduce(function(merged2, entry) {
+            return merge(merged2, entry[1].matches ? entry[0] : {});
+        }, {});
+        omit(options);
+        set(merged);
+        if (options.destroy) Splide2.destroy(options.destroy === "completely");
+        else if (destroyed) {
+            destroy(true);
+            Splide2.mount();
+        } else direction !== options.direction && Splide2.refresh();
+    }
+    function reduce(enable) {
+        if (matchMedia(MEDIA_PREFERS_REDUCED_MOTION).matches) enable ? merge(options, reducedMotion) : omit(options, ownKeys(reducedMotion));
+    }
+    function set(opts, base, notify) {
+        merge(options, opts);
+        base && merge(Object.getPrototypeOf(options), opts);
+        if (notify || !state.is(CREATED)) Splide2.emit(EVENT_UPDATED, options);
+    }
+    return {
+        setup: setup,
+        destroy: destroy,
+        reduce: reduce,
+        set: set
+    };
+}
+var ARROW = "Arrow";
+var ARROW_LEFT = ARROW + "Left";
+var ARROW_RIGHT = ARROW + "Right";
+var ARROW_UP = ARROW + "Up";
+var ARROW_DOWN = ARROW + "Down";
+var LTR = "ltr";
+var RTL = "rtl";
+var TTB = "ttb";
+var ORIENTATION_MAP = {
+    width: [
+        "height"
+    ],
+    left: [
+        "top",
+        "right"
+    ],
+    right: [
+        "bottom",
+        "left"
+    ],
+    x: [
+        "y"
+    ],
+    X: [
+        "Y"
+    ],
+    Y: [
+        "X"
+    ],
+    ArrowLeft: [
+        ARROW_UP,
+        ARROW_RIGHT
+    ],
+    ArrowRight: [
+        ARROW_DOWN,
+        ARROW_LEFT
+    ]
+};
+function Direction(Splide2, Components2, options) {
+    function resolve(prop, axisOnly, direction) {
+        direction = direction || options.direction;
+        var index = direction === RTL && !axisOnly ? 1 : direction === TTB ? 0 : -1;
+        return ORIENTATION_MAP[prop] && ORIENTATION_MAP[prop][index] || prop.replace(/width|left|right/i, function(match, offset) {
+            var replacement = ORIENTATION_MAP[match.toLowerCase()][index] || match;
+            return offset > 0 ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement;
+        });
+    }
+    function orient(value) {
+        return value * (options.direction === RTL ? 1 : -1);
+    }
+    return {
+        resolve: resolve,
+        orient: orient
+    };
+}
+var ROLE = "role";
+var TAB_INDEX = "tabindex";
+var DISABLED = "disabled";
+var ARIA_PREFIX = "aria-";
+var ARIA_CONTROLS = ARIA_PREFIX + "controls";
+var ARIA_CURRENT = ARIA_PREFIX + "current";
+var ARIA_SELECTED = ARIA_PREFIX + "selected";
+var ARIA_LABEL = ARIA_PREFIX + "label";
+var ARIA_LABELLEDBY = ARIA_PREFIX + "labelledby";
+var ARIA_HIDDEN = ARIA_PREFIX + "hidden";
+var ARIA_ORIENTATION = ARIA_PREFIX + "orientation";
+var ARIA_ROLEDESCRIPTION = ARIA_PREFIX + "roledescription";
+var ARIA_LIVE = ARIA_PREFIX + "live";
+var ARIA_BUSY = ARIA_PREFIX + "busy";
+var ARIA_ATOMIC = ARIA_PREFIX + "atomic";
+var ALL_ATTRIBUTES = [
+    ROLE,
+    TAB_INDEX,
+    DISABLED,
+    ARIA_CONTROLS,
+    ARIA_CURRENT,
+    ARIA_LABEL,
+    ARIA_LABELLEDBY,
+    ARIA_HIDDEN,
+    ARIA_ORIENTATION,
+    ARIA_ROLEDESCRIPTION
+];
+var CLASS_PREFIX = PROJECT_CODE + "__";
+var STATUS_CLASS_PREFIX = "is-";
+var CLASS_ROOT = PROJECT_CODE;
+var CLASS_TRACK = CLASS_PREFIX + "track";
+var CLASS_LIST = CLASS_PREFIX + "list";
+var CLASS_SLIDE = CLASS_PREFIX + "slide";
+var CLASS_CLONE = CLASS_SLIDE + "--clone";
+var CLASS_CONTAINER = CLASS_SLIDE + "__container";
+var CLASS_ARROWS = CLASS_PREFIX + "arrows";
+var CLASS_ARROW = CLASS_PREFIX + "arrow";
+var CLASS_ARROW_PREV = CLASS_ARROW + "--prev";
+var CLASS_ARROW_NEXT = CLASS_ARROW + "--next";
+var CLASS_PAGINATION = CLASS_PREFIX + "pagination";
+var CLASS_PAGINATION_PAGE = CLASS_PAGINATION + "__page";
+var CLASS_PROGRESS = CLASS_PREFIX + "progress";
+var CLASS_PROGRESS_BAR = CLASS_PROGRESS + "__bar";
+var CLASS_TOGGLE = CLASS_PREFIX + "toggle";
+var CLASS_TOGGLE_PLAY = CLASS_TOGGLE + "__play";
+var CLASS_TOGGLE_PAUSE = CLASS_TOGGLE + "__pause";
+var CLASS_SPINNER = CLASS_PREFIX + "spinner";
+var CLASS_SR = CLASS_PREFIX + "sr";
+var CLASS_INITIALIZED = STATUS_CLASS_PREFIX + "initialized";
+var CLASS_ACTIVE = STATUS_CLASS_PREFIX + "active";
+var CLASS_PREV = STATUS_CLASS_PREFIX + "prev";
+var CLASS_NEXT = STATUS_CLASS_PREFIX + "next";
+var CLASS_VISIBLE = STATUS_CLASS_PREFIX + "visible";
+var CLASS_LOADING = STATUS_CLASS_PREFIX + "loading";
+var CLASS_FOCUS_IN = STATUS_CLASS_PREFIX + "focus-in";
+var CLASS_OVERFLOW = STATUS_CLASS_PREFIX + "overflow";
+var STATUS_CLASSES = [
+    CLASS_ACTIVE,
+    CLASS_VISIBLE,
+    CLASS_PREV,
+    CLASS_NEXT,
+    CLASS_LOADING,
+    CLASS_FOCUS_IN,
+    CLASS_OVERFLOW
+];
+var CLASSES = {
+    slide: CLASS_SLIDE,
+    clone: CLASS_CLONE,
+    arrows: CLASS_ARROWS,
+    arrow: CLASS_ARROW,
+    prev: CLASS_ARROW_PREV,
+    next: CLASS_ARROW_NEXT,
+    pagination: CLASS_PAGINATION,
+    page: CLASS_PAGINATION_PAGE,
+    spinner: CLASS_SPINNER
+};
+function closest(from, selector) {
+    if (isFunction(from.closest)) return from.closest(selector);
+    var elm = from;
+    while(elm && elm.nodeType === 1){
+        if (matches(elm, selector)) break;
+        elm = elm.parentElement;
+    }
+    return elm;
+}
+var FRICTION = 5;
+var LOG_INTERVAL = 200;
+var POINTER_DOWN_EVENTS = "touchstart mousedown";
+var POINTER_MOVE_EVENTS = "touchmove mousemove";
+var POINTER_UP_EVENTS = "touchend touchcancel mouseup click";
+function Elements(Splide2, Components2, options) {
+    var _EventInterface = EventInterface(Splide2), on = _EventInterface.on, bind = _EventInterface.bind;
+    var root = Splide2.root;
+    var i18n = options.i18n;
+    var elements = {};
+    var slides = [];
+    var rootClasses = [];
+    var trackClasses = [];
+    var track;
+    var list;
+    var isUsingKey;
+    function setup() {
+        collect();
+        init();
+        update();
+    }
+    function mount() {
+        on(EVENT_REFRESH, destroy);
+        on(EVENT_REFRESH, setup);
+        on(EVENT_UPDATED, update);
+        bind(document, POINTER_DOWN_EVENTS + " keydown", function(e) {
+            isUsingKey = e.type === "keydown";
+        }, {
+            capture: true
+        });
+        bind(root, "focusin", function() {
+            toggleClass(root, CLASS_FOCUS_IN, !!isUsingKey);
+        });
+    }
+    function destroy(completely) {
+        var attrs = ALL_ATTRIBUTES.concat("style");
+        empty(slides);
+        removeClass(root, rootClasses);
+        removeClass(track, trackClasses);
+        removeAttribute([
+            track,
+            list
+        ], attrs);
+        removeAttribute(root, completely ? attrs : [
+            "style",
+            ARIA_ROLEDESCRIPTION
+        ]);
+    }
+    function update() {
+        removeClass(root, rootClasses);
+        removeClass(track, trackClasses);
+        rootClasses = getClasses(CLASS_ROOT);
+        trackClasses = getClasses(CLASS_TRACK);
+        addClass(root, rootClasses);
+        addClass(track, trackClasses);
+        setAttribute(root, ARIA_LABEL, options.label);
+        setAttribute(root, ARIA_LABELLEDBY, options.labelledby);
+    }
+    function collect() {
+        track = find("." + CLASS_TRACK);
+        list = child(track, "." + CLASS_LIST);
+        assert(track && list, "A track/list element is missing.");
+        push(slides, children(list, "." + CLASS_SLIDE + ":not(." + CLASS_CLONE + ")"));
+        forOwn({
+            arrows: CLASS_ARROWS,
+            pagination: CLASS_PAGINATION,
+            prev: CLASS_ARROW_PREV,
+            next: CLASS_ARROW_NEXT,
+            bar: CLASS_PROGRESS_BAR,
+            toggle: CLASS_TOGGLE
+        }, function(className, key) {
+            elements[key] = find("." + className);
+        });
+        assign(elements, {
+            root: root,
+            track: track,
+            list: list,
+            slides: slides
+        });
+    }
+    function init() {
+        var id = root.id || uniqueId(PROJECT_CODE);
+        var role = options.role;
+        root.id = id;
+        track.id = track.id || id + "-track";
+        list.id = list.id || id + "-list";
+        if (!getAttribute(root, ROLE) && root.tagName !== "SECTION" && role) setAttribute(root, ROLE, role);
+        setAttribute(root, ARIA_ROLEDESCRIPTION, i18n.carousel);
+        setAttribute(list, ROLE, "presentation");
+    }
+    function find(selector) {
+        var elm = query(root, selector);
+        return elm && closest(elm, "." + CLASS_ROOT) === root ? elm : void 0;
+    }
+    function getClasses(base) {
+        return [
+            base + "--" + options.type,
+            base + "--" + options.direction,
+            options.drag && base + "--draggable",
+            options.isNavigation && base + "--nav",
+            base === CLASS_ROOT && CLASS_ACTIVE
+        ];
+    }
+    return assign(elements, {
+        setup: setup,
+        mount: mount,
+        destroy: destroy
+    });
+}
+var SLIDE = "slide";
+var LOOP = "loop";
+var FADE = "fade";
+function Slide$1(Splide2, index, slideIndex, slide) {
+    var event = EventInterface(Splide2);
+    var on = event.on, emit = event.emit, bind = event.bind;
+    var Components = Splide2.Components, root = Splide2.root, options = Splide2.options;
+    var isNavigation = options.isNavigation, updateOnMove = options.updateOnMove, i18n = options.i18n, pagination = options.pagination, slideFocus = options.slideFocus;
+    var resolve = Components.Direction.resolve;
+    var styles = getAttribute(slide, "style");
+    var label = getAttribute(slide, ARIA_LABEL);
+    var isClone = slideIndex > -1;
+    var container = child(slide, "." + CLASS_CONTAINER);
+    var destroyed;
+    function mount() {
+        if (!isClone) {
+            slide.id = root.id + "-slide" + pad(index + 1);
+            setAttribute(slide, ROLE, pagination ? "tabpanel" : "group");
+            setAttribute(slide, ARIA_ROLEDESCRIPTION, i18n.slide);
+            setAttribute(slide, ARIA_LABEL, label || format(i18n.slideLabel, [
+                index + 1,
+                Splide2.length
+            ]));
+        }
+        listen();
+    }
+    function listen() {
+        bind(slide, "click", apply(emit, EVENT_CLICK, self));
+        bind(slide, "keydown", apply(emit, EVENT_SLIDE_KEYDOWN, self));
+        on([
+            EVENT_MOVED,
+            EVENT_SHIFTED,
+            EVENT_SCROLLED
+        ], update);
+        on(EVENT_NAVIGATION_MOUNTED, initNavigation);
+        if (updateOnMove) on(EVENT_MOVE, onMove);
+    }
+    function destroy() {
+        destroyed = true;
+        event.destroy();
+        removeClass(slide, STATUS_CLASSES);
+        removeAttribute(slide, ALL_ATTRIBUTES);
+        setAttribute(slide, "style", styles);
+        setAttribute(slide, ARIA_LABEL, label || "");
+    }
+    function initNavigation() {
+        var controls = Splide2.splides.map(function(target) {
+            var Slide2 = target.splide.Components.Slides.getAt(index);
+            return Slide2 ? Slide2.slide.id : "";
+        }).join(" ");
+        setAttribute(slide, ARIA_LABEL, format(i18n.slideX, (isClone ? slideIndex : index) + 1));
+        setAttribute(slide, ARIA_CONTROLS, controls);
+        setAttribute(slide, ROLE, slideFocus ? "button" : "");
+        slideFocus && removeAttribute(slide, ARIA_ROLEDESCRIPTION);
+    }
+    function onMove() {
+        if (!destroyed) update();
+    }
+    function update() {
+        if (!destroyed) {
+            var curr = Splide2.index;
+            updateActivity();
+            updateVisibility();
+            toggleClass(slide, CLASS_PREV, index === curr - 1);
+            toggleClass(slide, CLASS_NEXT, index === curr + 1);
+        }
+    }
+    function updateActivity() {
+        var active = isActive();
+        if (active !== hasClass(slide, CLASS_ACTIVE)) {
+            toggleClass(slide, CLASS_ACTIVE, active);
+            setAttribute(slide, ARIA_CURRENT, isNavigation && active || "");
+            emit(active ? EVENT_ACTIVE : EVENT_INACTIVE, self);
+        }
+    }
+    function updateVisibility() {
+        var visible = isVisible();
+        var hidden = !visible && (!isActive() || isClone);
+        if (!Splide2.state.is([
+            MOVING,
+            SCROLLING
+        ])) setAttribute(slide, ARIA_HIDDEN, hidden || "");
+        setAttribute(queryAll(slide, options.focusableNodes || ""), TAB_INDEX, hidden ? -1 : "");
+        if (slideFocus) setAttribute(slide, TAB_INDEX, hidden ? -1 : 0);
+        if (visible !== hasClass(slide, CLASS_VISIBLE)) {
+            toggleClass(slide, CLASS_VISIBLE, visible);
+            emit(visible ? EVENT_VISIBLE : EVENT_HIDDEN, self);
+        }
+        if (!visible && document.activeElement === slide) {
+            var Slide2 = Components.Slides.getAt(Splide2.index);
+            Slide2 && focus(Slide2.slide);
+        }
+    }
+    function style$1(prop, value, useContainer) {
+        style(useContainer && container || slide, prop, value);
+    }
+    function isActive() {
+        var curr = Splide2.index;
+        return curr === index || options.cloneStatus && curr === slideIndex;
+    }
+    function isVisible() {
+        if (Splide2.is(FADE)) return isActive();
+        var trackRect = rect(Components.Elements.track);
+        var slideRect = rect(slide);
+        var left = resolve("left", true);
+        var right = resolve("right", true);
+        return floor(trackRect[left]) <= ceil(slideRect[left]) && floor(slideRect[right]) <= ceil(trackRect[right]);
+    }
+    function isWithin(from, distance) {
+        var diff = abs(from - index);
+        if (!isClone && (options.rewind || Splide2.is(LOOP))) diff = min(diff, Splide2.length - diff);
+        return diff <= distance;
+    }
+    var self = {
+        index: index,
+        slideIndex: slideIndex,
+        slide: slide,
+        container: container,
+        isClone: isClone,
+        mount: mount,
+        destroy: destroy,
+        update: update,
+        style: style$1,
+        isWithin: isWithin
+    };
+    return self;
+}
+function Slides(Splide2, Components2, options) {
+    var _EventInterface2 = EventInterface(Splide2), on = _EventInterface2.on, emit = _EventInterface2.emit, bind = _EventInterface2.bind;
+    var _Components2$Elements = Components2.Elements, slides = _Components2$Elements.slides, list = _Components2$Elements.list;
+    var Slides2 = [];
+    function mount() {
+        init();
+        on(EVENT_REFRESH, destroy);
+        on(EVENT_REFRESH, init);
+    }
+    function init() {
+        slides.forEach(function(slide, index) {
+            register(slide, index, -1);
+        });
+    }
+    function destroy() {
+        forEach$1(function(Slide2) {
+            Slide2.destroy();
+        });
+        empty(Slides2);
+    }
+    function update() {
+        forEach$1(function(Slide2) {
+            Slide2.update();
+        });
+    }
+    function register(slide, index, slideIndex) {
+        var object = Slide$1(Splide2, index, slideIndex, slide);
+        object.mount();
+        Slides2.push(object);
+        Slides2.sort(function(Slide1, Slide2) {
+            return Slide1.index - Slide2.index;
+        });
+    }
+    function get(excludeClones) {
+        return excludeClones ? filter(function(Slide2) {
+            return !Slide2.isClone;
+        }) : Slides2;
+    }
+    function getIn(page) {
+        var Controller = Components2.Controller;
+        var index = Controller.toIndex(page);
+        var max = Controller.hasFocus() ? 1 : options.perPage;
+        return filter(function(Slide2) {
+            return between(Slide2.index, index, index + max - 1);
+        });
+    }
+    function getAt(index) {
+        return filter(index)[0];
+    }
+    function add(items, index) {
+        forEach(items, function(slide) {
+            if (isString(slide)) slide = parseHtml(slide);
+            if (isHTMLElement(slide)) {
+                var ref = slides[index];
+                ref ? before(slide, ref) : append(list, slide);
+                addClass(slide, options.classes.slide);
+                observeImages(slide, apply(emit, EVENT_RESIZE));
+            }
+        });
+        emit(EVENT_REFRESH);
+    }
+    function remove$1(matcher) {
+        remove(filter(matcher).map(function(Slide2) {
+            return Slide2.slide;
+        }));
+        emit(EVENT_REFRESH);
+    }
+    function forEach$1(iteratee, excludeClones) {
+        get(excludeClones).forEach(iteratee);
+    }
+    function filter(matcher) {
+        return Slides2.filter(isFunction(matcher) ? matcher : function(Slide2) {
+            return isString(matcher) ? matches(Slide2.slide, matcher) : includes(toArray(matcher), Slide2.index);
+        });
+    }
+    function style(prop, value, useContainer) {
+        forEach$1(function(Slide2) {
+            Slide2.style(prop, value, useContainer);
+        });
+    }
+    function observeImages(elm, callback) {
+        var images = queryAll(elm, "img");
+        var length = images.length;
+        if (length) images.forEach(function(img) {
+            bind(img, "load error", function() {
+                if (!--length) callback();
+            });
+        });
+        else callback();
+    }
+    function getLength(excludeClones) {
+        return excludeClones ? slides.length : Slides2.length;
+    }
+    function isEnough() {
+        return Slides2.length > options.perPage;
+    }
+    return {
+        mount: mount,
+        destroy: destroy,
+        update: update,
+        register: register,
+        get: get,
+        getIn: getIn,
+        getAt: getAt,
+        add: add,
+        remove: remove$1,
+        forEach: forEach$1,
+        filter: filter,
+        style: style,
+        getLength: getLength,
+        isEnough: isEnough
+    };
+}
+function Layout(Splide2, Components2, options) {
+    var _EventInterface3 = EventInterface(Splide2), on = _EventInterface3.on, bind = _EventInterface3.bind, emit = _EventInterface3.emit;
+    var Slides = Components2.Slides;
+    var resolve = Components2.Direction.resolve;
+    var _Components2$Elements2 = Components2.Elements, root = _Components2$Elements2.root, track = _Components2$Elements2.track, list = _Components2$Elements2.list;
+    var getAt = Slides.getAt, styleSlides = Slides.style;
+    var vertical;
+    var rootRect;
+    var overflow;
+    function mount() {
+        init();
+        bind(window, "resize load", Throttle(apply(emit, EVENT_RESIZE)));
+        on([
+            EVENT_UPDATED,
+            EVENT_REFRESH
+        ], init);
+        on(EVENT_RESIZE, resize);
+    }
+    function init() {
+        vertical = options.direction === TTB;
+        style(root, "maxWidth", unit(options.width));
+        style(track, resolve("paddingLeft"), cssPadding(false));
+        style(track, resolve("paddingRight"), cssPadding(true));
+        resize(true);
+    }
+    function resize(force) {
+        var newRect = rect(root);
+        if (force || rootRect.width !== newRect.width || rootRect.height !== newRect.height) {
+            style(track, "height", cssTrackHeight());
+            styleSlides(resolve("marginRight"), unit(options.gap));
+            styleSlides("width", cssSlideWidth());
+            styleSlides("height", cssSlideHeight(), true);
+            rootRect = newRect;
+            emit(EVENT_RESIZED);
+            if (overflow !== (overflow = isOverflow())) {
+                toggleClass(root, CLASS_OVERFLOW, overflow);
+                emit(EVENT_OVERFLOW, overflow);
+            }
+        }
+    }
+    function cssPadding(right) {
+        var padding = options.padding;
+        var prop = resolve(right ? "right" : "left");
+        return padding && unit(padding[prop] || (isObject(padding) ? 0 : padding)) || "0px";
+    }
+    function cssTrackHeight() {
+        var height = "";
+        if (vertical) {
+            height = cssHeight();
+            assert(height, "height or heightRatio is missing.");
+            height = "calc(" + height + " - " + cssPadding(false) + " - " + cssPadding(true) + ")";
+        }
+        return height;
+    }
+    function cssHeight() {
+        return unit(options.height || rect(list).width * options.heightRatio);
+    }
+    function cssSlideWidth() {
+        return options.autoWidth ? null : unit(options.fixedWidth) || (vertical ? "" : cssSlideSize());
+    }
+    function cssSlideHeight() {
+        return unit(options.fixedHeight) || (vertical ? options.autoHeight ? null : cssSlideSize() : cssHeight());
+    }
+    function cssSlideSize() {
+        var gap = unit(options.gap);
+        return "calc((100%" + (gap && " + " + gap) + ")/" + (options.perPage || 1) + (gap && " - " + gap) + ")";
+    }
+    function listSize() {
+        return rect(list)[resolve("width")];
+    }
+    function slideSize(index, withoutGap) {
+        var Slide = getAt(index || 0);
+        return Slide ? rect(Slide.slide)[resolve("width")] + (withoutGap ? 0 : getGap()) : 0;
+    }
+    function totalSize(index, withoutGap) {
+        var Slide = getAt(index);
+        if (Slide) {
+            var right = rect(Slide.slide)[resolve("right")];
+            var left = rect(list)[resolve("left")];
+            return abs(right - left) + (withoutGap ? 0 : getGap());
+        }
+        return 0;
+    }
+    function sliderSize(withoutGap) {
+        return totalSize(Splide2.length - 1) - totalSize(0) + slideSize(0, withoutGap);
+    }
+    function getGap() {
+        var Slide = getAt(0);
+        return Slide && parseFloat(style(Slide.slide, resolve("marginRight"))) || 0;
+    }
+    function getPadding(right) {
+        return parseFloat(style(track, resolve("padding" + (right ? "Right" : "Left")))) || 0;
+    }
+    function isOverflow() {
+        return Splide2.is(FADE) || sliderSize(true) > listSize();
+    }
+    return {
+        mount: mount,
+        resize: resize,
+        listSize: listSize,
+        slideSize: slideSize,
+        sliderSize: sliderSize,
+        totalSize: totalSize,
+        getPadding: getPadding,
+        isOverflow: isOverflow
+    };
+}
+var MULTIPLIER = 2;
+function Clones(Splide2, Components2, options) {
+    var event = EventInterface(Splide2);
+    var on = event.on;
+    var Elements = Components2.Elements, Slides = Components2.Slides;
+    var resolve = Components2.Direction.resolve;
+    var clones = [];
+    var cloneCount;
+    function mount() {
+        on(EVENT_REFRESH, remount);
+        on([
+            EVENT_UPDATED,
+            EVENT_RESIZE
+        ], observe);
+        if (cloneCount = computeCloneCount()) {
+            generate(cloneCount);
+            Components2.Layout.resize(true);
+        }
+    }
+    function remount() {
+        destroy();
+        mount();
+    }
+    function destroy() {
+        remove(clones);
+        empty(clones);
+        event.destroy();
+    }
+    function observe() {
+        var count = computeCloneCount();
+        if (cloneCount !== count) {
+            if (cloneCount < count || !count) event.emit(EVENT_REFRESH);
+        }
+    }
+    function generate(count) {
+        var slides = Slides.get().slice();
+        var length = slides.length;
+        if (length) {
+            while(slides.length < count)push(slides, slides);
+            push(slides.slice(-count), slides.slice(0, count)).forEach(function(Slide, index) {
+                var isHead = index < count;
+                var clone = cloneDeep(Slide.slide, index);
+                isHead ? before(clone, slides[0].slide) : append(Elements.list, clone);
+                push(clones, clone);
+                Slides.register(clone, index - count + (isHead ? 0 : length), Slide.index);
+            });
+        }
+    }
+    function cloneDeep(elm, index) {
+        var clone = elm.cloneNode(true);
+        addClass(clone, options.classes.clone);
+        clone.id = Splide2.root.id + "-clone" + pad(index + 1);
+        return clone;
+    }
+    function computeCloneCount() {
+        var clones2 = options.clones;
+        if (!Splide2.is(LOOP)) clones2 = 0;
+        else if (isUndefined(clones2)) {
+            var fixedSize = options[resolve("fixedWidth")] && Components2.Layout.slideSize(0);
+            var fixedCount = fixedSize && ceil(rect(Elements.track)[resolve("width")] / fixedSize);
+            clones2 = fixedCount || options[resolve("autoWidth")] && Splide2.length || options.perPage * MULTIPLIER;
+        }
+        return clones2;
+    }
+    return {
+        mount: mount,
+        destroy: destroy
+    };
+}
+function Move(Splide2, Components2, options) {
+    var _EventInterface4 = EventInterface(Splide2), on = _EventInterface4.on, emit = _EventInterface4.emit;
+    var set = Splide2.state.set;
+    var _Components2$Layout = Components2.Layout, slideSize = _Components2$Layout.slideSize, getPadding = _Components2$Layout.getPadding, totalSize = _Components2$Layout.totalSize, listSize = _Components2$Layout.listSize, sliderSize = _Components2$Layout.sliderSize;
+    var _Components2$Directio = Components2.Direction, resolve = _Components2$Directio.resolve, orient = _Components2$Directio.orient;
+    var _Components2$Elements3 = Components2.Elements, list = _Components2$Elements3.list, track = _Components2$Elements3.track;
+    var Transition;
+    function mount() {
+        Transition = Components2.Transition;
+        on([
+            EVENT_MOUNTED,
+            EVENT_RESIZED,
+            EVENT_UPDATED,
+            EVENT_REFRESH
+        ], reposition);
+    }
+    function reposition() {
+        if (!Components2.Controller.isBusy()) {
+            Components2.Scroll.cancel();
+            jump(Splide2.index);
+            Components2.Slides.update();
+        }
+    }
+    function move(dest, index, prev, callback) {
+        if (dest !== index && canShift(dest > prev)) {
+            cancel();
+            translate(shift(getPosition(), dest > prev), true);
+        }
+        set(MOVING);
+        emit(EVENT_MOVE, index, prev, dest);
+        Transition.start(index, function() {
+            set(IDLE);
+            emit(EVENT_MOVED, index, prev, dest);
+            callback && callback();
+        });
+    }
+    function jump(index) {
+        translate(toPosition(index, true));
+    }
+    function translate(position, preventLoop) {
+        if (!Splide2.is(FADE)) {
+            var destination = preventLoop ? position : loop(position);
+            style(list, "transform", "translate" + resolve("X") + "(" + destination + "px)");
+            position !== destination && emit(EVENT_SHIFTED);
+        }
+    }
+    function loop(position) {
+        if (Splide2.is(LOOP)) {
+            var index = toIndex(position);
+            var exceededMax = index > Components2.Controller.getEnd();
+            var exceededMin = index < 0;
+            if (exceededMin || exceededMax) position = shift(position, exceededMax);
+        }
+        return position;
+    }
+    function shift(position, backwards) {
+        var excess = position - getLimit(backwards);
+        var size = sliderSize();
+        position -= orient(size * (ceil(abs(excess) / size) || 1)) * (backwards ? 1 : -1);
+        return position;
+    }
+    function cancel() {
+        translate(getPosition(), true);
+        Transition.cancel();
+    }
+    function toIndex(position) {
+        var Slides = Components2.Slides.get();
+        var index = 0;
+        var minDistance = Infinity;
+        for(var i = 0; i < Slides.length; i++){
+            var slideIndex = Slides[i].index;
+            var distance = abs(toPosition(slideIndex, true) - position);
+            if (distance <= minDistance) {
+                minDistance = distance;
+                index = slideIndex;
+            } else break;
+        }
+        return index;
+    }
+    function toPosition(index, trimming) {
+        var position = orient(totalSize(index - 1) - offset(index));
+        return trimming ? trim(position) : position;
+    }
+    function getPosition() {
+        var left = resolve("left");
+        return rect(list)[left] - rect(track)[left] + orient(getPadding(false));
+    }
+    function trim(position) {
+        if (options.trimSpace && Splide2.is(SLIDE)) position = clamp(position, 0, orient(sliderSize(true) - listSize()));
+        return position;
+    }
+    function offset(index) {
+        var focus = options.focus;
+        return focus === "center" ? (listSize() - slideSize(index, true)) / 2 : +focus * slideSize(index) || 0;
+    }
+    function getLimit(max) {
+        return toPosition(max ? Components2.Controller.getEnd() : 0, !!options.trimSpace);
+    }
+    function canShift(backwards) {
+        var shifted = orient(shift(getPosition(), backwards));
+        return backwards ? shifted >= 0 : shifted <= list[resolve("scrollWidth")] - rect(track)[resolve("width")];
+    }
+    function exceededLimit(max, position) {
+        position = isUndefined(position) ? getPosition() : position;
+        var exceededMin = max !== true && orient(position) < orient(getLimit(false));
+        var exceededMax = max !== false && orient(position) > orient(getLimit(true));
+        return exceededMin || exceededMax;
+    }
+    return {
+        mount: mount,
+        move: move,
+        jump: jump,
+        translate: translate,
+        shift: shift,
+        cancel: cancel,
+        toIndex: toIndex,
+        toPosition: toPosition,
+        getPosition: getPosition,
+        getLimit: getLimit,
+        exceededLimit: exceededLimit,
+        reposition: reposition
+    };
+}
+function Controller(Splide2, Components2, options) {
+    var _EventInterface5 = EventInterface(Splide2), on = _EventInterface5.on, emit = _EventInterface5.emit;
+    var Move = Components2.Move;
+    var getPosition = Move.getPosition, getLimit = Move.getLimit, toPosition = Move.toPosition;
+    var _Components2$Slides = Components2.Slides, isEnough = _Components2$Slides.isEnough, getLength = _Components2$Slides.getLength;
+    var omitEnd = options.omitEnd;
+    var isLoop = Splide2.is(LOOP);
+    var isSlide = Splide2.is(SLIDE);
+    var getNext = apply(getAdjacent, false);
+    var getPrev = apply(getAdjacent, true);
+    var currIndex = options.start || 0;
+    var endIndex;
+    var prevIndex = currIndex;
+    var slideCount;
+    var perMove;
+    var perPage;
+    function mount() {
+        init();
+        on([
+            EVENT_UPDATED,
+            EVENT_REFRESH,
+            EVENT_END_INDEX_CHANGED
+        ], init);
+        on(EVENT_RESIZED, onResized);
+    }
+    function init() {
+        slideCount = getLength(true);
+        perMove = options.perMove;
+        perPage = options.perPage;
+        endIndex = getEnd();
+        var index = clamp(currIndex, 0, omitEnd ? endIndex : slideCount - 1);
+        if (index !== currIndex) {
+            currIndex = index;
+            Move.reposition();
+        }
+    }
+    function onResized() {
+        if (endIndex !== getEnd()) emit(EVENT_END_INDEX_CHANGED);
+    }
+    function go(control, allowSameIndex, callback) {
+        if (!isBusy()) {
+            var dest = parse(control);
+            var index = loop(dest);
+            if (index > -1 && (allowSameIndex || index !== currIndex)) {
+                setIndex(index);
+                Move.move(dest, index, prevIndex, callback);
+            }
+        }
+    }
+    function scroll(destination, duration, snap, callback) {
+        Components2.Scroll.scroll(destination, duration, snap, function() {
+            var index = loop(Move.toIndex(getPosition()));
+            setIndex(omitEnd ? min(index, endIndex) : index);
+            callback && callback();
+        });
+    }
+    function parse(control) {
+        var index = currIndex;
+        if (isString(control)) {
+            var _ref = control.match(/([+\-<>])(\d+)?/) || [], indicator = _ref[1], number = _ref[2];
+            if (indicator === "+" || indicator === "-") index = computeDestIndex(currIndex + +("" + indicator + (+number || 1)), currIndex);
+            else if (indicator === ">") index = number ? toIndex(+number) : getNext(true);
+            else if (indicator === "<") index = getPrev(true);
+        } else index = isLoop ? control : clamp(control, 0, endIndex);
+        return index;
+    }
+    function getAdjacent(prev, destination) {
+        var number = perMove || (hasFocus() ? 1 : perPage);
+        var dest = computeDestIndex(currIndex + number * (prev ? -1 : 1), currIndex, !(perMove || hasFocus()));
+        if (dest === -1 && isSlide) {
+            if (!approximatelyEqual(getPosition(), getLimit(!prev), 1)) return prev ? 0 : endIndex;
+        }
+        return destination ? dest : loop(dest);
+    }
+    function computeDestIndex(dest, from, snapPage) {
+        if (isEnough() || hasFocus()) {
+            var index = computeMovableDestIndex(dest);
+            if (index !== dest) {
+                from = dest;
+                dest = index;
+                snapPage = false;
+            }
+            if (dest < 0 || dest > endIndex) {
+                if (!perMove && (between(0, dest, from, true) || between(endIndex, from, dest, true))) dest = toIndex(toPage(dest));
+                else {
+                    if (isLoop) dest = snapPage ? dest < 0 ? -(slideCount % perPage || perPage) : slideCount : dest;
+                    else if (options.rewind) dest = dest < 0 ? endIndex : 0;
+                    else dest = -1;
+                }
+            } else if (snapPage && dest !== from) dest = toIndex(toPage(from) + (dest < from ? -1 : 1));
+        } else dest = -1;
+        return dest;
+    }
+    function computeMovableDestIndex(dest) {
+        if (isSlide && options.trimSpace === "move" && dest !== currIndex) {
+            var position = getPosition();
+            while(position === toPosition(dest, true) && between(dest, 0, Splide2.length - 1, !options.rewind))dest < currIndex ? --dest : ++dest;
+        }
+        return dest;
+    }
+    function loop(index) {
+        return isLoop ? (index + slideCount) % slideCount || 0 : index;
+    }
+    function getEnd() {
+        var end = slideCount - (hasFocus() || isLoop && perMove ? 1 : perPage);
+        while(omitEnd && end-- > 0)if (toPosition(slideCount - 1, true) !== toPosition(end, true)) {
+            end++;
+            break;
+        }
+        return clamp(end, 0, slideCount - 1);
+    }
+    function toIndex(page) {
+        return clamp(hasFocus() ? page : perPage * page, 0, endIndex);
+    }
+    function toPage(index) {
+        return hasFocus() ? min(index, endIndex) : floor((index >= endIndex ? slideCount - 1 : index) / perPage);
+    }
+    function toDest(destination) {
+        var closest = Move.toIndex(destination);
+        return isSlide ? clamp(closest, 0, endIndex) : closest;
+    }
+    function setIndex(index) {
+        if (index !== currIndex) {
+            prevIndex = currIndex;
+            currIndex = index;
+        }
+    }
+    function getIndex(prev) {
+        return prev ? prevIndex : currIndex;
+    }
+    function hasFocus() {
+        return !isUndefined(options.focus) || options.isNavigation;
+    }
+    function isBusy() {
+        return Splide2.state.is([
+            MOVING,
+            SCROLLING
+        ]) && !!options.waitForTransition;
+    }
+    return {
+        mount: mount,
+        go: go,
+        scroll: scroll,
+        getNext: getNext,
+        getPrev: getPrev,
+        getAdjacent: getAdjacent,
+        getEnd: getEnd,
+        setIndex: setIndex,
+        getIndex: getIndex,
+        toIndex: toIndex,
+        toPage: toPage,
+        toDest: toDest,
+        hasFocus: hasFocus,
+        isBusy: isBusy
+    };
+}
+var XML_NAME_SPACE = "http://www.w3.org/2000/svg";
+var PATH = "m15.5 0.932-4.3 4.38 14.5 14.6-14.5 14.5 4.3 4.4 14.6-14.6 4.4-4.3-4.4-4.4-14.6-14.6z";
+var SIZE = 40;
+function Arrows(Splide2, Components2, options) {
+    var event = EventInterface(Splide2);
+    var on = event.on, bind = event.bind, emit = event.emit;
+    var classes = options.classes, i18n = options.i18n;
+    var Elements = Components2.Elements, Controller = Components2.Controller;
+    var placeholder = Elements.arrows, track = Elements.track;
+    var wrapper = placeholder;
+    var prev = Elements.prev;
+    var next = Elements.next;
+    var created;
+    var wrapperClasses;
+    var arrows = {};
+    function mount() {
+        init();
+        on(EVENT_UPDATED, remount);
+    }
+    function remount() {
+        destroy();
+        mount();
+    }
+    function init() {
+        var enabled = options.arrows;
+        if (enabled && !(prev && next)) createArrows();
+        if (prev && next) {
+            assign(arrows, {
+                prev: prev,
+                next: next
+            });
+            display(wrapper, enabled ? "" : "none");
+            addClass(wrapper, wrapperClasses = CLASS_ARROWS + "--" + options.direction);
+            if (enabled) {
+                listen();
+                update();
+                setAttribute([
+                    prev,
+                    next
+                ], ARIA_CONTROLS, track.id);
+                emit(EVENT_ARROWS_MOUNTED, prev, next);
+            }
+        }
+    }
+    function destroy() {
+        event.destroy();
+        removeClass(wrapper, wrapperClasses);
+        if (created) {
+            remove(placeholder ? [
+                prev,
+                next
+            ] : wrapper);
+            prev = next = null;
+        } else removeAttribute([
+            prev,
+            next
+        ], ALL_ATTRIBUTES);
+    }
+    function listen() {
+        on([
+            EVENT_MOUNTED,
+            EVENT_MOVED,
+            EVENT_REFRESH,
+            EVENT_SCROLLED,
+            EVENT_END_INDEX_CHANGED
+        ], update);
+        bind(next, "click", apply(go, ">"));
+        bind(prev, "click", apply(go, "<"));
+    }
+    function go(control) {
+        Controller.go(control, true);
+    }
+    function createArrows() {
+        wrapper = placeholder || create("div", classes.arrows);
+        prev = createArrow(true);
+        next = createArrow(false);
+        created = true;
+        append(wrapper, [
+            prev,
+            next
+        ]);
+        !placeholder && before(wrapper, track);
+    }
+    function createArrow(prev2) {
+        var arrow = '<button class="' + classes.arrow + " " + (prev2 ? classes.prev : classes.next) + '" type="button"><svg xmlns="' + XML_NAME_SPACE + '" viewBox="0 0 ' + SIZE + " " + SIZE + '" width="' + SIZE + '" height="' + SIZE + '" focusable="false"><path d="' + (options.arrowPath || PATH) + '" />';
+        return parseHtml(arrow);
+    }
+    function update() {
+        if (prev && next) {
+            var index = Splide2.index;
+            var prevIndex = Controller.getPrev();
+            var nextIndex = Controller.getNext();
+            var prevLabel = prevIndex > -1 && index < prevIndex ? i18n.last : i18n.prev;
+            var nextLabel = nextIndex > -1 && index > nextIndex ? i18n.first : i18n.next;
+            prev.disabled = prevIndex < 0;
+            next.disabled = nextIndex < 0;
+            setAttribute(prev, ARIA_LABEL, prevLabel);
+            setAttribute(next, ARIA_LABEL, nextLabel);
+            emit(EVENT_ARROWS_UPDATED, prev, next, prevIndex, nextIndex);
+        }
+    }
+    return {
+        arrows: arrows,
+        mount: mount,
+        destroy: destroy,
+        update: update
+    };
+}
+var INTERVAL_DATA_ATTRIBUTE = DATA_ATTRIBUTE + "-interval";
+function Autoplay(Splide2, Components2, options) {
+    var _EventInterface6 = EventInterface(Splide2), on = _EventInterface6.on, bind = _EventInterface6.bind, emit = _EventInterface6.emit;
+    var interval = RequestInterval(options.interval, Splide2.go.bind(Splide2, ">"), onAnimationFrame);
+    var isPaused = interval.isPaused;
+    var Elements = Components2.Elements, _Components2$Elements4 = Components2.Elements, root = _Components2$Elements4.root, toggle = _Components2$Elements4.toggle;
+    var autoplay = options.autoplay;
+    var hovered;
+    var focused;
+    var stopped = autoplay === "pause";
+    function mount() {
+        if (autoplay) {
+            listen();
+            toggle && setAttribute(toggle, ARIA_CONTROLS, Elements.track.id);
+            stopped || play();
+            update();
+        }
+    }
+    function listen() {
+        if (options.pauseOnHover) bind(root, "mouseenter mouseleave", function(e) {
+            hovered = e.type === "mouseenter";
+            autoToggle();
+        });
+        if (options.pauseOnFocus) bind(root, "focusin focusout", function(e) {
+            focused = e.type === "focusin";
+            autoToggle();
+        });
+        if (toggle) bind(toggle, "click", function() {
+            stopped ? play() : pause(true);
+        });
+        on([
+            EVENT_MOVE,
+            EVENT_SCROLL,
+            EVENT_REFRESH
+        ], interval.rewind);
+        on(EVENT_MOVE, onMove);
+    }
+    function play() {
+        if (isPaused() && Components2.Slides.isEnough()) {
+            interval.start(!options.resetProgress);
+            focused = hovered = stopped = false;
+            update();
+            emit(EVENT_AUTOPLAY_PLAY);
+        }
+    }
+    function pause(stop) {
+        if (stop === void 0) stop = true;
+        stopped = !!stop;
+        update();
+        if (!isPaused()) {
+            interval.pause();
+            emit(EVENT_AUTOPLAY_PAUSE);
+        }
+    }
+    function autoToggle() {
+        if (!stopped) hovered || focused ? pause(false) : play();
+    }
+    function update() {
+        if (toggle) {
+            toggleClass(toggle, CLASS_ACTIVE, !stopped);
+            setAttribute(toggle, ARIA_LABEL, options.i18n[stopped ? "play" : "pause"]);
+        }
+    }
+    function onAnimationFrame(rate) {
+        var bar = Elements.bar;
+        bar && style(bar, "width", rate * 100 + "%");
+        emit(EVENT_AUTOPLAY_PLAYING, rate);
+    }
+    function onMove(index) {
+        var Slide = Components2.Slides.getAt(index);
+        interval.set(Slide && +getAttribute(Slide.slide, INTERVAL_DATA_ATTRIBUTE) || options.interval);
+    }
+    return {
+        mount: mount,
+        destroy: interval.cancel,
+        play: play,
+        pause: pause,
+        isPaused: isPaused
+    };
+}
+function Cover(Splide2, Components2, options) {
+    var _EventInterface7 = EventInterface(Splide2), on = _EventInterface7.on;
+    function mount() {
+        if (options.cover) {
+            on(EVENT_LAZYLOAD_LOADED, apply(toggle, true));
+            on([
+                EVENT_MOUNTED,
+                EVENT_UPDATED,
+                EVENT_REFRESH
+            ], apply(cover, true));
+        }
+    }
+    function cover(cover2) {
+        Components2.Slides.forEach(function(Slide) {
+            var img = child(Slide.container || Slide.slide, "img");
+            if (img && img.src) toggle(cover2, img, Slide);
+        });
+    }
+    function toggle(cover2, img, Slide) {
+        Slide.style("background", cover2 ? 'center/cover no-repeat url("' + img.src + '")' : "", true);
+        display(img, cover2 ? "none" : "");
+    }
+    return {
+        mount: mount,
+        destroy: apply(cover, false)
+    };
+}
+var BOUNCE_DIFF_THRESHOLD = 10;
+var BOUNCE_DURATION = 600;
+var FRICTION_FACTOR = 0.6;
+var BASE_VELOCITY = 1.5;
+var MIN_DURATION = 800;
+function Scroll(Splide2, Components2, options) {
+    var _EventInterface8 = EventInterface(Splide2), on = _EventInterface8.on, emit = _EventInterface8.emit;
+    var set = Splide2.state.set;
+    var Move = Components2.Move;
+    var getPosition = Move.getPosition, getLimit = Move.getLimit, exceededLimit = Move.exceededLimit, translate = Move.translate;
+    var isSlide = Splide2.is(SLIDE);
+    var interval;
+    var callback;
+    var friction = 1;
+    function mount() {
+        on(EVENT_MOVE, clear);
+        on([
+            EVENT_UPDATED,
+            EVENT_REFRESH
+        ], cancel);
+    }
+    function scroll(destination, duration, snap, onScrolled, noConstrain) {
+        var from = getPosition();
+        clear();
+        if (snap && (!isSlide || !exceededLimit())) {
+            var size = Components2.Layout.sliderSize();
+            var offset = sign(destination) * size * floor(abs(destination) / size) || 0;
+            destination = Move.toPosition(Components2.Controller.toDest(destination % size)) + offset;
+        }
+        var noDistance = approximatelyEqual(from, destination, 1);
+        friction = 1;
+        duration = noDistance ? 0 : duration || max(abs(destination - from) / BASE_VELOCITY, MIN_DURATION);
+        callback = onScrolled;
+        interval = RequestInterval(duration, onEnd, apply(update, from, destination, noConstrain), 1);
+        set(SCROLLING);
+        emit(EVENT_SCROLL);
+        interval.start();
+    }
+    function onEnd() {
+        set(IDLE);
+        callback && callback();
+        emit(EVENT_SCROLLED);
+    }
+    function update(from, to, noConstrain, rate) {
+        var position = getPosition();
+        var target = from + (to - from) * easing(rate);
+        var diff = (target - position) * friction;
+        translate(position + diff);
+        if (isSlide && !noConstrain && exceededLimit()) {
+            friction *= FRICTION_FACTOR;
+            if (abs(diff) < BOUNCE_DIFF_THRESHOLD) scroll(getLimit(exceededLimit(true)), BOUNCE_DURATION, false, callback, true);
+        }
+    }
+    function clear() {
+        if (interval) interval.cancel();
+    }
+    function cancel() {
+        if (interval && !interval.isPaused()) {
+            clear();
+            onEnd();
+        }
+    }
+    function easing(t) {
+        var easingFunc = options.easingFunc;
+        return easingFunc ? easingFunc(t) : 1 - Math.pow(1 - t, 4);
+    }
+    return {
+        mount: mount,
+        destroy: clear,
+        scroll: scroll,
+        cancel: cancel
+    };
+}
+var SCROLL_LISTENER_OPTIONS = {
+    passive: false,
+    capture: true
+};
+function Drag(Splide2, Components2, options) {
+    var _EventInterface9 = EventInterface(Splide2), on = _EventInterface9.on, emit = _EventInterface9.emit, bind = _EventInterface9.bind, unbind = _EventInterface9.unbind;
+    var state = Splide2.state;
+    var Move = Components2.Move, Scroll = Components2.Scroll, Controller = Components2.Controller, track = Components2.Elements.track, reduce = Components2.Media.reduce;
+    var _Components2$Directio2 = Components2.Direction, resolve = _Components2$Directio2.resolve, orient = _Components2$Directio2.orient;
+    var getPosition = Move.getPosition, exceededLimit = Move.exceededLimit;
+    var basePosition;
+    var baseEvent;
+    var prevBaseEvent;
+    var isFree;
+    var dragging;
+    var exceeded = false;
+    var clickPrevented;
+    var disabled;
+    var target;
+    function mount() {
+        bind(track, POINTER_MOVE_EVENTS, noop, SCROLL_LISTENER_OPTIONS);
+        bind(track, POINTER_UP_EVENTS, noop, SCROLL_LISTENER_OPTIONS);
+        bind(track, POINTER_DOWN_EVENTS, onPointerDown, SCROLL_LISTENER_OPTIONS);
+        bind(track, "click", onClick, {
+            capture: true
+        });
+        bind(track, "dragstart", prevent);
+        on([
+            EVENT_MOUNTED,
+            EVENT_UPDATED
+        ], init);
+    }
+    function init() {
+        var drag = options.drag;
+        disable(!drag);
+        isFree = drag === "free";
+    }
+    function onPointerDown(e) {
+        clickPrevented = false;
+        if (!disabled) {
+            var isTouch = isTouchEvent(e);
+            if (isDraggable(e.target) && (isTouch || !e.button)) {
+                if (!Controller.isBusy()) {
+                    target = isTouch ? track : window;
+                    dragging = state.is([
+                        MOVING,
+                        SCROLLING
+                    ]);
+                    prevBaseEvent = null;
+                    bind(target, POINTER_MOVE_EVENTS, onPointerMove, SCROLL_LISTENER_OPTIONS);
+                    bind(target, POINTER_UP_EVENTS, onPointerUp, SCROLL_LISTENER_OPTIONS);
+                    Move.cancel();
+                    Scroll.cancel();
+                    save(e);
+                } else prevent(e, true);
+            }
+        }
+    }
+    function onPointerMove(e) {
+        if (!state.is(DRAGGING)) {
+            state.set(DRAGGING);
+            emit(EVENT_DRAG);
+        }
+        if (e.cancelable) {
+            if (dragging) {
+                Move.translate(basePosition + constrain(diffCoord(e)));
+                var expired = diffTime(e) > LOG_INTERVAL;
+                var hasExceeded = exceeded !== (exceeded = exceededLimit());
+                if (expired || hasExceeded) save(e);
+                clickPrevented = true;
+                emit(EVENT_DRAGGING);
+                prevent(e);
+            } else if (isSliderDirection(e)) {
+                dragging = shouldStart(e);
+                prevent(e);
+            }
+        }
+    }
+    function onPointerUp(e) {
+        if (state.is(DRAGGING)) {
+            state.set(IDLE);
+            emit(EVENT_DRAGGED);
+        }
+        if (dragging) {
+            move(e);
+            prevent(e);
+        }
+        unbind(target, POINTER_MOVE_EVENTS, onPointerMove);
+        unbind(target, POINTER_UP_EVENTS, onPointerUp);
+        dragging = false;
+    }
+    function onClick(e) {
+        if (!disabled && clickPrevented) prevent(e, true);
+    }
+    function save(e) {
+        prevBaseEvent = baseEvent;
+        baseEvent = e;
+        basePosition = getPosition();
+    }
+    function move(e) {
+        var velocity = computeVelocity(e);
+        var destination = computeDestination(velocity);
+        var rewind = options.rewind && options.rewindByDrag;
+        reduce(false);
+        if (isFree) Controller.scroll(destination, 0, options.snap);
+        else if (Splide2.is(FADE)) Controller.go(orient(sign(velocity)) < 0 ? rewind ? "<" : "-" : rewind ? ">" : "+");
+        else if (Splide2.is(SLIDE) && exceeded && rewind) Controller.go(exceededLimit(true) ? ">" : "<");
+        else Controller.go(Controller.toDest(destination), true);
+        reduce(true);
+    }
+    function shouldStart(e) {
+        var thresholds = options.dragMinThreshold;
+        var isObj = isObject(thresholds);
+        var mouse = isObj && thresholds.mouse || 0;
+        var touch = (isObj ? thresholds.touch : +thresholds) || 10;
+        return abs(diffCoord(e)) > (isTouchEvent(e) ? touch : mouse);
+    }
+    function isSliderDirection(e) {
+        return abs(diffCoord(e)) > abs(diffCoord(e, true));
+    }
+    function computeVelocity(e) {
+        if (Splide2.is(LOOP) || !exceeded) {
+            var time = diffTime(e);
+            if (time && time < LOG_INTERVAL) return diffCoord(e) / time;
+        }
+        return 0;
+    }
+    function computeDestination(velocity) {
+        return getPosition() + sign(velocity) * min(abs(velocity) * (options.flickPower || 600), isFree ? Infinity : Components2.Layout.listSize() * (options.flickMaxPages || 1));
+    }
+    function diffCoord(e, orthogonal) {
+        return coordOf(e, orthogonal) - coordOf(getBaseEvent(e), orthogonal);
+    }
+    function diffTime(e) {
+        return timeOf(e) - timeOf(getBaseEvent(e));
+    }
+    function getBaseEvent(e) {
+        return baseEvent === e && prevBaseEvent || baseEvent;
+    }
+    function coordOf(e, orthogonal) {
+        return (isTouchEvent(e) ? e.changedTouches[0] : e)["page" + resolve(orthogonal ? "Y" : "X")];
+    }
+    function constrain(diff) {
+        return diff / (exceeded && Splide2.is(SLIDE) ? FRICTION : 1);
+    }
+    function isDraggable(target2) {
+        var noDrag = options.noDrag;
+        return !matches(target2, "." + CLASS_PAGINATION_PAGE + ", ." + CLASS_ARROW) && (!noDrag || !matches(target2, noDrag));
+    }
+    function isTouchEvent(e) {
+        return typeof TouchEvent !== "undefined" && e instanceof TouchEvent;
+    }
+    function isDragging() {
+        return dragging;
+    }
+    function disable(value) {
+        disabled = value;
+    }
+    return {
+        mount: mount,
+        disable: disable,
+        isDragging: isDragging
+    };
+}
+var NORMALIZATION_MAP = {
+    Spacebar: " ",
+    Right: ARROW_RIGHT,
+    Left: ARROW_LEFT,
+    Up: ARROW_UP,
+    Down: ARROW_DOWN
+};
+function normalizeKey(key) {
+    key = isString(key) ? key : key.key;
+    return NORMALIZATION_MAP[key] || key;
+}
+var KEYBOARD_EVENT = "keydown";
+function Keyboard(Splide2, Components2, options) {
+    var _EventInterface10 = EventInterface(Splide2), on = _EventInterface10.on, bind = _EventInterface10.bind, unbind = _EventInterface10.unbind;
+    var root = Splide2.root;
+    var resolve = Components2.Direction.resolve;
+    var target;
+    var disabled;
+    function mount() {
+        init();
+        on(EVENT_UPDATED, destroy);
+        on(EVENT_UPDATED, init);
+        on(EVENT_MOVE, onMove);
+    }
+    function init() {
+        var keyboard = options.keyboard;
+        if (keyboard) {
+            target = keyboard === "global" ? window : root;
+            bind(target, KEYBOARD_EVENT, onKeydown);
+        }
+    }
+    function destroy() {
+        unbind(target, KEYBOARD_EVENT);
+    }
+    function disable(value) {
+        disabled = value;
+    }
+    function onMove() {
+        var _disabled = disabled;
+        disabled = true;
+        nextTick(function() {
+            disabled = _disabled;
+        });
+    }
+    function onKeydown(e) {
+        if (!disabled) {
+            var key = normalizeKey(e);
+            if (key === resolve(ARROW_LEFT)) Splide2.go("<");
+            else if (key === resolve(ARROW_RIGHT)) Splide2.go(">");
+        }
+    }
+    return {
+        mount: mount,
+        destroy: destroy,
+        disable: disable
+    };
+}
+var SRC_DATA_ATTRIBUTE = DATA_ATTRIBUTE + "-lazy";
+var SRCSET_DATA_ATTRIBUTE = SRC_DATA_ATTRIBUTE + "-srcset";
+var IMAGE_SELECTOR = "[" + SRC_DATA_ATTRIBUTE + "], [" + SRCSET_DATA_ATTRIBUTE + "]";
+function LazyLoad(Splide2, Components2, options) {
+    var _EventInterface11 = EventInterface(Splide2), on = _EventInterface11.on, off = _EventInterface11.off, bind = _EventInterface11.bind, emit = _EventInterface11.emit;
+    var isSequential = options.lazyLoad === "sequential";
+    var events = [
+        EVENT_MOVED,
+        EVENT_SCROLLED
+    ];
+    var entries = [];
+    function mount() {
+        if (options.lazyLoad) {
+            init();
+            on(EVENT_REFRESH, init);
+        }
+    }
+    function init() {
+        empty(entries);
+        register();
+        if (isSequential) loadNext();
+        else {
+            off(events);
+            on(events, check);
+            check();
+        }
+    }
+    function register() {
+        Components2.Slides.forEach(function(Slide) {
+            queryAll(Slide.slide, IMAGE_SELECTOR).forEach(function(img) {
+                var src = getAttribute(img, SRC_DATA_ATTRIBUTE);
+                var srcset = getAttribute(img, SRCSET_DATA_ATTRIBUTE);
+                if (src !== img.src || srcset !== img.srcset) {
+                    var className = options.classes.spinner;
+                    var parent = img.parentElement;
+                    var spinner = child(parent, "." + className) || create("span", className, parent);
+                    entries.push([
+                        img,
+                        Slide,
+                        spinner
+                    ]);
+                    img.src || display(img, "none");
+                }
+            });
+        });
+    }
+    function check() {
+        entries = entries.filter(function(data) {
+            var distance = options.perPage * ((options.preloadPages || 1) + 1) - 1;
+            return data[1].isWithin(Splide2.index, distance) ? load(data) : true;
+        });
+        entries.length || off(events);
+    }
+    function load(data) {
+        var img = data[0];
+        addClass(data[1].slide, CLASS_LOADING);
+        bind(img, "load error", apply(onLoad, data));
+        setAttribute(img, "src", getAttribute(img, SRC_DATA_ATTRIBUTE));
+        setAttribute(img, "srcset", getAttribute(img, SRCSET_DATA_ATTRIBUTE));
+        removeAttribute(img, SRC_DATA_ATTRIBUTE);
+        removeAttribute(img, SRCSET_DATA_ATTRIBUTE);
+    }
+    function onLoad(data, e) {
+        var img = data[0], Slide = data[1];
+        removeClass(Slide.slide, CLASS_LOADING);
+        if (e.type !== "error") {
+            remove(data[2]);
+            display(img, "");
+            emit(EVENT_LAZYLOAD_LOADED, img, Slide);
+            emit(EVENT_RESIZE);
+        }
+        isSequential && loadNext();
+    }
+    function loadNext() {
+        entries.length && load(entries.shift());
+    }
+    return {
+        mount: mount,
+        destroy: apply(empty, entries),
+        check: check
+    };
+}
+function Pagination(Splide2, Components2, options) {
+    var event = EventInterface(Splide2);
+    var on = event.on, emit = event.emit, bind = event.bind;
+    var Slides = Components2.Slides, Elements = Components2.Elements, Controller = Components2.Controller;
+    var hasFocus = Controller.hasFocus, getIndex = Controller.getIndex, go = Controller.go;
+    var resolve = Components2.Direction.resolve;
+    var placeholder = Elements.pagination;
+    var items = [];
+    var list;
+    var paginationClasses;
+    function mount() {
+        destroy();
+        on([
+            EVENT_UPDATED,
+            EVENT_REFRESH,
+            EVENT_END_INDEX_CHANGED
+        ], mount);
+        var enabled = options.pagination;
+        placeholder && display(placeholder, enabled ? "" : "none");
+        if (enabled) {
+            on([
+                EVENT_MOVE,
+                EVENT_SCROLL,
+                EVENT_SCROLLED
+            ], update);
+            createPagination();
+            update();
+            emit(EVENT_PAGINATION_MOUNTED, {
+                list: list,
+                items: items
+            }, getAt(Splide2.index));
+        }
+    }
+    function destroy() {
+        if (list) {
+            remove(placeholder ? slice(list.children) : list);
+            removeClass(list, paginationClasses);
+            empty(items);
+            list = null;
+        }
+        event.destroy();
+    }
+    function createPagination() {
+        var length = Splide2.length;
+        var classes = options.classes, i18n = options.i18n, perPage = options.perPage;
+        var max = hasFocus() ? Controller.getEnd() + 1 : ceil(length / perPage);
+        list = placeholder || create("ul", classes.pagination, Elements.track.parentElement);
+        addClass(list, paginationClasses = CLASS_PAGINATION + "--" + getDirection());
+        setAttribute(list, ROLE, "tablist");
+        setAttribute(list, ARIA_LABEL, i18n.select);
+        setAttribute(list, ARIA_ORIENTATION, getDirection() === TTB ? "vertical" : "");
+        for(var i = 0; i < max; i++){
+            var li = create("li", null, list);
+            var button = create("button", {
+                class: classes.page,
+                type: "button"
+            }, li);
+            var controls = Slides.getIn(i).map(function(Slide) {
+                return Slide.slide.id;
+            });
+            var text = !hasFocus() && perPage > 1 ? i18n.pageX : i18n.slideX;
+            bind(button, "click", apply(onClick, i));
+            if (options.paginationKeyboard) bind(button, "keydown", apply(onKeydown, i));
+            setAttribute(li, ROLE, "presentation");
+            setAttribute(button, ROLE, "tab");
+            setAttribute(button, ARIA_CONTROLS, controls.join(" "));
+            setAttribute(button, ARIA_LABEL, format(text, i + 1));
+            setAttribute(button, TAB_INDEX, -1);
+            items.push({
+                li: li,
+                button: button,
+                page: i
+            });
+        }
+    }
+    function onClick(page) {
+        go(">" + page, true);
+    }
+    function onKeydown(page, e) {
+        var length = items.length;
+        var key = normalizeKey(e);
+        var dir = getDirection();
+        var nextPage = -1;
+        if (key === resolve(ARROW_RIGHT, false, dir)) nextPage = ++page % length;
+        else if (key === resolve(ARROW_LEFT, false, dir)) nextPage = (--page + length) % length;
+        else if (key === "Home") nextPage = 0;
+        else if (key === "End") nextPage = length - 1;
+        var item = items[nextPage];
+        if (item) {
+            focus(item.button);
+            go(">" + nextPage);
+            prevent(e, true);
+        }
+    }
+    function getDirection() {
+        return options.paginationDirection || options.direction;
+    }
+    function getAt(index) {
+        return items[Controller.toPage(index)];
+    }
+    function update() {
+        var prev = getAt(getIndex(true));
+        var curr = getAt(getIndex());
+        if (prev) {
+            var button = prev.button;
+            removeClass(button, CLASS_ACTIVE);
+            removeAttribute(button, ARIA_SELECTED);
+            setAttribute(button, TAB_INDEX, -1);
+        }
+        if (curr) {
+            var _button = curr.button;
+            addClass(_button, CLASS_ACTIVE);
+            setAttribute(_button, ARIA_SELECTED, true);
+            setAttribute(_button, TAB_INDEX, "");
+        }
+        emit(EVENT_PAGINATION_UPDATED, {
+            list: list,
+            items: items
+        }, prev, curr);
+    }
+    return {
+        items: items,
+        mount: mount,
+        destroy: destroy,
+        getAt: getAt,
+        update: update
+    };
+}
+var TRIGGER_KEYS = [
+    " ",
+    "Enter"
+];
+function Sync(Splide2, Components2, options) {
+    var isNavigation = options.isNavigation, slideFocus = options.slideFocus;
+    var events = [];
+    function mount() {
+        Splide2.splides.forEach(function(target) {
+            if (!target.isParent) {
+                sync(Splide2, target.splide);
+                sync(target.splide, Splide2);
+            }
+        });
+        if (isNavigation) navigate();
+    }
+    function destroy() {
+        events.forEach(function(event) {
+            event.destroy();
+        });
+        empty(events);
+    }
+    function remount() {
+        destroy();
+        mount();
+    }
+    function sync(splide, target) {
+        var event = EventInterface(splide);
+        event.on(EVENT_MOVE, function(index, prev, dest) {
+            target.go(target.is(LOOP) ? dest : index);
+        });
+        events.push(event);
+    }
+    function navigate() {
+        var event = EventInterface(Splide2);
+        var on = event.on;
+        on(EVENT_CLICK, onClick);
+        on(EVENT_SLIDE_KEYDOWN, onKeydown);
+        on([
+            EVENT_MOUNTED,
+            EVENT_UPDATED
+        ], update);
+        events.push(event);
+        event.emit(EVENT_NAVIGATION_MOUNTED, Splide2.splides);
+    }
+    function update() {
+        setAttribute(Components2.Elements.list, ARIA_ORIENTATION, options.direction === TTB ? "vertical" : "");
+    }
+    function onClick(Slide) {
+        Splide2.go(Slide.index);
+    }
+    function onKeydown(Slide, e) {
+        if (includes(TRIGGER_KEYS, normalizeKey(e))) {
+            onClick(Slide);
+            prevent(e);
+        }
+    }
+    return {
+        setup: apply(Components2.Media.set, {
+            slideFocus: isUndefined(slideFocus) ? isNavigation : slideFocus
+        }, true),
+        mount: mount,
+        destroy: destroy,
+        remount: remount
+    };
+}
+function Wheel(Splide2, Components2, options) {
+    var _EventInterface12 = EventInterface(Splide2), bind = _EventInterface12.bind;
+    var lastTime = 0;
+    function mount() {
+        if (options.wheel) bind(Components2.Elements.track, "wheel", onWheel, SCROLL_LISTENER_OPTIONS);
+    }
+    function onWheel(e) {
+        if (e.cancelable) {
+            var deltaY = e.deltaY;
+            var backwards = deltaY < 0;
+            var timeStamp = timeOf(e);
+            var _min = options.wheelMinThreshold || 0;
+            var sleep = options.wheelSleep || 0;
+            if (abs(deltaY) > _min && timeStamp - lastTime > sleep) {
+                Splide2.go(backwards ? "<" : ">");
+                lastTime = timeStamp;
+            }
+            shouldPrevent(backwards) && prevent(e);
+        }
+    }
+    function shouldPrevent(backwards) {
+        return !options.releaseWheel || Splide2.state.is(MOVING) || Components2.Controller.getAdjacent(backwards) !== -1;
+    }
+    return {
+        mount: mount
+    };
+}
+var SR_REMOVAL_DELAY = 90;
+function Live(Splide2, Components2, options) {
+    var _EventInterface13 = EventInterface(Splide2), on = _EventInterface13.on;
+    var track = Components2.Elements.track;
+    var enabled = options.live && !options.isNavigation;
+    var sr = create("span", CLASS_SR);
+    var interval = RequestInterval(SR_REMOVAL_DELAY, apply(toggle, false));
+    function mount() {
+        if (enabled) {
+            disable(!Components2.Autoplay.isPaused());
+            setAttribute(track, ARIA_ATOMIC, true);
+            sr.textContent = "\u2026";
+            on(EVENT_AUTOPLAY_PLAY, apply(disable, true));
+            on(EVENT_AUTOPLAY_PAUSE, apply(disable, false));
+            on([
+                EVENT_MOVED,
+                EVENT_SCROLLED
+            ], apply(toggle, true));
+        }
+    }
+    function toggle(active) {
+        setAttribute(track, ARIA_BUSY, active);
+        if (active) {
+            append(track, sr);
+            interval.start();
+        } else {
+            remove(sr);
+            interval.cancel();
+        }
+    }
+    function destroy() {
+        removeAttribute(track, [
+            ARIA_LIVE,
+            ARIA_ATOMIC,
+            ARIA_BUSY
+        ]);
+        remove(sr);
+    }
+    function disable(disabled) {
+        if (enabled) setAttribute(track, ARIA_LIVE, disabled ? "off" : "polite");
+    }
+    return {
+        mount: mount,
+        disable: disable,
+        destroy: destroy
+    };
+}
+var ComponentConstructors = /*#__PURE__*/ Object.freeze({
+    __proto__: null,
+    Media: Media,
+    Direction: Direction,
+    Elements: Elements,
+    Slides: Slides,
+    Layout: Layout,
+    Clones: Clones,
+    Move: Move,
+    Controller: Controller,
+    Arrows: Arrows,
+    Autoplay: Autoplay,
+    Cover: Cover,
+    Scroll: Scroll,
+    Drag: Drag,
+    Keyboard: Keyboard,
+    LazyLoad: LazyLoad,
+    Pagination: Pagination,
+    Sync: Sync,
+    Wheel: Wheel,
+    Live: Live
+});
+var I18N = {
+    prev: "Previous slide",
+    next: "Next slide",
+    first: "Go to first slide",
+    last: "Go to last slide",
+    slideX: "Go to slide %s",
+    pageX: "Go to page %s",
+    play: "Start autoplay",
+    pause: "Pause autoplay",
+    carousel: "carousel",
+    slide: "slide",
+    select: "Select a slide to show",
+    slideLabel: "%s of %s"
+};
+var DEFAULTS = {
+    type: "slide",
+    role: "region",
+    speed: 400,
+    perPage: 1,
+    cloneStatus: true,
+    arrows: true,
+    pagination: true,
+    paginationKeyboard: true,
+    interval: 5e3,
+    pauseOnHover: true,
+    pauseOnFocus: true,
+    resetProgress: true,
+    easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+    drag: true,
+    direction: "ltr",
+    trimSpace: true,
+    focusableNodes: "a, button, textarea, input, select, iframe",
+    live: true,
+    classes: CLASSES,
+    i18n: I18N,
+    reducedMotion: {
+        speed: 0,
+        rewindSpeed: 0,
+        autoplay: "pause"
+    }
+};
+function Fade(Splide2, Components2, options) {
+    var Slides = Components2.Slides;
+    function mount() {
+        EventInterface(Splide2).on([
+            EVENT_MOUNTED,
+            EVENT_REFRESH
+        ], init);
+    }
+    function init() {
+        Slides.forEach(function(Slide) {
+            Slide.style("transform", "translateX(-" + 100 * Slide.index + "%)");
+        });
+    }
+    function start(index, done) {
+        Slides.style("transition", "opacity " + options.speed + "ms " + options.easing);
+        nextTick(done);
+    }
+    return {
+        mount: mount,
+        start: start,
+        cancel: noop
+    };
+}
+function Slide(Splide2, Components2, options) {
+    var Move = Components2.Move, Controller = Components2.Controller, Scroll = Components2.Scroll;
+    var list = Components2.Elements.list;
+    var transition = apply(style, list, "transition");
+    var endCallback;
+    function mount() {
+        EventInterface(Splide2).bind(list, "transitionend", function(e) {
+            if (e.target === list && endCallback) {
+                cancel();
+                endCallback();
+            }
+        });
+    }
+    function start(index, done) {
+        var destination = Move.toPosition(index, true);
+        var position = Move.getPosition();
+        var speed = getSpeed(index);
+        if (abs(destination - position) >= 1 && speed >= 1) {
+            if (options.useScroll) Scroll.scroll(destination, speed, false, done);
+            else {
+                transition("transform " + speed + "ms " + options.easing);
+                Move.translate(destination, true);
+                endCallback = done;
+            }
+        } else {
+            Move.jump(index);
+            done();
+        }
+    }
+    function cancel() {
+        transition("");
+        Scroll.cancel();
+    }
+    function getSpeed(index) {
+        var rewindSpeed = options.rewindSpeed;
+        if (Splide2.is(SLIDE) && rewindSpeed) {
+            var prev = Controller.getIndex(true);
+            var end = Controller.getEnd();
+            if (prev === 0 && index >= end || prev >= end && index === 0) return rewindSpeed;
+        }
+        return options.speed;
+    }
+    return {
+        mount: mount,
+        start: start,
+        cancel: cancel
+    };
+}
+var _Splide = /*#__PURE__*/ function() {
+    function _Splide(target, options) {
+        this.event = EventInterface();
+        this.Components = {};
+        this.state = State(CREATED);
+        this.splides = [];
+        this._o = {};
+        this._E = {};
+        var root = isString(target) ? query(document, target) : target;
+        assert(root, root + " is invalid.");
+        this.root = root;
+        options = merge({
+            label: getAttribute(root, ARIA_LABEL) || "",
+            labelledby: getAttribute(root, ARIA_LABELLEDBY) || ""
+        }, DEFAULTS, _Splide.defaults, options || {});
+        try {
+            merge(options, JSON.parse(getAttribute(root, DATA_ATTRIBUTE)));
+        } catch (e) {
+            assert(false, "Invalid JSON");
+        }
+        this._o = Object.create(merge({}, options));
+    }
+    var _proto = _Splide.prototype;
+    _proto.mount = function mount(Extensions, Transition) {
+        var _this = this;
+        var state = this.state, Components2 = this.Components;
+        assert(state.is([
+            CREATED,
+            DESTROYED
+        ]), "Already mounted!");
+        state.set(CREATED);
+        this._C = Components2;
+        this._T = Transition || this._T || (this.is(FADE) ? Fade : Slide);
+        this._E = Extensions || this._E;
+        var Constructors = assign({}, ComponentConstructors, this._E, {
+            Transition: this._T
+        });
+        forOwn(Constructors, function(Component, key) {
+            var component = Component(_this, Components2, _this._o);
+            Components2[key] = component;
+            component.setup && component.setup();
+        });
+        forOwn(Components2, function(component) {
+            component.mount && component.mount();
+        });
+        this.emit(EVENT_MOUNTED);
+        addClass(this.root, CLASS_INITIALIZED);
+        state.set(IDLE);
+        this.emit(EVENT_READY);
+        return this;
+    };
+    _proto.sync = function sync(splide) {
+        this.splides.push({
+            splide: splide
+        });
+        splide.splides.push({
+            splide: this,
+            isParent: true
+        });
+        if (this.state.is(IDLE)) {
+            this._C.Sync.remount();
+            splide.Components.Sync.remount();
+        }
+        return this;
+    };
+    _proto.go = function go(control) {
+        this._C.Controller.go(control);
+        return this;
+    };
+    _proto.on = function on(events, callback) {
+        this.event.on(events, callback);
+        return this;
+    };
+    _proto.off = function off(events) {
+        this.event.off(events);
+        return this;
+    };
+    _proto.emit = function emit(event) {
+        var _this$event;
+        (_this$event = this.event).emit.apply(_this$event, [
+            event
+        ].concat(slice(arguments, 1)));
+        return this;
+    };
+    _proto.add = function add(slides, index) {
+        this._C.Slides.add(slides, index);
+        return this;
+    };
+    _proto.remove = function remove(matcher) {
+        this._C.Slides.remove(matcher);
+        return this;
+    };
+    _proto.is = function is(type) {
+        return this._o.type === type;
+    };
+    _proto.refresh = function refresh() {
+        this.emit(EVENT_REFRESH);
+        return this;
+    };
+    _proto.destroy = function destroy(completely) {
+        if (completely === void 0) completely = true;
+        var event = this.event, state = this.state;
+        if (state.is(CREATED)) EventInterface(this).on(EVENT_READY, this.destroy.bind(this, completely));
+        else {
+            forOwn(this._C, function(component) {
+                component.destroy && component.destroy(completely);
+            }, true);
+            event.emit(EVENT_DESTROY);
+            event.destroy();
+            completely && empty(this.splides);
+            state.set(DESTROYED);
+        }
+        return this;
+    };
+    _createClass(_Splide, [
+        {
+            key: "options",
+            get: function get() {
+                return this._o;
+            },
+            set: function set(options) {
+                this._C.Media.set(options, true, true);
+            }
+        },
+        {
+            key: "length",
+            get: function get() {
+                return this._C.Slides.getLength(true);
+            }
+        },
+        {
+            key: "index",
+            get: function get() {
+                return this._C.Controller.getIndex();
+            }
+        }
+    ]);
+    return _Splide;
+}();
+var Splide = _Splide;
+Splide.defaults = {};
+Splide.STATES = STATES;
+var CLASS_RENDERED = "is-rendered";
+var RENDERER_DEFAULT_CONFIG = {
+    listTag: "ul",
+    slideTag: "li"
+};
+var Style = /*#__PURE__*/ function() {
+    function Style(id, options) {
+        this.styles = {};
+        this.id = id;
+        this.options = options;
+    }
+    var _proto2 = Style.prototype;
+    _proto2.rule = function rule(selector, prop, value, breakpoint) {
+        breakpoint = breakpoint || "default";
+        var selectors = this.styles[breakpoint] = this.styles[breakpoint] || {};
+        var styles = selectors[selector] = selectors[selector] || {};
+        styles[prop] = value;
+    };
+    _proto2.build = function build() {
+        var _this2 = this;
+        var css = "";
+        if (this.styles.default) css += this.buildSelectors(this.styles.default);
+        Object.keys(this.styles).sort(function(n, m) {
+            return _this2.options.mediaQuery === "min" ? +n - +m : +m - +n;
+        }).forEach(function(breakpoint) {
+            if (breakpoint !== "default") {
+                css += "@media screen and (max-width: " + breakpoint + "px) {";
+                css += _this2.buildSelectors(_this2.styles[breakpoint]);
+                css += "}";
+            }
+        });
+        return css;
+    };
+    _proto2.buildSelectors = function buildSelectors(selectors) {
+        var _this3 = this;
+        var css = "";
+        forOwn(selectors, function(styles, selector) {
+            selector = ("#" + _this3.id + " " + selector).trim();
+            css += selector + " {";
+            forOwn(styles, function(value, prop) {
+                if (value || value === 0) css += prop + ": " + value + ";";
+            });
+            css += "}";
+        });
+        return css;
+    };
+    return Style;
+}();
+var SplideRenderer = /*#__PURE__*/ function() {
+    function SplideRenderer(contents, options, config, defaults) {
+        this.slides = [];
+        this.options = {};
+        this.breakpoints = [];
+        merge(DEFAULTS, defaults || {});
+        merge(merge(this.options, DEFAULTS), options || {});
+        this.contents = contents;
+        this.config = assign({}, RENDERER_DEFAULT_CONFIG, config || {});
+        this.id = this.config.id || uniqueId("splide");
+        this.Style = new Style(this.id, this.options);
+        this.Direction = Direction(null, null, this.options);
+        assert(this.contents.length, "Provide at least 1 content.");
+        this.init();
+    }
+    SplideRenderer.clean = function clean(splide) {
+        var _EventInterface14 = EventInterface(splide), on = _EventInterface14.on;
+        var root = splide.root;
+        var clones = queryAll(root, "." + CLASS_CLONE);
+        on(EVENT_MOUNTED, function() {
+            remove(child(root, "style"));
+        });
+        remove(clones);
+    };
+    var _proto3 = SplideRenderer.prototype;
+    _proto3.init = function init() {
+        this.parseBreakpoints();
+        this.initSlides();
+        this.registerRootStyles();
+        this.registerTrackStyles();
+        this.registerSlideStyles();
+        this.registerListStyles();
+    };
+    _proto3.initSlides = function initSlides() {
+        var _this4 = this;
+        push(this.slides, this.contents.map(function(content, index) {
+            content = isString(content) ? {
+                html: content
+            } : content;
+            content.styles = content.styles || {};
+            content.attrs = content.attrs || {};
+            _this4.cover(content);
+            var classes = _this4.options.classes.slide + " " + (index === 0 ? CLASS_ACTIVE : "");
+            assign(content.attrs, {
+                class: (classes + " " + (content.attrs.class || "")).trim(),
+                style: _this4.buildStyles(content.styles)
+            });
+            return content;
+        }));
+        if (this.isLoop()) this.generateClones(this.slides);
+    };
+    _proto3.registerRootStyles = function registerRootStyles() {
+        var _this5 = this;
+        this.breakpoints.forEach(function(_ref2) {
+            var width = _ref2[0], options = _ref2[1];
+            _this5.Style.rule(" ", "max-width", unit(options.width), width);
+        });
+    };
+    _proto3.registerTrackStyles = function registerTrackStyles() {
+        var _this6 = this;
+        var Style2 = this.Style;
+        var selector = "." + CLASS_TRACK;
+        this.breakpoints.forEach(function(_ref3) {
+            var width = _ref3[0], options = _ref3[1];
+            Style2.rule(selector, _this6.resolve("paddingLeft"), _this6.cssPadding(options, false), width);
+            Style2.rule(selector, _this6.resolve("paddingRight"), _this6.cssPadding(options, true), width);
+            Style2.rule(selector, "height", _this6.cssTrackHeight(options), width);
+        });
+    };
+    _proto3.registerListStyles = function registerListStyles() {
+        var _this7 = this;
+        var Style2 = this.Style;
+        var selector = "." + CLASS_LIST;
+        this.breakpoints.forEach(function(_ref4) {
+            var width = _ref4[0], options = _ref4[1];
+            Style2.rule(selector, "transform", _this7.buildTranslate(options), width);
+            if (!_this7.cssSlideHeight(options)) Style2.rule(selector, "aspect-ratio", _this7.cssAspectRatio(options), width);
+        });
+    };
+    _proto3.registerSlideStyles = function registerSlideStyles() {
+        var _this8 = this;
+        var Style2 = this.Style;
+        var selector = "." + CLASS_SLIDE;
+        this.breakpoints.forEach(function(_ref5) {
+            var width = _ref5[0], options = _ref5[1];
+            Style2.rule(selector, "width", _this8.cssSlideWidth(options), width);
+            Style2.rule(selector, "height", _this8.cssSlideHeight(options) || "100%", width);
+            Style2.rule(selector, _this8.resolve("marginRight"), unit(options.gap) || "0px", width);
+            Style2.rule(selector + " > img", "display", options.cover ? "none" : "inline", width);
+        });
+    };
+    _proto3.buildTranslate = function buildTranslate(options) {
+        var _this$Direction = this.Direction, resolve = _this$Direction.resolve, orient = _this$Direction.orient;
+        var values = [];
+        values.push(this.cssOffsetClones(options));
+        values.push(this.cssOffsetGaps(options));
+        if (this.isCenter(options)) {
+            values.push(this.buildCssValue(orient(-50), "%"));
+            values.push.apply(values, this.cssOffsetCenter(options));
+        }
+        return values.filter(Boolean).map(function(value) {
+            return "translate" + resolve("X") + "(" + value + ")";
+        }).join(" ");
+    };
+    _proto3.cssOffsetClones = function cssOffsetClones(options) {
+        var _this$Direction2 = this.Direction, resolve = _this$Direction2.resolve, orient = _this$Direction2.orient;
+        var cloneCount = this.getCloneCount();
+        if (this.isFixedWidth(options)) {
+            var _this$parseCssValue = this.parseCssValue(options[resolve("fixedWidth")]), value = _this$parseCssValue.value, unit2 = _this$parseCssValue.unit;
+            return this.buildCssValue(orient(value) * cloneCount, unit2);
+        }
+        var percent = 100 * cloneCount / options.perPage;
+        return orient(percent) + "%";
+    };
+    _proto3.cssOffsetCenter = function cssOffsetCenter(options) {
+        var _this$Direction3 = this.Direction, resolve = _this$Direction3.resolve, orient = _this$Direction3.orient;
+        if (this.isFixedWidth(options)) {
+            var _this$parseCssValue2 = this.parseCssValue(options[resolve("fixedWidth")]), value = _this$parseCssValue2.value, unit2 = _this$parseCssValue2.unit;
+            return [
+                this.buildCssValue(orient(value / 2), unit2)
+            ];
+        }
+        var values = [];
+        var perPage = options.perPage, gap = options.gap;
+        values.push(orient(50 / perPage) + "%");
+        if (gap) {
+            var _this$parseCssValue3 = this.parseCssValue(gap), _value = _this$parseCssValue3.value, _unit = _this$parseCssValue3.unit;
+            var gapOffset = (_value / perPage - _value) / 2;
+            values.push(this.buildCssValue(orient(gapOffset), _unit));
+        }
+        return values;
+    };
+    _proto3.cssOffsetGaps = function cssOffsetGaps(options) {
+        var cloneCount = this.getCloneCount();
+        if (cloneCount && options.gap) {
+            var orient = this.Direction.orient;
+            var _this$parseCssValue4 = this.parseCssValue(options.gap), value = _this$parseCssValue4.value, unit2 = _this$parseCssValue4.unit;
+            if (this.isFixedWidth(options)) return this.buildCssValue(orient(value * cloneCount), unit2);
+            var perPage = options.perPage;
+            var gaps = cloneCount / perPage;
+            return this.buildCssValue(orient(gaps * value), unit2);
+        }
+        return "";
+    };
+    _proto3.resolve = function resolve(prop) {
+        return camelToKebab(this.Direction.resolve(prop));
+    };
+    _proto3.cssPadding = function cssPadding(options, right) {
+        var padding = options.padding;
+        var prop = this.Direction.resolve(right ? "right" : "left", true);
+        return padding && unit(padding[prop] || (isObject(padding) ? 0 : padding)) || "0px";
+    };
+    _proto3.cssTrackHeight = function cssTrackHeight(options) {
+        var height = "";
+        if (this.isVertical()) {
+            height = this.cssHeight(options);
+            assert(height, '"height" is missing.');
+            height = "calc(" + height + " - " + this.cssPadding(options, false) + " - " + this.cssPadding(options, true) + ")";
+        }
+        return height;
+    };
+    _proto3.cssHeight = function cssHeight(options) {
+        return unit(options.height);
+    };
+    _proto3.cssSlideWidth = function cssSlideWidth(options) {
+        return options.autoWidth ? "" : unit(options.fixedWidth) || (this.isVertical() ? "" : this.cssSlideSize(options));
+    };
+    _proto3.cssSlideHeight = function cssSlideHeight(options) {
+        return unit(options.fixedHeight) || (this.isVertical() ? options.autoHeight ? "" : this.cssSlideSize(options) : this.cssHeight(options));
+    };
+    _proto3.cssSlideSize = function cssSlideSize(options) {
+        var gap = unit(options.gap);
+        return "calc((100%" + (gap && " + " + gap) + ")/" + (options.perPage || 1) + (gap && " - " + gap) + ")";
+    };
+    _proto3.cssAspectRatio = function cssAspectRatio(options) {
+        var heightRatio = options.heightRatio;
+        return heightRatio ? "" + 1 / heightRatio : "";
+    };
+    _proto3.buildCssValue = function buildCssValue(value, unit2) {
+        return "" + value + unit2;
+    };
+    _proto3.parseCssValue = function parseCssValue(value) {
+        if (isString(value)) {
+            var number = parseFloat(value) || 0;
+            var unit2 = value.replace(/\d*(\.\d*)?/, "") || "px";
+            return {
+                value: number,
+                unit: unit2
+            };
+        }
+        return {
+            value: value,
+            unit: "px"
+        };
+    };
+    _proto3.parseBreakpoints = function parseBreakpoints() {
+        var _this9 = this;
+        var breakpoints = this.options.breakpoints;
+        this.breakpoints.push([
+            "default",
+            this.options
+        ]);
+        if (breakpoints) forOwn(breakpoints, function(options, width) {
+            _this9.breakpoints.push([
+                width,
+                merge(merge({}, _this9.options), options)
+            ]);
+        });
+    };
+    _proto3.isFixedWidth = function isFixedWidth(options) {
+        return !!options[this.Direction.resolve("fixedWidth")];
+    };
+    _proto3.isLoop = function isLoop() {
+        return this.options.type === LOOP;
+    };
+    _proto3.isCenter = function isCenter(options) {
+        if (options.focus === "center") {
+            if (this.isLoop()) return true;
+            if (this.options.type === SLIDE) return !this.options.trimSpace;
+        }
+        return false;
+    };
+    _proto3.isVertical = function isVertical() {
+        return this.options.direction === TTB;
+    };
+    _proto3.buildClasses = function buildClasses() {
+        var options = this.options;
+        return [
+            CLASS_ROOT,
+            CLASS_ROOT + "--" + options.type,
+            CLASS_ROOT + "--" + options.direction,
+            options.drag && CLASS_ROOT + "--draggable",
+            options.isNavigation && CLASS_ROOT + "--nav",
+            CLASS_ACTIVE,
+            !this.config.hidden && CLASS_RENDERED
+        ].filter(Boolean).join(" ");
+    };
+    _proto3.buildAttrs = function buildAttrs(attrs) {
+        var attr = "";
+        forOwn(attrs, function(value, key) {
+            attr += value ? " " + camelToKebab(key) + '="' + value + '"' : "";
+        });
+        return attr.trim();
+    };
+    _proto3.buildStyles = function buildStyles(styles) {
+        var style = "";
+        forOwn(styles, function(value, key) {
+            style += " " + camelToKebab(key) + ":" + value + ";";
+        });
+        return style.trim();
+    };
+    _proto3.renderSlides = function renderSlides() {
+        var _this10 = this;
+        var tag = this.config.slideTag;
+        return this.slides.map(function(content) {
+            return "<" + tag + " " + _this10.buildAttrs(content.attrs) + ">" + (content.html || "") + "</" + tag + ">";
+        }).join("");
+    };
+    _proto3.cover = function cover(content) {
+        var styles = content.styles, _content$html = content.html, html = _content$html === void 0 ? "" : _content$html;
+        if (this.options.cover && !this.options.lazyLoad) {
+            var src = html.match(/<img.*?src\s*=\s*(['"])(.+?)\1.*?>/);
+            if (src && src[2]) styles.background = "center/cover no-repeat url('" + src[2] + "')";
+        }
+    };
+    _proto3.generateClones = function generateClones(contents) {
+        var classes = this.options.classes;
+        var count = this.getCloneCount();
+        var slides = contents.slice();
+        while(slides.length < count)push(slides, slides);
+        push(slides.slice(-count).reverse(), slides.slice(0, count)).forEach(function(content, index) {
+            var attrs = assign({}, content.attrs, {
+                class: content.attrs.class + " " + classes.clone
+            });
+            var clone = assign({}, content, {
+                attrs: attrs
+            });
+            index < count ? contents.unshift(clone) : contents.push(clone);
+        });
+    };
+    _proto3.getCloneCount = function getCloneCount() {
+        if (this.isLoop()) {
+            var options = this.options;
+            if (options.clones) return options.clones;
+            var perPage = max.apply(void 0, this.breakpoints.map(function(_ref6) {
+                var options2 = _ref6[1];
+                return options2.perPage;
+            }));
+            return perPage * ((options.flickMaxPages || 1) + 1);
+        }
+        return 0;
+    };
+    _proto3.renderArrows = function renderArrows() {
+        var html = "";
+        html += '<div class="' + this.options.classes.arrows + '">';
+        html += this.renderArrow(true);
+        html += this.renderArrow(false);
+        html += "</div>";
+        return html;
+    };
+    _proto3.renderArrow = function renderArrow(prev) {
+        var _this$options = this.options, classes = _this$options.classes, i18n = _this$options.i18n;
+        var attrs = {
+            class: classes.arrow + " " + (prev ? classes.prev : classes.next),
+            type: "button",
+            ariaLabel: prev ? i18n.prev : i18n.next
+        };
+        return "<button " + this.buildAttrs(attrs) + '><svg xmlns="' + XML_NAME_SPACE + '" viewBox="0 0 ' + SIZE + " " + SIZE + '" width="' + SIZE + '" height="' + SIZE + '"><path d="' + (this.options.arrowPath || PATH) + '" /></svg></button>';
+    };
+    _proto3.html = function html() {
+        var _this$config = this.config, rootClass = _this$config.rootClass, listTag = _this$config.listTag, arrows = _this$config.arrows, beforeTrack = _this$config.beforeTrack, afterTrack = _this$config.afterTrack, slider = _this$config.slider, beforeSlider = _this$config.beforeSlider, afterSlider = _this$config.afterSlider;
+        var html = "";
+        html += '<div id="' + this.id + '" class="' + this.buildClasses() + " " + (rootClass || "") + '">';
+        html += "<style>" + this.Style.build() + "</style>";
+        if (slider) {
+            html += beforeSlider || "";
+            html += '<div class="splide__slider">';
+        }
+        html += beforeTrack || "";
+        if (arrows) html += this.renderArrows();
+        html += '<div class="splide__track">';
+        html += "<" + listTag + ' class="splide__list">';
+        html += this.renderSlides();
+        html += "</" + listTag + ">";
+        html += "</div>";
+        html += afterTrack || "";
+        if (slider) {
+            html += "</div>";
+            html += afterSlider || "";
+        }
+        html += "</div>";
+        return html;
+    };
+    return SplideRenderer;
+}();
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kLFb5":[function(require,module,exports) {
+/*!
+ * @splidejs/splide-extension-intersection
+ * Version  : 0.2.0
+ * License  : MIT
+ * Copyright: 2022 Naotoshi Fujita
+ */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Intersection", ()=>Intersection);
+function empty(array) {
+    array.length = 0;
+}
+function slice$1(arrayLike, start, end) {
+    return Array.prototype.slice.call(arrayLike, start, end);
+}
+function apply$1(func) {
+    return func.bind.apply(func, [
+        null
+    ].concat(slice$1(arguments, 1)));
+}
+function typeOf$1(type, subject) {
+    return typeof subject === type;
+}
+var isArray = Array.isArray;
+apply$1(typeOf$1, "function");
+apply$1(typeOf$1, "string");
+apply$1(typeOf$1, "undefined");
+function toArray(value) {
+    return isArray(value) ? value : [
+        value
+    ];
+}
+function forEach(values, iteratee) {
+    toArray(values).forEach(iteratee);
+}
+var ownKeys$1 = Object.keys;
+function forOwn$1(object, iteratee, right) {
+    if (object) {
+        var keys = ownKeys$1(object);
+        keys = right ? keys.reverse() : keys;
+        for(var i = 0; i < keys.length; i++){
+            var key = keys[i];
+            if (key !== "__proto__") {
+                if (iteratee(object[key], key) === false) break;
+            }
+        }
+    }
+    return object;
+}
+function assign(object) {
+    slice$1(arguments, 1).forEach(function(source) {
+        forOwn$1(source, function(value, key) {
+            object[key] = source[key];
+        });
+    });
+    return object;
+}
+function EventBinder() {
+    var listeners = [];
+    function bind(targets, events, callback, options) {
+        forEachEvent(targets, events, function(target, event, namespace) {
+            var isEventTarget = "addEventListener" in target;
+            var remover = isEventTarget ? target.removeEventListener.bind(target, event, callback, options) : target["removeListener"].bind(target, callback);
+            isEventTarget ? target.addEventListener(event, callback, options) : target["addListener"](callback);
+            listeners.push([
+                target,
+                event,
+                namespace,
+                callback,
+                remover
+            ]);
+        });
+    }
+    function unbind(targets, events, callback) {
+        forEachEvent(targets, events, function(target, event, namespace) {
+            listeners = listeners.filter(function(listener) {
+                if (listener[0] === target && listener[1] === event && listener[2] === namespace && (!callback || listener[3] === callback)) {
+                    listener[4]();
+                    return false;
+                }
+                return true;
+            });
+        });
+    }
+    function dispatch(target, type, detail) {
+        var e;
+        var bubbles = true;
+        if (typeof CustomEvent === "function") e = new CustomEvent(type, {
+            bubbles: bubbles,
+            detail: detail
+        });
+        else {
+            e = document.createEvent("CustomEvent");
+            e.initCustomEvent(type, bubbles, false, detail);
+        }
+        target.dispatchEvent(e);
+        return e;
+    }
+    function forEachEvent(targets, events, iteratee) {
+        forEach(targets, function(target) {
+            target && forEach(events, function(events2) {
+                events2.split(" ").forEach(function(eventNS) {
+                    var fragment = eventNS.split(".");
+                    iteratee(target, fragment[0], fragment[1]);
+                });
+            });
+        });
+    }
+    function destroy() {
+        listeners.forEach(function(data) {
+            data[4]();
+        });
+        empty(listeners);
+    }
+    return {
+        bind: bind,
+        unbind: unbind,
+        dispatch: dispatch,
+        destroy: destroy
+    };
+}
+var EVENT_DESTROY = "destroy";
+function EventInterface(Splide2) {
+    var bus = Splide2 ? Splide2.event.bus : document.createDocumentFragment();
+    var binder = EventBinder();
+    function on(events, callback) {
+        binder.bind(bus, toArray(events).join(" "), function(e) {
+            callback.apply(callback, isArray(e.detail) ? e.detail : []);
+        });
+    }
+    function emit(event) {
+        binder.dispatch(bus, event, slice$1(arguments, 1));
+    }
+    if (Splide2) Splide2.event.on(EVENT_DESTROY, binder.destroy);
+    return assign(binder, {
+        bus: bus,
+        on: on,
+        off: apply$1(binder.unbind, bus),
+        emit: emit
+    });
+}
+function slice(arrayLike, start, end) {
+    return Array.prototype.slice.call(arrayLike, start, end);
+}
+function apply(func) {
+    return func.bind(null, ...slice(arguments, 1));
+}
+function typeOf(type, subject) {
+    return typeof subject === type;
+}
+apply(typeOf, "function");
+apply(typeOf, "string");
+const isUndefined = apply(typeOf, "undefined");
+const ownKeys = Object.keys;
+function forOwn(object, iteratee, right) {
+    if (object) {
+        let keys = ownKeys(object);
+        keys = right ? keys.reverse() : keys;
+        for(let i = 0; i < keys.length; i++){
+            const key = keys[i];
+            if (key !== "__proto__") {
+                if (iteratee(object[key], key) === false) break;
+            }
+        }
+    }
+    return object;
+}
+const EVENT_INTERSECTION = "intersection";
+const EVENT_INTERSECTION_IN = "intersection:in";
+const EVENT_INTERSECTION_OUT = "intersection:out";
+function Handlers(Splide2) {
+    const { Components } = Splide2;
+    return {
+        keyboard: {
+            enable () {
+                Components.Keyboard.disable(false);
+            },
+            disable () {
+                Components.Keyboard.disable(true);
+            }
+        },
+        autoplay: {
+            enable () {
+                if (Splide2.options.autoplay) Components.Autoplay.play();
+            },
+            disable () {
+                Components.Autoplay.pause();
+            }
+        },
+        autoScroll: {
+            enable () {
+                const AutoScroll = Components.AutoScroll;
+                AutoScroll && AutoScroll.play();
+            },
+            disable () {
+                const AutoScroll = Components.AutoScroll;
+                AutoScroll && AutoScroll.pause();
+            }
+        },
+        video: {
+            enable () {
+                const Video = Components.Video;
+                Video && Video.play();
+            },
+            disable () {
+                const Video = Components.Video;
+                Video && Video.pause();
+            }
+        }
+    };
+}
+function Intersection(Splide2, Components2, options) {
+    const { emit } = EventInterface(Splide2);
+    const intersectionOptions = options.intersection || {};
+    const handlers = Handlers(Splide2);
+    let observer;
+    function mount() {
+        if (window.IntersectionObserver) {
+            observer = new IntersectionObserver(onIntersect, {
+                root: intersectionOptions.root,
+                rootMargin: intersectionOptions.rootMargin,
+                threshold: intersectionOptions.threshold
+            });
+            observer.observe(Splide2.root);
+        }
+    }
+    function destroy() {
+        if (observer) {
+            observer.disconnect();
+            observer = null;
+        }
+    }
+    function onIntersect([entry]) {
+        if (entry) {
+            entry.isIntersecting ? inView(entry) : outView(entry);
+            emit(EVENT_INTERSECTION, entry);
+        }
+    }
+    function handle(options2) {
+        forOwn(options2, (value, key)=>{
+            if (!isUndefined(value)) {
+                const handler = handlers[key];
+                value ? handler.enable() : handler.disable();
+            }
+        });
+    }
+    function inView(entry) {
+        handle(intersectionOptions.inView || {});
+        emit(EVENT_INTERSECTION_IN, entry);
+        if (intersectionOptions.once) destroy();
+    }
+    function outView(entry) {
+        handle(intersectionOptions.outView || {});
+        emit(EVENT_INTERSECTION_OUT, entry);
+    }
+    return {
+        mount,
+        destroy
+    };
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fPSuC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "gsap", ()=>gsapWithCSS);
@@ -4743,3222 +8339,7 @@ var CSSPlugin = {
 });
 (0, _gsapCoreJs.gsap).registerPlugin(CSSPlugin);
 
-},{"./gsap-core.js":"05eeC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cxLY0":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "mobSplider", ()=>mobSplider);
-parcelHelpers.export(exports, "productSplider", ()=>productSplider);
-parcelHelpers.export(exports, "desktopSplider", ()=>desktopSplider);
-parcelHelpers.export(exports, "spliderWithArrows", ()=>spliderWithArrows);
-parcelHelpers.export(exports, "spliderVertical", ()=>spliderVertical);
-parcelHelpers.export(exports, "spliderWithArrowsDesktop", ()=>spliderWithArrowsDesktop);
-parcelHelpers.export(exports, "historySplider", ()=>historySplider);
-var _splide = require("@splidejs/splide");
-var _splideDefault = parcelHelpers.interopDefault(_splide);
-function mobSplider(sliderAttr) {
-    const spleders = document.querySelectorAll(`${sliderAttr}`);
-    if (window.matchMedia("(max-width: 769px)").matches) spleders.forEach((el)=>{
-        const splide = new (0, _splideDefault.default)(el, {
-            pagination: false,
-            arrows: false,
-            fixedWidth: "85%",
-            gap: "0px"
-        });
-        initProgressBar(splide);
-        splide.mount();
-    });
-}
-function productSplider(sliderAttr) {
-    const spleders = document.querySelectorAll(`${sliderAttr}`);
-    spleders.forEach((el)=>{
-        const splide = new (0, _splideDefault.default)(el, {
-            perPage: 1,
-            pagination: true
-        });
-        splide.mount();
-    });
-}
-function desktopSplider(sliderAttr) {
-    const spleders = document.querySelectorAll(`${sliderAttr}`);
-    if (window.matchMedia("(min-width: 769px)").matches) spleders.forEach((el)=>{
-        const splide = new (0, _splideDefault.default)(el, {
-            pagination: false,
-            arrows: false,
-            fixedWidth: "39%",
-            gap: "0px",
-            wheel: true,
-            perMove: 1,
-            wheelSleep: 1000,
-            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-            releaseWheel: true
-        });
-        initProgressBar(splide);
-        splide.mount();
-    });
-}
-function spliderWithArrows(sliderAttr) {
-    const spleders = document.querySelectorAll(`${sliderAttr}`);
-    spleders.forEach((el)=>{
-        const splide = new (0, _splideDefault.default)(el, {
-            pagination: false,
-            fixedWidth: "39.2%",
-            gap: "0px",
-            perMove: 2,
-            breakpoints: {
-                767: {
-                    fixedWidth: "85%",
-                    arrows: false
-                }
-            }
-        });
-        initProgressBar(splide);
-        splide.mount();
-    });
-}
-function spliderVertical(sliderAttr) {
-    const spleders = document.querySelectorAll(`${sliderAttr}`);
-    spleders.forEach((el)=>{
-        const splide = new (0, _splideDefault.default)(el, {
-            direction: "ttb",
-            heightRatio: 1,
-            perPage: 2,
-            pagination: false,
-            gap: "calc(24 *var(--fz))",
-            arrows: false,
-            wheel: true,
-            releaseWheel: true,
-            perMove: 1
-        });
-        initProgressBar(splide);
-        splide.mount();
-        if (window.matchMedia("(max-width: 767px)").matches) splide.destroy();
-    });
-}
-function spliderWithArrowsDesktop(sliderAttr) {
-    const spleders = document.querySelectorAll(`${sliderAttr}`);
-    spleders.forEach((el)=>{
-        const splide = new (0, _splideDefault.default)(el, {
-            pagination: false,
-            gap: "calc(24 * var(--fz))",
-            perMove: 1,
-            perPage: 5
-        });
-        initProgressBar(splide);
-        splide.mount();
-        if (window.matchMedia("(max-width: 767px)").matches) splide.destroy();
-    });
-}
-function historySplider(sliderAttr) {
-    const spleders = document.querySelectorAll(`${sliderAttr}`);
-    spleders.forEach((el)=>{
-        const splide = new (0, _splideDefault.default)(el, {
-            pagination: false,
-            fixedWidth: "100%",
-            gap: "0px",
-            perMove: 1
-        });
-        progressBarWithYears(splide);
-        splide.mount();
-    });
-}
-function progressBarWithYears(slider) {
-    const bar = slider.root.querySelector("[data-slider-bar]");
-    const line = slider.root.querySelector("[data-slider-line]");
-    const numbersContainer = slider.root.querySelector("[data-slider-numbers]");
-    const dates = [
-        "2018",
-        "2017",
-        "2016",
-        "2015",
-        "2014",
-        "2012",
-        "2010"
-    ];
-    if (bar) {
-        slider.on("mounted", ()=>{
-            let sliderEnd = slider.Components.Controller.getEnd();
-            for(i = 0; i <= sliderEnd; i++){
-                let span = document.createElement("span");
-                span.innerHTML = dates[i];
-                numbersContainer.prepend(span);
-                span.style.right = `${100 / sliderEnd * i}%`;
-            }
-        });
-        slider.on("mounted move", (prevIndex, newIndex)=>{
-            let numbersOnLine = Array.from(numbersContainer.querySelectorAll("span"));
-            let sliderEnd = slider.Components.Controller.getEnd();
-            const rate = 100 / sliderEnd * slider.index;
-            bar.style.width = String(rate) + "%";
-            if (prevIndex >= newIndex) numbersOnLine[slider.index].style.color = "#0E0E0E";
-            else numbersOnLine[slider.index + 1].style.color = "#9D9D9D";
-        });
-        if (window.matchMedia("(max-width: 767px)").matches) {
-            slider.on("mounted", ()=>{
-                let sliderEnd = slider.Components.Controller.getEnd();
-                line.style.width = `${(sliderEnd + 1) * 50}vw`;
-            });
-            slider.on("mounted move", function(prevIndex, newIndex) {
-                line.style.transform = `translateX(-${slider.index * 50}vw)`;
-            });
-        }
-    }
-}
-function initProgressBar(slider) {
-    const bar = slider.root.querySelector("[data-slider-bar]");
-    if (bar) slider.on("mounted move", function() {
-        const end = slider.Components.Controller.getEnd();
-        const rate = 100 / end * slider.index;
-        bar.style.width = String(rate) + "%";
-        console.log(rate);
-    });
-}
-
-},{"@splidejs/splide":"5CJev","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5CJev":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "CLASSES", ()=>CLASSES);
-parcelHelpers.export(exports, "CLASS_ACTIVE", ()=>CLASS_ACTIVE);
-parcelHelpers.export(exports, "CLASS_ARROW", ()=>CLASS_ARROW);
-parcelHelpers.export(exports, "CLASS_ARROWS", ()=>CLASS_ARROWS);
-parcelHelpers.export(exports, "CLASS_ARROW_NEXT", ()=>CLASS_ARROW_NEXT);
-parcelHelpers.export(exports, "CLASS_ARROW_PREV", ()=>CLASS_ARROW_PREV);
-parcelHelpers.export(exports, "CLASS_CLONE", ()=>CLASS_CLONE);
-parcelHelpers.export(exports, "CLASS_CONTAINER", ()=>CLASS_CONTAINER);
-parcelHelpers.export(exports, "CLASS_FOCUS_IN", ()=>CLASS_FOCUS_IN);
-parcelHelpers.export(exports, "CLASS_INITIALIZED", ()=>CLASS_INITIALIZED);
-parcelHelpers.export(exports, "CLASS_LIST", ()=>CLASS_LIST);
-parcelHelpers.export(exports, "CLASS_LOADING", ()=>CLASS_LOADING);
-parcelHelpers.export(exports, "CLASS_NEXT", ()=>CLASS_NEXT);
-parcelHelpers.export(exports, "CLASS_OVERFLOW", ()=>CLASS_OVERFLOW);
-parcelHelpers.export(exports, "CLASS_PAGINATION", ()=>CLASS_PAGINATION);
-parcelHelpers.export(exports, "CLASS_PAGINATION_PAGE", ()=>CLASS_PAGINATION_PAGE);
-parcelHelpers.export(exports, "CLASS_PREV", ()=>CLASS_PREV);
-parcelHelpers.export(exports, "CLASS_PROGRESS", ()=>CLASS_PROGRESS);
-parcelHelpers.export(exports, "CLASS_PROGRESS_BAR", ()=>CLASS_PROGRESS_BAR);
-parcelHelpers.export(exports, "CLASS_ROOT", ()=>CLASS_ROOT);
-parcelHelpers.export(exports, "CLASS_SLIDE", ()=>CLASS_SLIDE);
-parcelHelpers.export(exports, "CLASS_SPINNER", ()=>CLASS_SPINNER);
-parcelHelpers.export(exports, "CLASS_SR", ()=>CLASS_SR);
-parcelHelpers.export(exports, "CLASS_TOGGLE", ()=>CLASS_TOGGLE);
-parcelHelpers.export(exports, "CLASS_TOGGLE_PAUSE", ()=>CLASS_TOGGLE_PAUSE);
-parcelHelpers.export(exports, "CLASS_TOGGLE_PLAY", ()=>CLASS_TOGGLE_PLAY);
-parcelHelpers.export(exports, "CLASS_TRACK", ()=>CLASS_TRACK);
-parcelHelpers.export(exports, "CLASS_VISIBLE", ()=>CLASS_VISIBLE);
-parcelHelpers.export(exports, "DEFAULTS", ()=>DEFAULTS);
-parcelHelpers.export(exports, "EVENT_ACTIVE", ()=>EVENT_ACTIVE);
-parcelHelpers.export(exports, "EVENT_ARROWS_MOUNTED", ()=>EVENT_ARROWS_MOUNTED);
-parcelHelpers.export(exports, "EVENT_ARROWS_UPDATED", ()=>EVENT_ARROWS_UPDATED);
-parcelHelpers.export(exports, "EVENT_AUTOPLAY_PAUSE", ()=>EVENT_AUTOPLAY_PAUSE);
-parcelHelpers.export(exports, "EVENT_AUTOPLAY_PLAY", ()=>EVENT_AUTOPLAY_PLAY);
-parcelHelpers.export(exports, "EVENT_AUTOPLAY_PLAYING", ()=>EVENT_AUTOPLAY_PLAYING);
-parcelHelpers.export(exports, "EVENT_CLICK", ()=>EVENT_CLICK);
-parcelHelpers.export(exports, "EVENT_DESTROY", ()=>EVENT_DESTROY);
-parcelHelpers.export(exports, "EVENT_DRAG", ()=>EVENT_DRAG);
-parcelHelpers.export(exports, "EVENT_DRAGGED", ()=>EVENT_DRAGGED);
-parcelHelpers.export(exports, "EVENT_DRAGGING", ()=>EVENT_DRAGGING);
-parcelHelpers.export(exports, "EVENT_END_INDEX_CHANGED", ()=>EVENT_END_INDEX_CHANGED);
-parcelHelpers.export(exports, "EVENT_HIDDEN", ()=>EVENT_HIDDEN);
-parcelHelpers.export(exports, "EVENT_INACTIVE", ()=>EVENT_INACTIVE);
-parcelHelpers.export(exports, "EVENT_LAZYLOAD_LOADED", ()=>EVENT_LAZYLOAD_LOADED);
-parcelHelpers.export(exports, "EVENT_MOUNTED", ()=>EVENT_MOUNTED);
-parcelHelpers.export(exports, "EVENT_MOVE", ()=>EVENT_MOVE);
-parcelHelpers.export(exports, "EVENT_MOVED", ()=>EVENT_MOVED);
-parcelHelpers.export(exports, "EVENT_NAVIGATION_MOUNTED", ()=>EVENT_NAVIGATION_MOUNTED);
-parcelHelpers.export(exports, "EVENT_OVERFLOW", ()=>EVENT_OVERFLOW);
-parcelHelpers.export(exports, "EVENT_PAGINATION_MOUNTED", ()=>EVENT_PAGINATION_MOUNTED);
-parcelHelpers.export(exports, "EVENT_PAGINATION_UPDATED", ()=>EVENT_PAGINATION_UPDATED);
-parcelHelpers.export(exports, "EVENT_READY", ()=>EVENT_READY);
-parcelHelpers.export(exports, "EVENT_REFRESH", ()=>EVENT_REFRESH);
-parcelHelpers.export(exports, "EVENT_RESIZE", ()=>EVENT_RESIZE);
-parcelHelpers.export(exports, "EVENT_RESIZED", ()=>EVENT_RESIZED);
-parcelHelpers.export(exports, "EVENT_SCROLL", ()=>EVENT_SCROLL);
-parcelHelpers.export(exports, "EVENT_SCROLLED", ()=>EVENT_SCROLLED);
-parcelHelpers.export(exports, "EVENT_SHIFTED", ()=>EVENT_SHIFTED);
-parcelHelpers.export(exports, "EVENT_SLIDE_KEYDOWN", ()=>EVENT_SLIDE_KEYDOWN);
-parcelHelpers.export(exports, "EVENT_UPDATED", ()=>EVENT_UPDATED);
-parcelHelpers.export(exports, "EVENT_VISIBLE", ()=>EVENT_VISIBLE);
-parcelHelpers.export(exports, "EventBinder", ()=>EventBinder);
-parcelHelpers.export(exports, "EventInterface", ()=>EventInterface);
-parcelHelpers.export(exports, "FADE", ()=>FADE);
-parcelHelpers.export(exports, "LOOP", ()=>LOOP);
-parcelHelpers.export(exports, "LTR", ()=>LTR);
-parcelHelpers.export(exports, "RTL", ()=>RTL);
-parcelHelpers.export(exports, "RequestInterval", ()=>RequestInterval);
-parcelHelpers.export(exports, "SLIDE", ()=>SLIDE);
-parcelHelpers.export(exports, "STATUS_CLASSES", ()=>STATUS_CLASSES);
-parcelHelpers.export(exports, "Splide", ()=>Splide);
-parcelHelpers.export(exports, "SplideRenderer", ()=>SplideRenderer);
-parcelHelpers.export(exports, "State", ()=>State);
-parcelHelpers.export(exports, "TTB", ()=>TTB);
-parcelHelpers.export(exports, "Throttle", ()=>Throttle);
-parcelHelpers.export(exports, "default", ()=>Splide);
-function _defineProperties(target, props) {
-    for(var i = 0; i < props.length; i++){
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-    }
-}
-function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    Object.defineProperty(Constructor, "prototype", {
-        writable: false
-    });
-    return Constructor;
-}
-/*!
- * Splide.js
- * Version  : 4.1.4
- * License  : MIT
- * Copyright: 2022 Naotoshi Fujita
- */ var MEDIA_PREFERS_REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
-var CREATED = 1;
-var MOUNTED = 2;
-var IDLE = 3;
-var MOVING = 4;
-var SCROLLING = 5;
-var DRAGGING = 6;
-var DESTROYED = 7;
-var STATES = {
-    CREATED: CREATED,
-    MOUNTED: MOUNTED,
-    IDLE: IDLE,
-    MOVING: MOVING,
-    SCROLLING: SCROLLING,
-    DRAGGING: DRAGGING,
-    DESTROYED: DESTROYED
-};
-function empty(array) {
-    array.length = 0;
-}
-function slice(arrayLike, start, end) {
-    return Array.prototype.slice.call(arrayLike, start, end);
-}
-function apply(func) {
-    return func.bind.apply(func, [
-        null
-    ].concat(slice(arguments, 1)));
-}
-var nextTick = setTimeout;
-var noop = function noop() {};
-function raf(func) {
-    return requestAnimationFrame(func);
-}
-function typeOf(type, subject) {
-    return typeof subject === type;
-}
-function isObject(subject) {
-    return !isNull(subject) && typeOf("object", subject);
-}
-var isArray = Array.isArray;
-var isFunction = apply(typeOf, "function");
-var isString = apply(typeOf, "string");
-var isUndefined = apply(typeOf, "undefined");
-function isNull(subject) {
-    return subject === null;
-}
-function isHTMLElement(subject) {
-    try {
-        return subject instanceof (subject.ownerDocument.defaultView || window).HTMLElement;
-    } catch (e) {
-        return false;
-    }
-}
-function toArray(value) {
-    return isArray(value) ? value : [
-        value
-    ];
-}
-function forEach(values, iteratee) {
-    toArray(values).forEach(iteratee);
-}
-function includes(array, value) {
-    return array.indexOf(value) > -1;
-}
-function push(array, items) {
-    array.push.apply(array, toArray(items));
-    return array;
-}
-function toggleClass(elm, classes, add) {
-    if (elm) forEach(classes, function(name) {
-        if (name) elm.classList[add ? "add" : "remove"](name);
-    });
-}
-function addClass(elm, classes) {
-    toggleClass(elm, isString(classes) ? classes.split(" ") : classes, true);
-}
-function append(parent, children) {
-    forEach(children, parent.appendChild.bind(parent));
-}
-function before(nodes, ref) {
-    forEach(nodes, function(node) {
-        var parent = (ref || node).parentNode;
-        if (parent) parent.insertBefore(node, ref);
-    });
-}
-function matches(elm, selector) {
-    return isHTMLElement(elm) && (elm["msMatchesSelector"] || elm.matches).call(elm, selector);
-}
-function children(parent, selector) {
-    var children2 = parent ? slice(parent.children) : [];
-    return selector ? children2.filter(function(child) {
-        return matches(child, selector);
-    }) : children2;
-}
-function child(parent, selector) {
-    return selector ? children(parent, selector)[0] : parent.firstElementChild;
-}
-var ownKeys = Object.keys;
-function forOwn(object, iteratee, right) {
-    if (object) (right ? ownKeys(object).reverse() : ownKeys(object)).forEach(function(key) {
-        key !== "__proto__" && iteratee(object[key], key);
-    });
-    return object;
-}
-function assign(object) {
-    slice(arguments, 1).forEach(function(source) {
-        forOwn(source, function(value, key) {
-            object[key] = source[key];
-        });
-    });
-    return object;
-}
-function merge(object) {
-    slice(arguments, 1).forEach(function(source) {
-        forOwn(source, function(value, key) {
-            if (isArray(value)) object[key] = value.slice();
-            else if (isObject(value)) object[key] = merge({}, isObject(object[key]) ? object[key] : {}, value);
-            else object[key] = value;
-        });
-    });
-    return object;
-}
-function omit(object, keys) {
-    forEach(keys || ownKeys(object), function(key) {
-        delete object[key];
-    });
-}
-function removeAttribute(elms, attrs) {
-    forEach(elms, function(elm) {
-        forEach(attrs, function(attr) {
-            elm && elm.removeAttribute(attr);
-        });
-    });
-}
-function setAttribute(elms, attrs, value) {
-    if (isObject(attrs)) forOwn(attrs, function(value2, name) {
-        setAttribute(elms, name, value2);
-    });
-    else forEach(elms, function(elm) {
-        isNull(value) || value === "" ? removeAttribute(elm, attrs) : elm.setAttribute(attrs, String(value));
-    });
-}
-function create(tag, attrs, parent) {
-    var elm = document.createElement(tag);
-    if (attrs) isString(attrs) ? addClass(elm, attrs) : setAttribute(elm, attrs);
-    parent && append(parent, elm);
-    return elm;
-}
-function style(elm, prop, value) {
-    if (isUndefined(value)) return getComputedStyle(elm)[prop];
-    if (!isNull(value)) elm.style[prop] = "" + value;
-}
-function display(elm, display2) {
-    style(elm, "display", display2);
-}
-function focus(elm) {
-    elm["setActive"] && elm["setActive"]() || elm.focus({
-        preventScroll: true
-    });
-}
-function getAttribute(elm, attr) {
-    return elm.getAttribute(attr);
-}
-function hasClass(elm, className) {
-    return elm && elm.classList.contains(className);
-}
-function rect(target) {
-    return target.getBoundingClientRect();
-}
-function remove(nodes) {
-    forEach(nodes, function(node) {
-        if (node && node.parentNode) node.parentNode.removeChild(node);
-    });
-}
-function parseHtml(html) {
-    return child(new DOMParser().parseFromString(html, "text/html").body);
-}
-function prevent(e, stopPropagation) {
-    e.preventDefault();
-    if (stopPropagation) {
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-    }
-}
-function query(parent, selector) {
-    return parent && parent.querySelector(selector);
-}
-function queryAll(parent, selector) {
-    return selector ? slice(parent.querySelectorAll(selector)) : [];
-}
-function removeClass(elm, classes) {
-    toggleClass(elm, classes, false);
-}
-function timeOf(e) {
-    return e.timeStamp;
-}
-function unit(value) {
-    return isString(value) ? value : value ? value + "px" : "";
-}
-var PROJECT_CODE = "splide";
-var DATA_ATTRIBUTE = "data-" + PROJECT_CODE;
-function assert(condition, message) {
-    if (!condition) throw new Error("[" + PROJECT_CODE + "] " + (message || ""));
-}
-var min = Math.min, max = Math.max, floor = Math.floor, ceil = Math.ceil, abs = Math.abs;
-function approximatelyEqual(x, y, epsilon) {
-    return abs(x - y) < epsilon;
-}
-function between(number, x, y, exclusive) {
-    var minimum = min(x, y);
-    var maximum = max(x, y);
-    return exclusive ? minimum < number && number < maximum : minimum <= number && number <= maximum;
-}
-function clamp(number, x, y) {
-    var minimum = min(x, y);
-    var maximum = max(x, y);
-    return min(max(minimum, number), maximum);
-}
-function sign(x) {
-    return +(x > 0) - +(x < 0);
-}
-function camelToKebab(string) {
-    return string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
-}
-function format(string, replacements) {
-    forEach(replacements, function(replacement) {
-        string = string.replace("%s", "" + replacement);
-    });
-    return string;
-}
-function pad(number) {
-    return number < 10 ? "0" + number : "" + number;
-}
-var ids = {};
-function uniqueId(prefix) {
-    return "" + prefix + pad(ids[prefix] = (ids[prefix] || 0) + 1);
-}
-function EventBinder() {
-    var listeners = [];
-    function bind(targets, events, callback, options) {
-        forEachEvent(targets, events, function(target, event, namespace) {
-            var isEventTarget = "addEventListener" in target;
-            var remover = isEventTarget ? target.removeEventListener.bind(target, event, callback, options) : target["removeListener"].bind(target, callback);
-            isEventTarget ? target.addEventListener(event, callback, options) : target["addListener"](callback);
-            listeners.push([
-                target,
-                event,
-                namespace,
-                callback,
-                remover
-            ]);
-        });
-    }
-    function unbind(targets, events, callback) {
-        forEachEvent(targets, events, function(target, event, namespace) {
-            listeners = listeners.filter(function(listener) {
-                if (listener[0] === target && listener[1] === event && listener[2] === namespace && (!callback || listener[3] === callback)) {
-                    listener[4]();
-                    return false;
-                }
-                return true;
-            });
-        });
-    }
-    function dispatch(target, type, detail) {
-        var e;
-        var bubbles = true;
-        if (typeof CustomEvent === "function") e = new CustomEvent(type, {
-            bubbles: bubbles,
-            detail: detail
-        });
-        else {
-            e = document.createEvent("CustomEvent");
-            e.initCustomEvent(type, bubbles, false, detail);
-        }
-        target.dispatchEvent(e);
-        return e;
-    }
-    function forEachEvent(targets, events, iteratee) {
-        forEach(targets, function(target) {
-            target && forEach(events, function(events2) {
-                events2.split(" ").forEach(function(eventNS) {
-                    var fragment = eventNS.split(".");
-                    iteratee(target, fragment[0], fragment[1]);
-                });
-            });
-        });
-    }
-    function destroy() {
-        listeners.forEach(function(data) {
-            data[4]();
-        });
-        empty(listeners);
-    }
-    return {
-        bind: bind,
-        unbind: unbind,
-        dispatch: dispatch,
-        destroy: destroy
-    };
-}
-var EVENT_MOUNTED = "mounted";
-var EVENT_READY = "ready";
-var EVENT_MOVE = "move";
-var EVENT_MOVED = "moved";
-var EVENT_CLICK = "click";
-var EVENT_ACTIVE = "active";
-var EVENT_INACTIVE = "inactive";
-var EVENT_VISIBLE = "visible";
-var EVENT_HIDDEN = "hidden";
-var EVENT_REFRESH = "refresh";
-var EVENT_UPDATED = "updated";
-var EVENT_RESIZE = "resize";
-var EVENT_RESIZED = "resized";
-var EVENT_DRAG = "drag";
-var EVENT_DRAGGING = "dragging";
-var EVENT_DRAGGED = "dragged";
-var EVENT_SCROLL = "scroll";
-var EVENT_SCROLLED = "scrolled";
-var EVENT_OVERFLOW = "overflow";
-var EVENT_DESTROY = "destroy";
-var EVENT_ARROWS_MOUNTED = "arrows:mounted";
-var EVENT_ARROWS_UPDATED = "arrows:updated";
-var EVENT_PAGINATION_MOUNTED = "pagination:mounted";
-var EVENT_PAGINATION_UPDATED = "pagination:updated";
-var EVENT_NAVIGATION_MOUNTED = "navigation:mounted";
-var EVENT_AUTOPLAY_PLAY = "autoplay:play";
-var EVENT_AUTOPLAY_PLAYING = "autoplay:playing";
-var EVENT_AUTOPLAY_PAUSE = "autoplay:pause";
-var EVENT_LAZYLOAD_LOADED = "lazyload:loaded";
-var EVENT_SLIDE_KEYDOWN = "sk";
-var EVENT_SHIFTED = "sh";
-var EVENT_END_INDEX_CHANGED = "ei";
-function EventInterface(Splide2) {
-    var bus = Splide2 ? Splide2.event.bus : document.createDocumentFragment();
-    var binder = EventBinder();
-    function on(events, callback) {
-        binder.bind(bus, toArray(events).join(" "), function(e) {
-            callback.apply(callback, isArray(e.detail) ? e.detail : []);
-        });
-    }
-    function emit(event) {
-        binder.dispatch(bus, event, slice(arguments, 1));
-    }
-    if (Splide2) Splide2.event.on(EVENT_DESTROY, binder.destroy);
-    return assign(binder, {
-        bus: bus,
-        on: on,
-        off: apply(binder.unbind, bus),
-        emit: emit
-    });
-}
-function RequestInterval(interval, onInterval, onUpdate, limit) {
-    var now = Date.now;
-    var startTime;
-    var rate = 0;
-    var id;
-    var paused = true;
-    var count = 0;
-    function update() {
-        if (!paused) {
-            rate = interval ? min((now() - startTime) / interval, 1) : 1;
-            onUpdate && onUpdate(rate);
-            if (rate >= 1) {
-                onInterval();
-                startTime = now();
-                if (limit && ++count >= limit) return pause();
-            }
-            id = raf(update);
-        }
-    }
-    function start(resume) {
-        resume || cancel();
-        startTime = now() - (resume ? rate * interval : 0);
-        paused = false;
-        id = raf(update);
-    }
-    function pause() {
-        paused = true;
-    }
-    function rewind() {
-        startTime = now();
-        rate = 0;
-        if (onUpdate) onUpdate(rate);
-    }
-    function cancel() {
-        id && cancelAnimationFrame(id);
-        rate = 0;
-        id = 0;
-        paused = true;
-    }
-    function set(time) {
-        interval = time;
-    }
-    function isPaused() {
-        return paused;
-    }
-    return {
-        start: start,
-        rewind: rewind,
-        pause: pause,
-        cancel: cancel,
-        set: set,
-        isPaused: isPaused
-    };
-}
-function State(initialState) {
-    var state = initialState;
-    function set(value) {
-        state = value;
-    }
-    function is(states) {
-        return includes(toArray(states), state);
-    }
-    return {
-        set: set,
-        is: is
-    };
-}
-function Throttle(func, duration) {
-    var interval = RequestInterval(duration || 0, func, null, 1);
-    return function() {
-        interval.isPaused() && interval.start();
-    };
-}
-function Media(Splide2, Components2, options) {
-    var state = Splide2.state;
-    var breakpoints = options.breakpoints || {};
-    var reducedMotion = options.reducedMotion || {};
-    var binder = EventBinder();
-    var queries = [];
-    function setup() {
-        var isMin = options.mediaQuery === "min";
-        ownKeys(breakpoints).sort(function(n, m) {
-            return isMin ? +n - +m : +m - +n;
-        }).forEach(function(key) {
-            register(breakpoints[key], "(" + (isMin ? "min" : "max") + "-width:" + key + "px)");
-        });
-        register(reducedMotion, MEDIA_PREFERS_REDUCED_MOTION);
-        update();
-    }
-    function destroy(completely) {
-        if (completely) binder.destroy();
-    }
-    function register(options2, query) {
-        var queryList = matchMedia(query);
-        binder.bind(queryList, "change", update);
-        queries.push([
-            options2,
-            queryList
-        ]);
-    }
-    function update() {
-        var destroyed = state.is(DESTROYED);
-        var direction = options.direction;
-        var merged = queries.reduce(function(merged2, entry) {
-            return merge(merged2, entry[1].matches ? entry[0] : {});
-        }, {});
-        omit(options);
-        set(merged);
-        if (options.destroy) Splide2.destroy(options.destroy === "completely");
-        else if (destroyed) {
-            destroy(true);
-            Splide2.mount();
-        } else direction !== options.direction && Splide2.refresh();
-    }
-    function reduce(enable) {
-        if (matchMedia(MEDIA_PREFERS_REDUCED_MOTION).matches) enable ? merge(options, reducedMotion) : omit(options, ownKeys(reducedMotion));
-    }
-    function set(opts, base, notify) {
-        merge(options, opts);
-        base && merge(Object.getPrototypeOf(options), opts);
-        if (notify || !state.is(CREATED)) Splide2.emit(EVENT_UPDATED, options);
-    }
-    return {
-        setup: setup,
-        destroy: destroy,
-        reduce: reduce,
-        set: set
-    };
-}
-var ARROW = "Arrow";
-var ARROW_LEFT = ARROW + "Left";
-var ARROW_RIGHT = ARROW + "Right";
-var ARROW_UP = ARROW + "Up";
-var ARROW_DOWN = ARROW + "Down";
-var LTR = "ltr";
-var RTL = "rtl";
-var TTB = "ttb";
-var ORIENTATION_MAP = {
-    width: [
-        "height"
-    ],
-    left: [
-        "top",
-        "right"
-    ],
-    right: [
-        "bottom",
-        "left"
-    ],
-    x: [
-        "y"
-    ],
-    X: [
-        "Y"
-    ],
-    Y: [
-        "X"
-    ],
-    ArrowLeft: [
-        ARROW_UP,
-        ARROW_RIGHT
-    ],
-    ArrowRight: [
-        ARROW_DOWN,
-        ARROW_LEFT
-    ]
-};
-function Direction(Splide2, Components2, options) {
-    function resolve(prop, axisOnly, direction) {
-        direction = direction || options.direction;
-        var index = direction === RTL && !axisOnly ? 1 : direction === TTB ? 0 : -1;
-        return ORIENTATION_MAP[prop] && ORIENTATION_MAP[prop][index] || prop.replace(/width|left|right/i, function(match, offset) {
-            var replacement = ORIENTATION_MAP[match.toLowerCase()][index] || match;
-            return offset > 0 ? replacement.charAt(0).toUpperCase() + replacement.slice(1) : replacement;
-        });
-    }
-    function orient(value) {
-        return value * (options.direction === RTL ? 1 : -1);
-    }
-    return {
-        resolve: resolve,
-        orient: orient
-    };
-}
-var ROLE = "role";
-var TAB_INDEX = "tabindex";
-var DISABLED = "disabled";
-var ARIA_PREFIX = "aria-";
-var ARIA_CONTROLS = ARIA_PREFIX + "controls";
-var ARIA_CURRENT = ARIA_PREFIX + "current";
-var ARIA_SELECTED = ARIA_PREFIX + "selected";
-var ARIA_LABEL = ARIA_PREFIX + "label";
-var ARIA_LABELLEDBY = ARIA_PREFIX + "labelledby";
-var ARIA_HIDDEN = ARIA_PREFIX + "hidden";
-var ARIA_ORIENTATION = ARIA_PREFIX + "orientation";
-var ARIA_ROLEDESCRIPTION = ARIA_PREFIX + "roledescription";
-var ARIA_LIVE = ARIA_PREFIX + "live";
-var ARIA_BUSY = ARIA_PREFIX + "busy";
-var ARIA_ATOMIC = ARIA_PREFIX + "atomic";
-var ALL_ATTRIBUTES = [
-    ROLE,
-    TAB_INDEX,
-    DISABLED,
-    ARIA_CONTROLS,
-    ARIA_CURRENT,
-    ARIA_LABEL,
-    ARIA_LABELLEDBY,
-    ARIA_HIDDEN,
-    ARIA_ORIENTATION,
-    ARIA_ROLEDESCRIPTION
-];
-var CLASS_PREFIX = PROJECT_CODE + "__";
-var STATUS_CLASS_PREFIX = "is-";
-var CLASS_ROOT = PROJECT_CODE;
-var CLASS_TRACK = CLASS_PREFIX + "track";
-var CLASS_LIST = CLASS_PREFIX + "list";
-var CLASS_SLIDE = CLASS_PREFIX + "slide";
-var CLASS_CLONE = CLASS_SLIDE + "--clone";
-var CLASS_CONTAINER = CLASS_SLIDE + "__container";
-var CLASS_ARROWS = CLASS_PREFIX + "arrows";
-var CLASS_ARROW = CLASS_PREFIX + "arrow";
-var CLASS_ARROW_PREV = CLASS_ARROW + "--prev";
-var CLASS_ARROW_NEXT = CLASS_ARROW + "--next";
-var CLASS_PAGINATION = CLASS_PREFIX + "pagination";
-var CLASS_PAGINATION_PAGE = CLASS_PAGINATION + "__page";
-var CLASS_PROGRESS = CLASS_PREFIX + "progress";
-var CLASS_PROGRESS_BAR = CLASS_PROGRESS + "__bar";
-var CLASS_TOGGLE = CLASS_PREFIX + "toggle";
-var CLASS_TOGGLE_PLAY = CLASS_TOGGLE + "__play";
-var CLASS_TOGGLE_PAUSE = CLASS_TOGGLE + "__pause";
-var CLASS_SPINNER = CLASS_PREFIX + "spinner";
-var CLASS_SR = CLASS_PREFIX + "sr";
-var CLASS_INITIALIZED = STATUS_CLASS_PREFIX + "initialized";
-var CLASS_ACTIVE = STATUS_CLASS_PREFIX + "active";
-var CLASS_PREV = STATUS_CLASS_PREFIX + "prev";
-var CLASS_NEXT = STATUS_CLASS_PREFIX + "next";
-var CLASS_VISIBLE = STATUS_CLASS_PREFIX + "visible";
-var CLASS_LOADING = STATUS_CLASS_PREFIX + "loading";
-var CLASS_FOCUS_IN = STATUS_CLASS_PREFIX + "focus-in";
-var CLASS_OVERFLOW = STATUS_CLASS_PREFIX + "overflow";
-var STATUS_CLASSES = [
-    CLASS_ACTIVE,
-    CLASS_VISIBLE,
-    CLASS_PREV,
-    CLASS_NEXT,
-    CLASS_LOADING,
-    CLASS_FOCUS_IN,
-    CLASS_OVERFLOW
-];
-var CLASSES = {
-    slide: CLASS_SLIDE,
-    clone: CLASS_CLONE,
-    arrows: CLASS_ARROWS,
-    arrow: CLASS_ARROW,
-    prev: CLASS_ARROW_PREV,
-    next: CLASS_ARROW_NEXT,
-    pagination: CLASS_PAGINATION,
-    page: CLASS_PAGINATION_PAGE,
-    spinner: CLASS_SPINNER
-};
-function closest(from, selector) {
-    if (isFunction(from.closest)) return from.closest(selector);
-    var elm = from;
-    while(elm && elm.nodeType === 1){
-        if (matches(elm, selector)) break;
-        elm = elm.parentElement;
-    }
-    return elm;
-}
-var FRICTION = 5;
-var LOG_INTERVAL = 200;
-var POINTER_DOWN_EVENTS = "touchstart mousedown";
-var POINTER_MOVE_EVENTS = "touchmove mousemove";
-var POINTER_UP_EVENTS = "touchend touchcancel mouseup click";
-function Elements(Splide2, Components2, options) {
-    var _EventInterface = EventInterface(Splide2), on = _EventInterface.on, bind = _EventInterface.bind;
-    var root = Splide2.root;
-    var i18n = options.i18n;
-    var elements = {};
-    var slides = [];
-    var rootClasses = [];
-    var trackClasses = [];
-    var track;
-    var list;
-    var isUsingKey;
-    function setup() {
-        collect();
-        init();
-        update();
-    }
-    function mount() {
-        on(EVENT_REFRESH, destroy);
-        on(EVENT_REFRESH, setup);
-        on(EVENT_UPDATED, update);
-        bind(document, POINTER_DOWN_EVENTS + " keydown", function(e) {
-            isUsingKey = e.type === "keydown";
-        }, {
-            capture: true
-        });
-        bind(root, "focusin", function() {
-            toggleClass(root, CLASS_FOCUS_IN, !!isUsingKey);
-        });
-    }
-    function destroy(completely) {
-        var attrs = ALL_ATTRIBUTES.concat("style");
-        empty(slides);
-        removeClass(root, rootClasses);
-        removeClass(track, trackClasses);
-        removeAttribute([
-            track,
-            list
-        ], attrs);
-        removeAttribute(root, completely ? attrs : [
-            "style",
-            ARIA_ROLEDESCRIPTION
-        ]);
-    }
-    function update() {
-        removeClass(root, rootClasses);
-        removeClass(track, trackClasses);
-        rootClasses = getClasses(CLASS_ROOT);
-        trackClasses = getClasses(CLASS_TRACK);
-        addClass(root, rootClasses);
-        addClass(track, trackClasses);
-        setAttribute(root, ARIA_LABEL, options.label);
-        setAttribute(root, ARIA_LABELLEDBY, options.labelledby);
-    }
-    function collect() {
-        track = find("." + CLASS_TRACK);
-        list = child(track, "." + CLASS_LIST);
-        assert(track && list, "A track/list element is missing.");
-        push(slides, children(list, "." + CLASS_SLIDE + ":not(." + CLASS_CLONE + ")"));
-        forOwn({
-            arrows: CLASS_ARROWS,
-            pagination: CLASS_PAGINATION,
-            prev: CLASS_ARROW_PREV,
-            next: CLASS_ARROW_NEXT,
-            bar: CLASS_PROGRESS_BAR,
-            toggle: CLASS_TOGGLE
-        }, function(className, key) {
-            elements[key] = find("." + className);
-        });
-        assign(elements, {
-            root: root,
-            track: track,
-            list: list,
-            slides: slides
-        });
-    }
-    function init() {
-        var id = root.id || uniqueId(PROJECT_CODE);
-        var role = options.role;
-        root.id = id;
-        track.id = track.id || id + "-track";
-        list.id = list.id || id + "-list";
-        if (!getAttribute(root, ROLE) && root.tagName !== "SECTION" && role) setAttribute(root, ROLE, role);
-        setAttribute(root, ARIA_ROLEDESCRIPTION, i18n.carousel);
-        setAttribute(list, ROLE, "presentation");
-    }
-    function find(selector) {
-        var elm = query(root, selector);
-        return elm && closest(elm, "." + CLASS_ROOT) === root ? elm : void 0;
-    }
-    function getClasses(base) {
-        return [
-            base + "--" + options.type,
-            base + "--" + options.direction,
-            options.drag && base + "--draggable",
-            options.isNavigation && base + "--nav",
-            base === CLASS_ROOT && CLASS_ACTIVE
-        ];
-    }
-    return assign(elements, {
-        setup: setup,
-        mount: mount,
-        destroy: destroy
-    });
-}
-var SLIDE = "slide";
-var LOOP = "loop";
-var FADE = "fade";
-function Slide$1(Splide2, index, slideIndex, slide) {
-    var event = EventInterface(Splide2);
-    var on = event.on, emit = event.emit, bind = event.bind;
-    var Components = Splide2.Components, root = Splide2.root, options = Splide2.options;
-    var isNavigation = options.isNavigation, updateOnMove = options.updateOnMove, i18n = options.i18n, pagination = options.pagination, slideFocus = options.slideFocus;
-    var resolve = Components.Direction.resolve;
-    var styles = getAttribute(slide, "style");
-    var label = getAttribute(slide, ARIA_LABEL);
-    var isClone = slideIndex > -1;
-    var container = child(slide, "." + CLASS_CONTAINER);
-    var destroyed;
-    function mount() {
-        if (!isClone) {
-            slide.id = root.id + "-slide" + pad(index + 1);
-            setAttribute(slide, ROLE, pagination ? "tabpanel" : "group");
-            setAttribute(slide, ARIA_ROLEDESCRIPTION, i18n.slide);
-            setAttribute(slide, ARIA_LABEL, label || format(i18n.slideLabel, [
-                index + 1,
-                Splide2.length
-            ]));
-        }
-        listen();
-    }
-    function listen() {
-        bind(slide, "click", apply(emit, EVENT_CLICK, self));
-        bind(slide, "keydown", apply(emit, EVENT_SLIDE_KEYDOWN, self));
-        on([
-            EVENT_MOVED,
-            EVENT_SHIFTED,
-            EVENT_SCROLLED
-        ], update);
-        on(EVENT_NAVIGATION_MOUNTED, initNavigation);
-        if (updateOnMove) on(EVENT_MOVE, onMove);
-    }
-    function destroy() {
-        destroyed = true;
-        event.destroy();
-        removeClass(slide, STATUS_CLASSES);
-        removeAttribute(slide, ALL_ATTRIBUTES);
-        setAttribute(slide, "style", styles);
-        setAttribute(slide, ARIA_LABEL, label || "");
-    }
-    function initNavigation() {
-        var controls = Splide2.splides.map(function(target) {
-            var Slide2 = target.splide.Components.Slides.getAt(index);
-            return Slide2 ? Slide2.slide.id : "";
-        }).join(" ");
-        setAttribute(slide, ARIA_LABEL, format(i18n.slideX, (isClone ? slideIndex : index) + 1));
-        setAttribute(slide, ARIA_CONTROLS, controls);
-        setAttribute(slide, ROLE, slideFocus ? "button" : "");
-        slideFocus && removeAttribute(slide, ARIA_ROLEDESCRIPTION);
-    }
-    function onMove() {
-        if (!destroyed) update();
-    }
-    function update() {
-        if (!destroyed) {
-            var curr = Splide2.index;
-            updateActivity();
-            updateVisibility();
-            toggleClass(slide, CLASS_PREV, index === curr - 1);
-            toggleClass(slide, CLASS_NEXT, index === curr + 1);
-        }
-    }
-    function updateActivity() {
-        var active = isActive();
-        if (active !== hasClass(slide, CLASS_ACTIVE)) {
-            toggleClass(slide, CLASS_ACTIVE, active);
-            setAttribute(slide, ARIA_CURRENT, isNavigation && active || "");
-            emit(active ? EVENT_ACTIVE : EVENT_INACTIVE, self);
-        }
-    }
-    function updateVisibility() {
-        var visible = isVisible();
-        var hidden = !visible && (!isActive() || isClone);
-        if (!Splide2.state.is([
-            MOVING,
-            SCROLLING
-        ])) setAttribute(slide, ARIA_HIDDEN, hidden || "");
-        setAttribute(queryAll(slide, options.focusableNodes || ""), TAB_INDEX, hidden ? -1 : "");
-        if (slideFocus) setAttribute(slide, TAB_INDEX, hidden ? -1 : 0);
-        if (visible !== hasClass(slide, CLASS_VISIBLE)) {
-            toggleClass(slide, CLASS_VISIBLE, visible);
-            emit(visible ? EVENT_VISIBLE : EVENT_HIDDEN, self);
-        }
-        if (!visible && document.activeElement === slide) {
-            var Slide2 = Components.Slides.getAt(Splide2.index);
-            Slide2 && focus(Slide2.slide);
-        }
-    }
-    function style$1(prop, value, useContainer) {
-        style(useContainer && container || slide, prop, value);
-    }
-    function isActive() {
-        var curr = Splide2.index;
-        return curr === index || options.cloneStatus && curr === slideIndex;
-    }
-    function isVisible() {
-        if (Splide2.is(FADE)) return isActive();
-        var trackRect = rect(Components.Elements.track);
-        var slideRect = rect(slide);
-        var left = resolve("left", true);
-        var right = resolve("right", true);
-        return floor(trackRect[left]) <= ceil(slideRect[left]) && floor(slideRect[right]) <= ceil(trackRect[right]);
-    }
-    function isWithin(from, distance) {
-        var diff = abs(from - index);
-        if (!isClone && (options.rewind || Splide2.is(LOOP))) diff = min(diff, Splide2.length - diff);
-        return diff <= distance;
-    }
-    var self = {
-        index: index,
-        slideIndex: slideIndex,
-        slide: slide,
-        container: container,
-        isClone: isClone,
-        mount: mount,
-        destroy: destroy,
-        update: update,
-        style: style$1,
-        isWithin: isWithin
-    };
-    return self;
-}
-function Slides(Splide2, Components2, options) {
-    var _EventInterface2 = EventInterface(Splide2), on = _EventInterface2.on, emit = _EventInterface2.emit, bind = _EventInterface2.bind;
-    var _Components2$Elements = Components2.Elements, slides = _Components2$Elements.slides, list = _Components2$Elements.list;
-    var Slides2 = [];
-    function mount() {
-        init();
-        on(EVENT_REFRESH, destroy);
-        on(EVENT_REFRESH, init);
-    }
-    function init() {
-        slides.forEach(function(slide, index) {
-            register(slide, index, -1);
-        });
-    }
-    function destroy() {
-        forEach$1(function(Slide2) {
-            Slide2.destroy();
-        });
-        empty(Slides2);
-    }
-    function update() {
-        forEach$1(function(Slide2) {
-            Slide2.update();
-        });
-    }
-    function register(slide, index, slideIndex) {
-        var object = Slide$1(Splide2, index, slideIndex, slide);
-        object.mount();
-        Slides2.push(object);
-        Slides2.sort(function(Slide1, Slide2) {
-            return Slide1.index - Slide2.index;
-        });
-    }
-    function get(excludeClones) {
-        return excludeClones ? filter(function(Slide2) {
-            return !Slide2.isClone;
-        }) : Slides2;
-    }
-    function getIn(page) {
-        var Controller = Components2.Controller;
-        var index = Controller.toIndex(page);
-        var max = Controller.hasFocus() ? 1 : options.perPage;
-        return filter(function(Slide2) {
-            return between(Slide2.index, index, index + max - 1);
-        });
-    }
-    function getAt(index) {
-        return filter(index)[0];
-    }
-    function add(items, index) {
-        forEach(items, function(slide) {
-            if (isString(slide)) slide = parseHtml(slide);
-            if (isHTMLElement(slide)) {
-                var ref = slides[index];
-                ref ? before(slide, ref) : append(list, slide);
-                addClass(slide, options.classes.slide);
-                observeImages(slide, apply(emit, EVENT_RESIZE));
-            }
-        });
-        emit(EVENT_REFRESH);
-    }
-    function remove$1(matcher) {
-        remove(filter(matcher).map(function(Slide2) {
-            return Slide2.slide;
-        }));
-        emit(EVENT_REFRESH);
-    }
-    function forEach$1(iteratee, excludeClones) {
-        get(excludeClones).forEach(iteratee);
-    }
-    function filter(matcher) {
-        return Slides2.filter(isFunction(matcher) ? matcher : function(Slide2) {
-            return isString(matcher) ? matches(Slide2.slide, matcher) : includes(toArray(matcher), Slide2.index);
-        });
-    }
-    function style(prop, value, useContainer) {
-        forEach$1(function(Slide2) {
-            Slide2.style(prop, value, useContainer);
-        });
-    }
-    function observeImages(elm, callback) {
-        var images = queryAll(elm, "img");
-        var length = images.length;
-        if (length) images.forEach(function(img) {
-            bind(img, "load error", function() {
-                if (!--length) callback();
-            });
-        });
-        else callback();
-    }
-    function getLength(excludeClones) {
-        return excludeClones ? slides.length : Slides2.length;
-    }
-    function isEnough() {
-        return Slides2.length > options.perPage;
-    }
-    return {
-        mount: mount,
-        destroy: destroy,
-        update: update,
-        register: register,
-        get: get,
-        getIn: getIn,
-        getAt: getAt,
-        add: add,
-        remove: remove$1,
-        forEach: forEach$1,
-        filter: filter,
-        style: style,
-        getLength: getLength,
-        isEnough: isEnough
-    };
-}
-function Layout(Splide2, Components2, options) {
-    var _EventInterface3 = EventInterface(Splide2), on = _EventInterface3.on, bind = _EventInterface3.bind, emit = _EventInterface3.emit;
-    var Slides = Components2.Slides;
-    var resolve = Components2.Direction.resolve;
-    var _Components2$Elements2 = Components2.Elements, root = _Components2$Elements2.root, track = _Components2$Elements2.track, list = _Components2$Elements2.list;
-    var getAt = Slides.getAt, styleSlides = Slides.style;
-    var vertical;
-    var rootRect;
-    var overflow;
-    function mount() {
-        init();
-        bind(window, "resize load", Throttle(apply(emit, EVENT_RESIZE)));
-        on([
-            EVENT_UPDATED,
-            EVENT_REFRESH
-        ], init);
-        on(EVENT_RESIZE, resize);
-    }
-    function init() {
-        vertical = options.direction === TTB;
-        style(root, "maxWidth", unit(options.width));
-        style(track, resolve("paddingLeft"), cssPadding(false));
-        style(track, resolve("paddingRight"), cssPadding(true));
-        resize(true);
-    }
-    function resize(force) {
-        var newRect = rect(root);
-        if (force || rootRect.width !== newRect.width || rootRect.height !== newRect.height) {
-            style(track, "height", cssTrackHeight());
-            styleSlides(resolve("marginRight"), unit(options.gap));
-            styleSlides("width", cssSlideWidth());
-            styleSlides("height", cssSlideHeight(), true);
-            rootRect = newRect;
-            emit(EVENT_RESIZED);
-            if (overflow !== (overflow = isOverflow())) {
-                toggleClass(root, CLASS_OVERFLOW, overflow);
-                emit(EVENT_OVERFLOW, overflow);
-            }
-        }
-    }
-    function cssPadding(right) {
-        var padding = options.padding;
-        var prop = resolve(right ? "right" : "left");
-        return padding && unit(padding[prop] || (isObject(padding) ? 0 : padding)) || "0px";
-    }
-    function cssTrackHeight() {
-        var height = "";
-        if (vertical) {
-            height = cssHeight();
-            assert(height, "height or heightRatio is missing.");
-            height = "calc(" + height + " - " + cssPadding(false) + " - " + cssPadding(true) + ")";
-        }
-        return height;
-    }
-    function cssHeight() {
-        return unit(options.height || rect(list).width * options.heightRatio);
-    }
-    function cssSlideWidth() {
-        return options.autoWidth ? null : unit(options.fixedWidth) || (vertical ? "" : cssSlideSize());
-    }
-    function cssSlideHeight() {
-        return unit(options.fixedHeight) || (vertical ? options.autoHeight ? null : cssSlideSize() : cssHeight());
-    }
-    function cssSlideSize() {
-        var gap = unit(options.gap);
-        return "calc((100%" + (gap && " + " + gap) + ")/" + (options.perPage || 1) + (gap && " - " + gap) + ")";
-    }
-    function listSize() {
-        return rect(list)[resolve("width")];
-    }
-    function slideSize(index, withoutGap) {
-        var Slide = getAt(index || 0);
-        return Slide ? rect(Slide.slide)[resolve("width")] + (withoutGap ? 0 : getGap()) : 0;
-    }
-    function totalSize(index, withoutGap) {
-        var Slide = getAt(index);
-        if (Slide) {
-            var right = rect(Slide.slide)[resolve("right")];
-            var left = rect(list)[resolve("left")];
-            return abs(right - left) + (withoutGap ? 0 : getGap());
-        }
-        return 0;
-    }
-    function sliderSize(withoutGap) {
-        return totalSize(Splide2.length - 1) - totalSize(0) + slideSize(0, withoutGap);
-    }
-    function getGap() {
-        var Slide = getAt(0);
-        return Slide && parseFloat(style(Slide.slide, resolve("marginRight"))) || 0;
-    }
-    function getPadding(right) {
-        return parseFloat(style(track, resolve("padding" + (right ? "Right" : "Left")))) || 0;
-    }
-    function isOverflow() {
-        return Splide2.is(FADE) || sliderSize(true) > listSize();
-    }
-    return {
-        mount: mount,
-        resize: resize,
-        listSize: listSize,
-        slideSize: slideSize,
-        sliderSize: sliderSize,
-        totalSize: totalSize,
-        getPadding: getPadding,
-        isOverflow: isOverflow
-    };
-}
-var MULTIPLIER = 2;
-function Clones(Splide2, Components2, options) {
-    var event = EventInterface(Splide2);
-    var on = event.on;
-    var Elements = Components2.Elements, Slides = Components2.Slides;
-    var resolve = Components2.Direction.resolve;
-    var clones = [];
-    var cloneCount;
-    function mount() {
-        on(EVENT_REFRESH, remount);
-        on([
-            EVENT_UPDATED,
-            EVENT_RESIZE
-        ], observe);
-        if (cloneCount = computeCloneCount()) {
-            generate(cloneCount);
-            Components2.Layout.resize(true);
-        }
-    }
-    function remount() {
-        destroy();
-        mount();
-    }
-    function destroy() {
-        remove(clones);
-        empty(clones);
-        event.destroy();
-    }
-    function observe() {
-        var count = computeCloneCount();
-        if (cloneCount !== count) {
-            if (cloneCount < count || !count) event.emit(EVENT_REFRESH);
-        }
-    }
-    function generate(count) {
-        var slides = Slides.get().slice();
-        var length = slides.length;
-        if (length) {
-            while(slides.length < count)push(slides, slides);
-            push(slides.slice(-count), slides.slice(0, count)).forEach(function(Slide, index) {
-                var isHead = index < count;
-                var clone = cloneDeep(Slide.slide, index);
-                isHead ? before(clone, slides[0].slide) : append(Elements.list, clone);
-                push(clones, clone);
-                Slides.register(clone, index - count + (isHead ? 0 : length), Slide.index);
-            });
-        }
-    }
-    function cloneDeep(elm, index) {
-        var clone = elm.cloneNode(true);
-        addClass(clone, options.classes.clone);
-        clone.id = Splide2.root.id + "-clone" + pad(index + 1);
-        return clone;
-    }
-    function computeCloneCount() {
-        var clones2 = options.clones;
-        if (!Splide2.is(LOOP)) clones2 = 0;
-        else if (isUndefined(clones2)) {
-            var fixedSize = options[resolve("fixedWidth")] && Components2.Layout.slideSize(0);
-            var fixedCount = fixedSize && ceil(rect(Elements.track)[resolve("width")] / fixedSize);
-            clones2 = fixedCount || options[resolve("autoWidth")] && Splide2.length || options.perPage * MULTIPLIER;
-        }
-        return clones2;
-    }
-    return {
-        mount: mount,
-        destroy: destroy
-    };
-}
-function Move(Splide2, Components2, options) {
-    var _EventInterface4 = EventInterface(Splide2), on = _EventInterface4.on, emit = _EventInterface4.emit;
-    var set = Splide2.state.set;
-    var _Components2$Layout = Components2.Layout, slideSize = _Components2$Layout.slideSize, getPadding = _Components2$Layout.getPadding, totalSize = _Components2$Layout.totalSize, listSize = _Components2$Layout.listSize, sliderSize = _Components2$Layout.sliderSize;
-    var _Components2$Directio = Components2.Direction, resolve = _Components2$Directio.resolve, orient = _Components2$Directio.orient;
-    var _Components2$Elements3 = Components2.Elements, list = _Components2$Elements3.list, track = _Components2$Elements3.track;
-    var Transition;
-    function mount() {
-        Transition = Components2.Transition;
-        on([
-            EVENT_MOUNTED,
-            EVENT_RESIZED,
-            EVENT_UPDATED,
-            EVENT_REFRESH
-        ], reposition);
-    }
-    function reposition() {
-        if (!Components2.Controller.isBusy()) {
-            Components2.Scroll.cancel();
-            jump(Splide2.index);
-            Components2.Slides.update();
-        }
-    }
-    function move(dest, index, prev, callback) {
-        if (dest !== index && canShift(dest > prev)) {
-            cancel();
-            translate(shift(getPosition(), dest > prev), true);
-        }
-        set(MOVING);
-        emit(EVENT_MOVE, index, prev, dest);
-        Transition.start(index, function() {
-            set(IDLE);
-            emit(EVENT_MOVED, index, prev, dest);
-            callback && callback();
-        });
-    }
-    function jump(index) {
-        translate(toPosition(index, true));
-    }
-    function translate(position, preventLoop) {
-        if (!Splide2.is(FADE)) {
-            var destination = preventLoop ? position : loop(position);
-            style(list, "transform", "translate" + resolve("X") + "(" + destination + "px)");
-            position !== destination && emit(EVENT_SHIFTED);
-        }
-    }
-    function loop(position) {
-        if (Splide2.is(LOOP)) {
-            var index = toIndex(position);
-            var exceededMax = index > Components2.Controller.getEnd();
-            var exceededMin = index < 0;
-            if (exceededMin || exceededMax) position = shift(position, exceededMax);
-        }
-        return position;
-    }
-    function shift(position, backwards) {
-        var excess = position - getLimit(backwards);
-        var size = sliderSize();
-        position -= orient(size * (ceil(abs(excess) / size) || 1)) * (backwards ? 1 : -1);
-        return position;
-    }
-    function cancel() {
-        translate(getPosition(), true);
-        Transition.cancel();
-    }
-    function toIndex(position) {
-        var Slides = Components2.Slides.get();
-        var index = 0;
-        var minDistance = Infinity;
-        for(var i = 0; i < Slides.length; i++){
-            var slideIndex = Slides[i].index;
-            var distance = abs(toPosition(slideIndex, true) - position);
-            if (distance <= minDistance) {
-                minDistance = distance;
-                index = slideIndex;
-            } else break;
-        }
-        return index;
-    }
-    function toPosition(index, trimming) {
-        var position = orient(totalSize(index - 1) - offset(index));
-        return trimming ? trim(position) : position;
-    }
-    function getPosition() {
-        var left = resolve("left");
-        return rect(list)[left] - rect(track)[left] + orient(getPadding(false));
-    }
-    function trim(position) {
-        if (options.trimSpace && Splide2.is(SLIDE)) position = clamp(position, 0, orient(sliderSize(true) - listSize()));
-        return position;
-    }
-    function offset(index) {
-        var focus = options.focus;
-        return focus === "center" ? (listSize() - slideSize(index, true)) / 2 : +focus * slideSize(index) || 0;
-    }
-    function getLimit(max) {
-        return toPosition(max ? Components2.Controller.getEnd() : 0, !!options.trimSpace);
-    }
-    function canShift(backwards) {
-        var shifted = orient(shift(getPosition(), backwards));
-        return backwards ? shifted >= 0 : shifted <= list[resolve("scrollWidth")] - rect(track)[resolve("width")];
-    }
-    function exceededLimit(max, position) {
-        position = isUndefined(position) ? getPosition() : position;
-        var exceededMin = max !== true && orient(position) < orient(getLimit(false));
-        var exceededMax = max !== false && orient(position) > orient(getLimit(true));
-        return exceededMin || exceededMax;
-    }
-    return {
-        mount: mount,
-        move: move,
-        jump: jump,
-        translate: translate,
-        shift: shift,
-        cancel: cancel,
-        toIndex: toIndex,
-        toPosition: toPosition,
-        getPosition: getPosition,
-        getLimit: getLimit,
-        exceededLimit: exceededLimit,
-        reposition: reposition
-    };
-}
-function Controller(Splide2, Components2, options) {
-    var _EventInterface5 = EventInterface(Splide2), on = _EventInterface5.on, emit = _EventInterface5.emit;
-    var Move = Components2.Move;
-    var getPosition = Move.getPosition, getLimit = Move.getLimit, toPosition = Move.toPosition;
-    var _Components2$Slides = Components2.Slides, isEnough = _Components2$Slides.isEnough, getLength = _Components2$Slides.getLength;
-    var omitEnd = options.omitEnd;
-    var isLoop = Splide2.is(LOOP);
-    var isSlide = Splide2.is(SLIDE);
-    var getNext = apply(getAdjacent, false);
-    var getPrev = apply(getAdjacent, true);
-    var currIndex = options.start || 0;
-    var endIndex;
-    var prevIndex = currIndex;
-    var slideCount;
-    var perMove;
-    var perPage;
-    function mount() {
-        init();
-        on([
-            EVENT_UPDATED,
-            EVENT_REFRESH,
-            EVENT_END_INDEX_CHANGED
-        ], init);
-        on(EVENT_RESIZED, onResized);
-    }
-    function init() {
-        slideCount = getLength(true);
-        perMove = options.perMove;
-        perPage = options.perPage;
-        endIndex = getEnd();
-        var index = clamp(currIndex, 0, omitEnd ? endIndex : slideCount - 1);
-        if (index !== currIndex) {
-            currIndex = index;
-            Move.reposition();
-        }
-    }
-    function onResized() {
-        if (endIndex !== getEnd()) emit(EVENT_END_INDEX_CHANGED);
-    }
-    function go(control, allowSameIndex, callback) {
-        if (!isBusy()) {
-            var dest = parse(control);
-            var index = loop(dest);
-            if (index > -1 && (allowSameIndex || index !== currIndex)) {
-                setIndex(index);
-                Move.move(dest, index, prevIndex, callback);
-            }
-        }
-    }
-    function scroll(destination, duration, snap, callback) {
-        Components2.Scroll.scroll(destination, duration, snap, function() {
-            var index = loop(Move.toIndex(getPosition()));
-            setIndex(omitEnd ? min(index, endIndex) : index);
-            callback && callback();
-        });
-    }
-    function parse(control) {
-        var index = currIndex;
-        if (isString(control)) {
-            var _ref = control.match(/([+\-<>])(\d+)?/) || [], indicator = _ref[1], number = _ref[2];
-            if (indicator === "+" || indicator === "-") index = computeDestIndex(currIndex + +("" + indicator + (+number || 1)), currIndex);
-            else if (indicator === ">") index = number ? toIndex(+number) : getNext(true);
-            else if (indicator === "<") index = getPrev(true);
-        } else index = isLoop ? control : clamp(control, 0, endIndex);
-        return index;
-    }
-    function getAdjacent(prev, destination) {
-        var number = perMove || (hasFocus() ? 1 : perPage);
-        var dest = computeDestIndex(currIndex + number * (prev ? -1 : 1), currIndex, !(perMove || hasFocus()));
-        if (dest === -1 && isSlide) {
-            if (!approximatelyEqual(getPosition(), getLimit(!prev), 1)) return prev ? 0 : endIndex;
-        }
-        return destination ? dest : loop(dest);
-    }
-    function computeDestIndex(dest, from, snapPage) {
-        if (isEnough() || hasFocus()) {
-            var index = computeMovableDestIndex(dest);
-            if (index !== dest) {
-                from = dest;
-                dest = index;
-                snapPage = false;
-            }
-            if (dest < 0 || dest > endIndex) {
-                if (!perMove && (between(0, dest, from, true) || between(endIndex, from, dest, true))) dest = toIndex(toPage(dest));
-                else {
-                    if (isLoop) dest = snapPage ? dest < 0 ? -(slideCount % perPage || perPage) : slideCount : dest;
-                    else if (options.rewind) dest = dest < 0 ? endIndex : 0;
-                    else dest = -1;
-                }
-            } else if (snapPage && dest !== from) dest = toIndex(toPage(from) + (dest < from ? -1 : 1));
-        } else dest = -1;
-        return dest;
-    }
-    function computeMovableDestIndex(dest) {
-        if (isSlide && options.trimSpace === "move" && dest !== currIndex) {
-            var position = getPosition();
-            while(position === toPosition(dest, true) && between(dest, 0, Splide2.length - 1, !options.rewind))dest < currIndex ? --dest : ++dest;
-        }
-        return dest;
-    }
-    function loop(index) {
-        return isLoop ? (index + slideCount) % slideCount || 0 : index;
-    }
-    function getEnd() {
-        var end = slideCount - (hasFocus() || isLoop && perMove ? 1 : perPage);
-        while(omitEnd && end-- > 0)if (toPosition(slideCount - 1, true) !== toPosition(end, true)) {
-            end++;
-            break;
-        }
-        return clamp(end, 0, slideCount - 1);
-    }
-    function toIndex(page) {
-        return clamp(hasFocus() ? page : perPage * page, 0, endIndex);
-    }
-    function toPage(index) {
-        return hasFocus() ? min(index, endIndex) : floor((index >= endIndex ? slideCount - 1 : index) / perPage);
-    }
-    function toDest(destination) {
-        var closest = Move.toIndex(destination);
-        return isSlide ? clamp(closest, 0, endIndex) : closest;
-    }
-    function setIndex(index) {
-        if (index !== currIndex) {
-            prevIndex = currIndex;
-            currIndex = index;
-        }
-    }
-    function getIndex(prev) {
-        return prev ? prevIndex : currIndex;
-    }
-    function hasFocus() {
-        return !isUndefined(options.focus) || options.isNavigation;
-    }
-    function isBusy() {
-        return Splide2.state.is([
-            MOVING,
-            SCROLLING
-        ]) && !!options.waitForTransition;
-    }
-    return {
-        mount: mount,
-        go: go,
-        scroll: scroll,
-        getNext: getNext,
-        getPrev: getPrev,
-        getAdjacent: getAdjacent,
-        getEnd: getEnd,
-        setIndex: setIndex,
-        getIndex: getIndex,
-        toIndex: toIndex,
-        toPage: toPage,
-        toDest: toDest,
-        hasFocus: hasFocus,
-        isBusy: isBusy
-    };
-}
-var XML_NAME_SPACE = "http://www.w3.org/2000/svg";
-var PATH = "m15.5 0.932-4.3 4.38 14.5 14.6-14.5 14.5 4.3 4.4 14.6-14.6 4.4-4.3-4.4-4.4-14.6-14.6z";
-var SIZE = 40;
-function Arrows(Splide2, Components2, options) {
-    var event = EventInterface(Splide2);
-    var on = event.on, bind = event.bind, emit = event.emit;
-    var classes = options.classes, i18n = options.i18n;
-    var Elements = Components2.Elements, Controller = Components2.Controller;
-    var placeholder = Elements.arrows, track = Elements.track;
-    var wrapper = placeholder;
-    var prev = Elements.prev;
-    var next = Elements.next;
-    var created;
-    var wrapperClasses;
-    var arrows = {};
-    function mount() {
-        init();
-        on(EVENT_UPDATED, remount);
-    }
-    function remount() {
-        destroy();
-        mount();
-    }
-    function init() {
-        var enabled = options.arrows;
-        if (enabled && !(prev && next)) createArrows();
-        if (prev && next) {
-            assign(arrows, {
-                prev: prev,
-                next: next
-            });
-            display(wrapper, enabled ? "" : "none");
-            addClass(wrapper, wrapperClasses = CLASS_ARROWS + "--" + options.direction);
-            if (enabled) {
-                listen();
-                update();
-                setAttribute([
-                    prev,
-                    next
-                ], ARIA_CONTROLS, track.id);
-                emit(EVENT_ARROWS_MOUNTED, prev, next);
-            }
-        }
-    }
-    function destroy() {
-        event.destroy();
-        removeClass(wrapper, wrapperClasses);
-        if (created) {
-            remove(placeholder ? [
-                prev,
-                next
-            ] : wrapper);
-            prev = next = null;
-        } else removeAttribute([
-            prev,
-            next
-        ], ALL_ATTRIBUTES);
-    }
-    function listen() {
-        on([
-            EVENT_MOUNTED,
-            EVENT_MOVED,
-            EVENT_REFRESH,
-            EVENT_SCROLLED,
-            EVENT_END_INDEX_CHANGED
-        ], update);
-        bind(next, "click", apply(go, ">"));
-        bind(prev, "click", apply(go, "<"));
-    }
-    function go(control) {
-        Controller.go(control, true);
-    }
-    function createArrows() {
-        wrapper = placeholder || create("div", classes.arrows);
-        prev = createArrow(true);
-        next = createArrow(false);
-        created = true;
-        append(wrapper, [
-            prev,
-            next
-        ]);
-        !placeholder && before(wrapper, track);
-    }
-    function createArrow(prev2) {
-        var arrow = '<button class="' + classes.arrow + " " + (prev2 ? classes.prev : classes.next) + '" type="button"><svg xmlns="' + XML_NAME_SPACE + '" viewBox="0 0 ' + SIZE + " " + SIZE + '" width="' + SIZE + '" height="' + SIZE + '" focusable="false"><path d="' + (options.arrowPath || PATH) + '" />';
-        return parseHtml(arrow);
-    }
-    function update() {
-        if (prev && next) {
-            var index = Splide2.index;
-            var prevIndex = Controller.getPrev();
-            var nextIndex = Controller.getNext();
-            var prevLabel = prevIndex > -1 && index < prevIndex ? i18n.last : i18n.prev;
-            var nextLabel = nextIndex > -1 && index > nextIndex ? i18n.first : i18n.next;
-            prev.disabled = prevIndex < 0;
-            next.disabled = nextIndex < 0;
-            setAttribute(prev, ARIA_LABEL, prevLabel);
-            setAttribute(next, ARIA_LABEL, nextLabel);
-            emit(EVENT_ARROWS_UPDATED, prev, next, prevIndex, nextIndex);
-        }
-    }
-    return {
-        arrows: arrows,
-        mount: mount,
-        destroy: destroy,
-        update: update
-    };
-}
-var INTERVAL_DATA_ATTRIBUTE = DATA_ATTRIBUTE + "-interval";
-function Autoplay(Splide2, Components2, options) {
-    var _EventInterface6 = EventInterface(Splide2), on = _EventInterface6.on, bind = _EventInterface6.bind, emit = _EventInterface6.emit;
-    var interval = RequestInterval(options.interval, Splide2.go.bind(Splide2, ">"), onAnimationFrame);
-    var isPaused = interval.isPaused;
-    var Elements = Components2.Elements, _Components2$Elements4 = Components2.Elements, root = _Components2$Elements4.root, toggle = _Components2$Elements4.toggle;
-    var autoplay = options.autoplay;
-    var hovered;
-    var focused;
-    var stopped = autoplay === "pause";
-    function mount() {
-        if (autoplay) {
-            listen();
-            toggle && setAttribute(toggle, ARIA_CONTROLS, Elements.track.id);
-            stopped || play();
-            update();
-        }
-    }
-    function listen() {
-        if (options.pauseOnHover) bind(root, "mouseenter mouseleave", function(e) {
-            hovered = e.type === "mouseenter";
-            autoToggle();
-        });
-        if (options.pauseOnFocus) bind(root, "focusin focusout", function(e) {
-            focused = e.type === "focusin";
-            autoToggle();
-        });
-        if (toggle) bind(toggle, "click", function() {
-            stopped ? play() : pause(true);
-        });
-        on([
-            EVENT_MOVE,
-            EVENT_SCROLL,
-            EVENT_REFRESH
-        ], interval.rewind);
-        on(EVENT_MOVE, onMove);
-    }
-    function play() {
-        if (isPaused() && Components2.Slides.isEnough()) {
-            interval.start(!options.resetProgress);
-            focused = hovered = stopped = false;
-            update();
-            emit(EVENT_AUTOPLAY_PLAY);
-        }
-    }
-    function pause(stop) {
-        if (stop === void 0) stop = true;
-        stopped = !!stop;
-        update();
-        if (!isPaused()) {
-            interval.pause();
-            emit(EVENT_AUTOPLAY_PAUSE);
-        }
-    }
-    function autoToggle() {
-        if (!stopped) hovered || focused ? pause(false) : play();
-    }
-    function update() {
-        if (toggle) {
-            toggleClass(toggle, CLASS_ACTIVE, !stopped);
-            setAttribute(toggle, ARIA_LABEL, options.i18n[stopped ? "play" : "pause"]);
-        }
-    }
-    function onAnimationFrame(rate) {
-        var bar = Elements.bar;
-        bar && style(bar, "width", rate * 100 + "%");
-        emit(EVENT_AUTOPLAY_PLAYING, rate);
-    }
-    function onMove(index) {
-        var Slide = Components2.Slides.getAt(index);
-        interval.set(Slide && +getAttribute(Slide.slide, INTERVAL_DATA_ATTRIBUTE) || options.interval);
-    }
-    return {
-        mount: mount,
-        destroy: interval.cancel,
-        play: play,
-        pause: pause,
-        isPaused: isPaused
-    };
-}
-function Cover(Splide2, Components2, options) {
-    var _EventInterface7 = EventInterface(Splide2), on = _EventInterface7.on;
-    function mount() {
-        if (options.cover) {
-            on(EVENT_LAZYLOAD_LOADED, apply(toggle, true));
-            on([
-                EVENT_MOUNTED,
-                EVENT_UPDATED,
-                EVENT_REFRESH
-            ], apply(cover, true));
-        }
-    }
-    function cover(cover2) {
-        Components2.Slides.forEach(function(Slide) {
-            var img = child(Slide.container || Slide.slide, "img");
-            if (img && img.src) toggle(cover2, img, Slide);
-        });
-    }
-    function toggle(cover2, img, Slide) {
-        Slide.style("background", cover2 ? 'center/cover no-repeat url("' + img.src + '")' : "", true);
-        display(img, cover2 ? "none" : "");
-    }
-    return {
-        mount: mount,
-        destroy: apply(cover, false)
-    };
-}
-var BOUNCE_DIFF_THRESHOLD = 10;
-var BOUNCE_DURATION = 600;
-var FRICTION_FACTOR = 0.6;
-var BASE_VELOCITY = 1.5;
-var MIN_DURATION = 800;
-function Scroll(Splide2, Components2, options) {
-    var _EventInterface8 = EventInterface(Splide2), on = _EventInterface8.on, emit = _EventInterface8.emit;
-    var set = Splide2.state.set;
-    var Move = Components2.Move;
-    var getPosition = Move.getPosition, getLimit = Move.getLimit, exceededLimit = Move.exceededLimit, translate = Move.translate;
-    var isSlide = Splide2.is(SLIDE);
-    var interval;
-    var callback;
-    var friction = 1;
-    function mount() {
-        on(EVENT_MOVE, clear);
-        on([
-            EVENT_UPDATED,
-            EVENT_REFRESH
-        ], cancel);
-    }
-    function scroll(destination, duration, snap, onScrolled, noConstrain) {
-        var from = getPosition();
-        clear();
-        if (snap && (!isSlide || !exceededLimit())) {
-            var size = Components2.Layout.sliderSize();
-            var offset = sign(destination) * size * floor(abs(destination) / size) || 0;
-            destination = Move.toPosition(Components2.Controller.toDest(destination % size)) + offset;
-        }
-        var noDistance = approximatelyEqual(from, destination, 1);
-        friction = 1;
-        duration = noDistance ? 0 : duration || max(abs(destination - from) / BASE_VELOCITY, MIN_DURATION);
-        callback = onScrolled;
-        interval = RequestInterval(duration, onEnd, apply(update, from, destination, noConstrain), 1);
-        set(SCROLLING);
-        emit(EVENT_SCROLL);
-        interval.start();
-    }
-    function onEnd() {
-        set(IDLE);
-        callback && callback();
-        emit(EVENT_SCROLLED);
-    }
-    function update(from, to, noConstrain, rate) {
-        var position = getPosition();
-        var target = from + (to - from) * easing(rate);
-        var diff = (target - position) * friction;
-        translate(position + diff);
-        if (isSlide && !noConstrain && exceededLimit()) {
-            friction *= FRICTION_FACTOR;
-            if (abs(diff) < BOUNCE_DIFF_THRESHOLD) scroll(getLimit(exceededLimit(true)), BOUNCE_DURATION, false, callback, true);
-        }
-    }
-    function clear() {
-        if (interval) interval.cancel();
-    }
-    function cancel() {
-        if (interval && !interval.isPaused()) {
-            clear();
-            onEnd();
-        }
-    }
-    function easing(t) {
-        var easingFunc = options.easingFunc;
-        return easingFunc ? easingFunc(t) : 1 - Math.pow(1 - t, 4);
-    }
-    return {
-        mount: mount,
-        destroy: clear,
-        scroll: scroll,
-        cancel: cancel
-    };
-}
-var SCROLL_LISTENER_OPTIONS = {
-    passive: false,
-    capture: true
-};
-function Drag(Splide2, Components2, options) {
-    var _EventInterface9 = EventInterface(Splide2), on = _EventInterface9.on, emit = _EventInterface9.emit, bind = _EventInterface9.bind, unbind = _EventInterface9.unbind;
-    var state = Splide2.state;
-    var Move = Components2.Move, Scroll = Components2.Scroll, Controller = Components2.Controller, track = Components2.Elements.track, reduce = Components2.Media.reduce;
-    var _Components2$Directio2 = Components2.Direction, resolve = _Components2$Directio2.resolve, orient = _Components2$Directio2.orient;
-    var getPosition = Move.getPosition, exceededLimit = Move.exceededLimit;
-    var basePosition;
-    var baseEvent;
-    var prevBaseEvent;
-    var isFree;
-    var dragging;
-    var exceeded = false;
-    var clickPrevented;
-    var disabled;
-    var target;
-    function mount() {
-        bind(track, POINTER_MOVE_EVENTS, noop, SCROLL_LISTENER_OPTIONS);
-        bind(track, POINTER_UP_EVENTS, noop, SCROLL_LISTENER_OPTIONS);
-        bind(track, POINTER_DOWN_EVENTS, onPointerDown, SCROLL_LISTENER_OPTIONS);
-        bind(track, "click", onClick, {
-            capture: true
-        });
-        bind(track, "dragstart", prevent);
-        on([
-            EVENT_MOUNTED,
-            EVENT_UPDATED
-        ], init);
-    }
-    function init() {
-        var drag = options.drag;
-        disable(!drag);
-        isFree = drag === "free";
-    }
-    function onPointerDown(e) {
-        clickPrevented = false;
-        if (!disabled) {
-            var isTouch = isTouchEvent(e);
-            if (isDraggable(e.target) && (isTouch || !e.button)) {
-                if (!Controller.isBusy()) {
-                    target = isTouch ? track : window;
-                    dragging = state.is([
-                        MOVING,
-                        SCROLLING
-                    ]);
-                    prevBaseEvent = null;
-                    bind(target, POINTER_MOVE_EVENTS, onPointerMove, SCROLL_LISTENER_OPTIONS);
-                    bind(target, POINTER_UP_EVENTS, onPointerUp, SCROLL_LISTENER_OPTIONS);
-                    Move.cancel();
-                    Scroll.cancel();
-                    save(e);
-                } else prevent(e, true);
-            }
-        }
-    }
-    function onPointerMove(e) {
-        if (!state.is(DRAGGING)) {
-            state.set(DRAGGING);
-            emit(EVENT_DRAG);
-        }
-        if (e.cancelable) {
-            if (dragging) {
-                Move.translate(basePosition + constrain(diffCoord(e)));
-                var expired = diffTime(e) > LOG_INTERVAL;
-                var hasExceeded = exceeded !== (exceeded = exceededLimit());
-                if (expired || hasExceeded) save(e);
-                clickPrevented = true;
-                emit(EVENT_DRAGGING);
-                prevent(e);
-            } else if (isSliderDirection(e)) {
-                dragging = shouldStart(e);
-                prevent(e);
-            }
-        }
-    }
-    function onPointerUp(e) {
-        if (state.is(DRAGGING)) {
-            state.set(IDLE);
-            emit(EVENT_DRAGGED);
-        }
-        if (dragging) {
-            move(e);
-            prevent(e);
-        }
-        unbind(target, POINTER_MOVE_EVENTS, onPointerMove);
-        unbind(target, POINTER_UP_EVENTS, onPointerUp);
-        dragging = false;
-    }
-    function onClick(e) {
-        if (!disabled && clickPrevented) prevent(e, true);
-    }
-    function save(e) {
-        prevBaseEvent = baseEvent;
-        baseEvent = e;
-        basePosition = getPosition();
-    }
-    function move(e) {
-        var velocity = computeVelocity(e);
-        var destination = computeDestination(velocity);
-        var rewind = options.rewind && options.rewindByDrag;
-        reduce(false);
-        if (isFree) Controller.scroll(destination, 0, options.snap);
-        else if (Splide2.is(FADE)) Controller.go(orient(sign(velocity)) < 0 ? rewind ? "<" : "-" : rewind ? ">" : "+");
-        else if (Splide2.is(SLIDE) && exceeded && rewind) Controller.go(exceededLimit(true) ? ">" : "<");
-        else Controller.go(Controller.toDest(destination), true);
-        reduce(true);
-    }
-    function shouldStart(e) {
-        var thresholds = options.dragMinThreshold;
-        var isObj = isObject(thresholds);
-        var mouse = isObj && thresholds.mouse || 0;
-        var touch = (isObj ? thresholds.touch : +thresholds) || 10;
-        return abs(diffCoord(e)) > (isTouchEvent(e) ? touch : mouse);
-    }
-    function isSliderDirection(e) {
-        return abs(diffCoord(e)) > abs(diffCoord(e, true));
-    }
-    function computeVelocity(e) {
-        if (Splide2.is(LOOP) || !exceeded) {
-            var time = diffTime(e);
-            if (time && time < LOG_INTERVAL) return diffCoord(e) / time;
-        }
-        return 0;
-    }
-    function computeDestination(velocity) {
-        return getPosition() + sign(velocity) * min(abs(velocity) * (options.flickPower || 600), isFree ? Infinity : Components2.Layout.listSize() * (options.flickMaxPages || 1));
-    }
-    function diffCoord(e, orthogonal) {
-        return coordOf(e, orthogonal) - coordOf(getBaseEvent(e), orthogonal);
-    }
-    function diffTime(e) {
-        return timeOf(e) - timeOf(getBaseEvent(e));
-    }
-    function getBaseEvent(e) {
-        return baseEvent === e && prevBaseEvent || baseEvent;
-    }
-    function coordOf(e, orthogonal) {
-        return (isTouchEvent(e) ? e.changedTouches[0] : e)["page" + resolve(orthogonal ? "Y" : "X")];
-    }
-    function constrain(diff) {
-        return diff / (exceeded && Splide2.is(SLIDE) ? FRICTION : 1);
-    }
-    function isDraggable(target2) {
-        var noDrag = options.noDrag;
-        return !matches(target2, "." + CLASS_PAGINATION_PAGE + ", ." + CLASS_ARROW) && (!noDrag || !matches(target2, noDrag));
-    }
-    function isTouchEvent(e) {
-        return typeof TouchEvent !== "undefined" && e instanceof TouchEvent;
-    }
-    function isDragging() {
-        return dragging;
-    }
-    function disable(value) {
-        disabled = value;
-    }
-    return {
-        mount: mount,
-        disable: disable,
-        isDragging: isDragging
-    };
-}
-var NORMALIZATION_MAP = {
-    Spacebar: " ",
-    Right: ARROW_RIGHT,
-    Left: ARROW_LEFT,
-    Up: ARROW_UP,
-    Down: ARROW_DOWN
-};
-function normalizeKey(key) {
-    key = isString(key) ? key : key.key;
-    return NORMALIZATION_MAP[key] || key;
-}
-var KEYBOARD_EVENT = "keydown";
-function Keyboard(Splide2, Components2, options) {
-    var _EventInterface10 = EventInterface(Splide2), on = _EventInterface10.on, bind = _EventInterface10.bind, unbind = _EventInterface10.unbind;
-    var root = Splide2.root;
-    var resolve = Components2.Direction.resolve;
-    var target;
-    var disabled;
-    function mount() {
-        init();
-        on(EVENT_UPDATED, destroy);
-        on(EVENT_UPDATED, init);
-        on(EVENT_MOVE, onMove);
-    }
-    function init() {
-        var keyboard = options.keyboard;
-        if (keyboard) {
-            target = keyboard === "global" ? window : root;
-            bind(target, KEYBOARD_EVENT, onKeydown);
-        }
-    }
-    function destroy() {
-        unbind(target, KEYBOARD_EVENT);
-    }
-    function disable(value) {
-        disabled = value;
-    }
-    function onMove() {
-        var _disabled = disabled;
-        disabled = true;
-        nextTick(function() {
-            disabled = _disabled;
-        });
-    }
-    function onKeydown(e) {
-        if (!disabled) {
-            var key = normalizeKey(e);
-            if (key === resolve(ARROW_LEFT)) Splide2.go("<");
-            else if (key === resolve(ARROW_RIGHT)) Splide2.go(">");
-        }
-    }
-    return {
-        mount: mount,
-        destroy: destroy,
-        disable: disable
-    };
-}
-var SRC_DATA_ATTRIBUTE = DATA_ATTRIBUTE + "-lazy";
-var SRCSET_DATA_ATTRIBUTE = SRC_DATA_ATTRIBUTE + "-srcset";
-var IMAGE_SELECTOR = "[" + SRC_DATA_ATTRIBUTE + "], [" + SRCSET_DATA_ATTRIBUTE + "]";
-function LazyLoad(Splide2, Components2, options) {
-    var _EventInterface11 = EventInterface(Splide2), on = _EventInterface11.on, off = _EventInterface11.off, bind = _EventInterface11.bind, emit = _EventInterface11.emit;
-    var isSequential = options.lazyLoad === "sequential";
-    var events = [
-        EVENT_MOVED,
-        EVENT_SCROLLED
-    ];
-    var entries = [];
-    function mount() {
-        if (options.lazyLoad) {
-            init();
-            on(EVENT_REFRESH, init);
-        }
-    }
-    function init() {
-        empty(entries);
-        register();
-        if (isSequential) loadNext();
-        else {
-            off(events);
-            on(events, check);
-            check();
-        }
-    }
-    function register() {
-        Components2.Slides.forEach(function(Slide) {
-            queryAll(Slide.slide, IMAGE_SELECTOR).forEach(function(img) {
-                var src = getAttribute(img, SRC_DATA_ATTRIBUTE);
-                var srcset = getAttribute(img, SRCSET_DATA_ATTRIBUTE);
-                if (src !== img.src || srcset !== img.srcset) {
-                    var className = options.classes.spinner;
-                    var parent = img.parentElement;
-                    var spinner = child(parent, "." + className) || create("span", className, parent);
-                    entries.push([
-                        img,
-                        Slide,
-                        spinner
-                    ]);
-                    img.src || display(img, "none");
-                }
-            });
-        });
-    }
-    function check() {
-        entries = entries.filter(function(data) {
-            var distance = options.perPage * ((options.preloadPages || 1) + 1) - 1;
-            return data[1].isWithin(Splide2.index, distance) ? load(data) : true;
-        });
-        entries.length || off(events);
-    }
-    function load(data) {
-        var img = data[0];
-        addClass(data[1].slide, CLASS_LOADING);
-        bind(img, "load error", apply(onLoad, data));
-        setAttribute(img, "src", getAttribute(img, SRC_DATA_ATTRIBUTE));
-        setAttribute(img, "srcset", getAttribute(img, SRCSET_DATA_ATTRIBUTE));
-        removeAttribute(img, SRC_DATA_ATTRIBUTE);
-        removeAttribute(img, SRCSET_DATA_ATTRIBUTE);
-    }
-    function onLoad(data, e) {
-        var img = data[0], Slide = data[1];
-        removeClass(Slide.slide, CLASS_LOADING);
-        if (e.type !== "error") {
-            remove(data[2]);
-            display(img, "");
-            emit(EVENT_LAZYLOAD_LOADED, img, Slide);
-            emit(EVENT_RESIZE);
-        }
-        isSequential && loadNext();
-    }
-    function loadNext() {
-        entries.length && load(entries.shift());
-    }
-    return {
-        mount: mount,
-        destroy: apply(empty, entries),
-        check: check
-    };
-}
-function Pagination(Splide2, Components2, options) {
-    var event = EventInterface(Splide2);
-    var on = event.on, emit = event.emit, bind = event.bind;
-    var Slides = Components2.Slides, Elements = Components2.Elements, Controller = Components2.Controller;
-    var hasFocus = Controller.hasFocus, getIndex = Controller.getIndex, go = Controller.go;
-    var resolve = Components2.Direction.resolve;
-    var placeholder = Elements.pagination;
-    var items = [];
-    var list;
-    var paginationClasses;
-    function mount() {
-        destroy();
-        on([
-            EVENT_UPDATED,
-            EVENT_REFRESH,
-            EVENT_END_INDEX_CHANGED
-        ], mount);
-        var enabled = options.pagination;
-        placeholder && display(placeholder, enabled ? "" : "none");
-        if (enabled) {
-            on([
-                EVENT_MOVE,
-                EVENT_SCROLL,
-                EVENT_SCROLLED
-            ], update);
-            createPagination();
-            update();
-            emit(EVENT_PAGINATION_MOUNTED, {
-                list: list,
-                items: items
-            }, getAt(Splide2.index));
-        }
-    }
-    function destroy() {
-        if (list) {
-            remove(placeholder ? slice(list.children) : list);
-            removeClass(list, paginationClasses);
-            empty(items);
-            list = null;
-        }
-        event.destroy();
-    }
-    function createPagination() {
-        var length = Splide2.length;
-        var classes = options.classes, i18n = options.i18n, perPage = options.perPage;
-        var max = hasFocus() ? Controller.getEnd() + 1 : ceil(length / perPage);
-        list = placeholder || create("ul", classes.pagination, Elements.track.parentElement);
-        addClass(list, paginationClasses = CLASS_PAGINATION + "--" + getDirection());
-        setAttribute(list, ROLE, "tablist");
-        setAttribute(list, ARIA_LABEL, i18n.select);
-        setAttribute(list, ARIA_ORIENTATION, getDirection() === TTB ? "vertical" : "");
-        for(var i = 0; i < max; i++){
-            var li = create("li", null, list);
-            var button = create("button", {
-                class: classes.page,
-                type: "button"
-            }, li);
-            var controls = Slides.getIn(i).map(function(Slide) {
-                return Slide.slide.id;
-            });
-            var text = !hasFocus() && perPage > 1 ? i18n.pageX : i18n.slideX;
-            bind(button, "click", apply(onClick, i));
-            if (options.paginationKeyboard) bind(button, "keydown", apply(onKeydown, i));
-            setAttribute(li, ROLE, "presentation");
-            setAttribute(button, ROLE, "tab");
-            setAttribute(button, ARIA_CONTROLS, controls.join(" "));
-            setAttribute(button, ARIA_LABEL, format(text, i + 1));
-            setAttribute(button, TAB_INDEX, -1);
-            items.push({
-                li: li,
-                button: button,
-                page: i
-            });
-        }
-    }
-    function onClick(page) {
-        go(">" + page, true);
-    }
-    function onKeydown(page, e) {
-        var length = items.length;
-        var key = normalizeKey(e);
-        var dir = getDirection();
-        var nextPage = -1;
-        if (key === resolve(ARROW_RIGHT, false, dir)) nextPage = ++page % length;
-        else if (key === resolve(ARROW_LEFT, false, dir)) nextPage = (--page + length) % length;
-        else if (key === "Home") nextPage = 0;
-        else if (key === "End") nextPage = length - 1;
-        var item = items[nextPage];
-        if (item) {
-            focus(item.button);
-            go(">" + nextPage);
-            prevent(e, true);
-        }
-    }
-    function getDirection() {
-        return options.paginationDirection || options.direction;
-    }
-    function getAt(index) {
-        return items[Controller.toPage(index)];
-    }
-    function update() {
-        var prev = getAt(getIndex(true));
-        var curr = getAt(getIndex());
-        if (prev) {
-            var button = prev.button;
-            removeClass(button, CLASS_ACTIVE);
-            removeAttribute(button, ARIA_SELECTED);
-            setAttribute(button, TAB_INDEX, -1);
-        }
-        if (curr) {
-            var _button = curr.button;
-            addClass(_button, CLASS_ACTIVE);
-            setAttribute(_button, ARIA_SELECTED, true);
-            setAttribute(_button, TAB_INDEX, "");
-        }
-        emit(EVENT_PAGINATION_UPDATED, {
-            list: list,
-            items: items
-        }, prev, curr);
-    }
-    return {
-        items: items,
-        mount: mount,
-        destroy: destroy,
-        getAt: getAt,
-        update: update
-    };
-}
-var TRIGGER_KEYS = [
-    " ",
-    "Enter"
-];
-function Sync(Splide2, Components2, options) {
-    var isNavigation = options.isNavigation, slideFocus = options.slideFocus;
-    var events = [];
-    function mount() {
-        Splide2.splides.forEach(function(target) {
-            if (!target.isParent) {
-                sync(Splide2, target.splide);
-                sync(target.splide, Splide2);
-            }
-        });
-        if (isNavigation) navigate();
-    }
-    function destroy() {
-        events.forEach(function(event) {
-            event.destroy();
-        });
-        empty(events);
-    }
-    function remount() {
-        destroy();
-        mount();
-    }
-    function sync(splide, target) {
-        var event = EventInterface(splide);
-        event.on(EVENT_MOVE, function(index, prev, dest) {
-            target.go(target.is(LOOP) ? dest : index);
-        });
-        events.push(event);
-    }
-    function navigate() {
-        var event = EventInterface(Splide2);
-        var on = event.on;
-        on(EVENT_CLICK, onClick);
-        on(EVENT_SLIDE_KEYDOWN, onKeydown);
-        on([
-            EVENT_MOUNTED,
-            EVENT_UPDATED
-        ], update);
-        events.push(event);
-        event.emit(EVENT_NAVIGATION_MOUNTED, Splide2.splides);
-    }
-    function update() {
-        setAttribute(Components2.Elements.list, ARIA_ORIENTATION, options.direction === TTB ? "vertical" : "");
-    }
-    function onClick(Slide) {
-        Splide2.go(Slide.index);
-    }
-    function onKeydown(Slide, e) {
-        if (includes(TRIGGER_KEYS, normalizeKey(e))) {
-            onClick(Slide);
-            prevent(e);
-        }
-    }
-    return {
-        setup: apply(Components2.Media.set, {
-            slideFocus: isUndefined(slideFocus) ? isNavigation : slideFocus
-        }, true),
-        mount: mount,
-        destroy: destroy,
-        remount: remount
-    };
-}
-function Wheel(Splide2, Components2, options) {
-    var _EventInterface12 = EventInterface(Splide2), bind = _EventInterface12.bind;
-    var lastTime = 0;
-    function mount() {
-        if (options.wheel) bind(Components2.Elements.track, "wheel", onWheel, SCROLL_LISTENER_OPTIONS);
-    }
-    function onWheel(e) {
-        if (e.cancelable) {
-            var deltaY = e.deltaY;
-            var backwards = deltaY < 0;
-            var timeStamp = timeOf(e);
-            var _min = options.wheelMinThreshold || 0;
-            var sleep = options.wheelSleep || 0;
-            if (abs(deltaY) > _min && timeStamp - lastTime > sleep) {
-                Splide2.go(backwards ? "<" : ">");
-                lastTime = timeStamp;
-            }
-            shouldPrevent(backwards) && prevent(e);
-        }
-    }
-    function shouldPrevent(backwards) {
-        return !options.releaseWheel || Splide2.state.is(MOVING) || Components2.Controller.getAdjacent(backwards) !== -1;
-    }
-    return {
-        mount: mount
-    };
-}
-var SR_REMOVAL_DELAY = 90;
-function Live(Splide2, Components2, options) {
-    var _EventInterface13 = EventInterface(Splide2), on = _EventInterface13.on;
-    var track = Components2.Elements.track;
-    var enabled = options.live && !options.isNavigation;
-    var sr = create("span", CLASS_SR);
-    var interval = RequestInterval(SR_REMOVAL_DELAY, apply(toggle, false));
-    function mount() {
-        if (enabled) {
-            disable(!Components2.Autoplay.isPaused());
-            setAttribute(track, ARIA_ATOMIC, true);
-            sr.textContent = "\u2026";
-            on(EVENT_AUTOPLAY_PLAY, apply(disable, true));
-            on(EVENT_AUTOPLAY_PAUSE, apply(disable, false));
-            on([
-                EVENT_MOVED,
-                EVENT_SCROLLED
-            ], apply(toggle, true));
-        }
-    }
-    function toggle(active) {
-        setAttribute(track, ARIA_BUSY, active);
-        if (active) {
-            append(track, sr);
-            interval.start();
-        } else {
-            remove(sr);
-            interval.cancel();
-        }
-    }
-    function destroy() {
-        removeAttribute(track, [
-            ARIA_LIVE,
-            ARIA_ATOMIC,
-            ARIA_BUSY
-        ]);
-        remove(sr);
-    }
-    function disable(disabled) {
-        if (enabled) setAttribute(track, ARIA_LIVE, disabled ? "off" : "polite");
-    }
-    return {
-        mount: mount,
-        disable: disable,
-        destroy: destroy
-    };
-}
-var ComponentConstructors = /*#__PURE__*/ Object.freeze({
-    __proto__: null,
-    Media: Media,
-    Direction: Direction,
-    Elements: Elements,
-    Slides: Slides,
-    Layout: Layout,
-    Clones: Clones,
-    Move: Move,
-    Controller: Controller,
-    Arrows: Arrows,
-    Autoplay: Autoplay,
-    Cover: Cover,
-    Scroll: Scroll,
-    Drag: Drag,
-    Keyboard: Keyboard,
-    LazyLoad: LazyLoad,
-    Pagination: Pagination,
-    Sync: Sync,
-    Wheel: Wheel,
-    Live: Live
-});
-var I18N = {
-    prev: "Previous slide",
-    next: "Next slide",
-    first: "Go to first slide",
-    last: "Go to last slide",
-    slideX: "Go to slide %s",
-    pageX: "Go to page %s",
-    play: "Start autoplay",
-    pause: "Pause autoplay",
-    carousel: "carousel",
-    slide: "slide",
-    select: "Select a slide to show",
-    slideLabel: "%s of %s"
-};
-var DEFAULTS = {
-    type: "slide",
-    role: "region",
-    speed: 400,
-    perPage: 1,
-    cloneStatus: true,
-    arrows: true,
-    pagination: true,
-    paginationKeyboard: true,
-    interval: 5e3,
-    pauseOnHover: true,
-    pauseOnFocus: true,
-    resetProgress: true,
-    easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-    drag: true,
-    direction: "ltr",
-    trimSpace: true,
-    focusableNodes: "a, button, textarea, input, select, iframe",
-    live: true,
-    classes: CLASSES,
-    i18n: I18N,
-    reducedMotion: {
-        speed: 0,
-        rewindSpeed: 0,
-        autoplay: "pause"
-    }
-};
-function Fade(Splide2, Components2, options) {
-    var Slides = Components2.Slides;
-    function mount() {
-        EventInterface(Splide2).on([
-            EVENT_MOUNTED,
-            EVENT_REFRESH
-        ], init);
-    }
-    function init() {
-        Slides.forEach(function(Slide) {
-            Slide.style("transform", "translateX(-" + 100 * Slide.index + "%)");
-        });
-    }
-    function start(index, done) {
-        Slides.style("transition", "opacity " + options.speed + "ms " + options.easing);
-        nextTick(done);
-    }
-    return {
-        mount: mount,
-        start: start,
-        cancel: noop
-    };
-}
-function Slide(Splide2, Components2, options) {
-    var Move = Components2.Move, Controller = Components2.Controller, Scroll = Components2.Scroll;
-    var list = Components2.Elements.list;
-    var transition = apply(style, list, "transition");
-    var endCallback;
-    function mount() {
-        EventInterface(Splide2).bind(list, "transitionend", function(e) {
-            if (e.target === list && endCallback) {
-                cancel();
-                endCallback();
-            }
-        });
-    }
-    function start(index, done) {
-        var destination = Move.toPosition(index, true);
-        var position = Move.getPosition();
-        var speed = getSpeed(index);
-        if (abs(destination - position) >= 1 && speed >= 1) {
-            if (options.useScroll) Scroll.scroll(destination, speed, false, done);
-            else {
-                transition("transform " + speed + "ms " + options.easing);
-                Move.translate(destination, true);
-                endCallback = done;
-            }
-        } else {
-            Move.jump(index);
-            done();
-        }
-    }
-    function cancel() {
-        transition("");
-        Scroll.cancel();
-    }
-    function getSpeed(index) {
-        var rewindSpeed = options.rewindSpeed;
-        if (Splide2.is(SLIDE) && rewindSpeed) {
-            var prev = Controller.getIndex(true);
-            var end = Controller.getEnd();
-            if (prev === 0 && index >= end || prev >= end && index === 0) return rewindSpeed;
-        }
-        return options.speed;
-    }
-    return {
-        mount: mount,
-        start: start,
-        cancel: cancel
-    };
-}
-var _Splide = /*#__PURE__*/ function() {
-    function _Splide(target, options) {
-        this.event = EventInterface();
-        this.Components = {};
-        this.state = State(CREATED);
-        this.splides = [];
-        this._o = {};
-        this._E = {};
-        var root = isString(target) ? query(document, target) : target;
-        assert(root, root + " is invalid.");
-        this.root = root;
-        options = merge({
-            label: getAttribute(root, ARIA_LABEL) || "",
-            labelledby: getAttribute(root, ARIA_LABELLEDBY) || ""
-        }, DEFAULTS, _Splide.defaults, options || {});
-        try {
-            merge(options, JSON.parse(getAttribute(root, DATA_ATTRIBUTE)));
-        } catch (e) {
-            assert(false, "Invalid JSON");
-        }
-        this._o = Object.create(merge({}, options));
-    }
-    var _proto = _Splide.prototype;
-    _proto.mount = function mount(Extensions, Transition) {
-        var _this = this;
-        var state = this.state, Components2 = this.Components;
-        assert(state.is([
-            CREATED,
-            DESTROYED
-        ]), "Already mounted!");
-        state.set(CREATED);
-        this._C = Components2;
-        this._T = Transition || this._T || (this.is(FADE) ? Fade : Slide);
-        this._E = Extensions || this._E;
-        var Constructors = assign({}, ComponentConstructors, this._E, {
-            Transition: this._T
-        });
-        forOwn(Constructors, function(Component, key) {
-            var component = Component(_this, Components2, _this._o);
-            Components2[key] = component;
-            component.setup && component.setup();
-        });
-        forOwn(Components2, function(component) {
-            component.mount && component.mount();
-        });
-        this.emit(EVENT_MOUNTED);
-        addClass(this.root, CLASS_INITIALIZED);
-        state.set(IDLE);
-        this.emit(EVENT_READY);
-        return this;
-    };
-    _proto.sync = function sync(splide) {
-        this.splides.push({
-            splide: splide
-        });
-        splide.splides.push({
-            splide: this,
-            isParent: true
-        });
-        if (this.state.is(IDLE)) {
-            this._C.Sync.remount();
-            splide.Components.Sync.remount();
-        }
-        return this;
-    };
-    _proto.go = function go(control) {
-        this._C.Controller.go(control);
-        return this;
-    };
-    _proto.on = function on(events, callback) {
-        this.event.on(events, callback);
-        return this;
-    };
-    _proto.off = function off(events) {
-        this.event.off(events);
-        return this;
-    };
-    _proto.emit = function emit(event) {
-        var _this$event;
-        (_this$event = this.event).emit.apply(_this$event, [
-            event
-        ].concat(slice(arguments, 1)));
-        return this;
-    };
-    _proto.add = function add(slides, index) {
-        this._C.Slides.add(slides, index);
-        return this;
-    };
-    _proto.remove = function remove(matcher) {
-        this._C.Slides.remove(matcher);
-        return this;
-    };
-    _proto.is = function is(type) {
-        return this._o.type === type;
-    };
-    _proto.refresh = function refresh() {
-        this.emit(EVENT_REFRESH);
-        return this;
-    };
-    _proto.destroy = function destroy(completely) {
-        if (completely === void 0) completely = true;
-        var event = this.event, state = this.state;
-        if (state.is(CREATED)) EventInterface(this).on(EVENT_READY, this.destroy.bind(this, completely));
-        else {
-            forOwn(this._C, function(component) {
-                component.destroy && component.destroy(completely);
-            }, true);
-            event.emit(EVENT_DESTROY);
-            event.destroy();
-            completely && empty(this.splides);
-            state.set(DESTROYED);
-        }
-        return this;
-    };
-    _createClass(_Splide, [
-        {
-            key: "options",
-            get: function get() {
-                return this._o;
-            },
-            set: function set(options) {
-                this._C.Media.set(options, true, true);
-            }
-        },
-        {
-            key: "length",
-            get: function get() {
-                return this._C.Slides.getLength(true);
-            }
-        },
-        {
-            key: "index",
-            get: function get() {
-                return this._C.Controller.getIndex();
-            }
-        }
-    ]);
-    return _Splide;
-}();
-var Splide = _Splide;
-Splide.defaults = {};
-Splide.STATES = STATES;
-var CLASS_RENDERED = "is-rendered";
-var RENDERER_DEFAULT_CONFIG = {
-    listTag: "ul",
-    slideTag: "li"
-};
-var Style = /*#__PURE__*/ function() {
-    function Style(id, options) {
-        this.styles = {};
-        this.id = id;
-        this.options = options;
-    }
-    var _proto2 = Style.prototype;
-    _proto2.rule = function rule(selector, prop, value, breakpoint) {
-        breakpoint = breakpoint || "default";
-        var selectors = this.styles[breakpoint] = this.styles[breakpoint] || {};
-        var styles = selectors[selector] = selectors[selector] || {};
-        styles[prop] = value;
-    };
-    _proto2.build = function build() {
-        var _this2 = this;
-        var css = "";
-        if (this.styles.default) css += this.buildSelectors(this.styles.default);
-        Object.keys(this.styles).sort(function(n, m) {
-            return _this2.options.mediaQuery === "min" ? +n - +m : +m - +n;
-        }).forEach(function(breakpoint) {
-            if (breakpoint !== "default") {
-                css += "@media screen and (max-width: " + breakpoint + "px) {";
-                css += _this2.buildSelectors(_this2.styles[breakpoint]);
-                css += "}";
-            }
-        });
-        return css;
-    };
-    _proto2.buildSelectors = function buildSelectors(selectors) {
-        var _this3 = this;
-        var css = "";
-        forOwn(selectors, function(styles, selector) {
-            selector = ("#" + _this3.id + " " + selector).trim();
-            css += selector + " {";
-            forOwn(styles, function(value, prop) {
-                if (value || value === 0) css += prop + ": " + value + ";";
-            });
-            css += "}";
-        });
-        return css;
-    };
-    return Style;
-}();
-var SplideRenderer = /*#__PURE__*/ function() {
-    function SplideRenderer(contents, options, config, defaults) {
-        this.slides = [];
-        this.options = {};
-        this.breakpoints = [];
-        merge(DEFAULTS, defaults || {});
-        merge(merge(this.options, DEFAULTS), options || {});
-        this.contents = contents;
-        this.config = assign({}, RENDERER_DEFAULT_CONFIG, config || {});
-        this.id = this.config.id || uniqueId("splide");
-        this.Style = new Style(this.id, this.options);
-        this.Direction = Direction(null, null, this.options);
-        assert(this.contents.length, "Provide at least 1 content.");
-        this.init();
-    }
-    SplideRenderer.clean = function clean(splide) {
-        var _EventInterface14 = EventInterface(splide), on = _EventInterface14.on;
-        var root = splide.root;
-        var clones = queryAll(root, "." + CLASS_CLONE);
-        on(EVENT_MOUNTED, function() {
-            remove(child(root, "style"));
-        });
-        remove(clones);
-    };
-    var _proto3 = SplideRenderer.prototype;
-    _proto3.init = function init() {
-        this.parseBreakpoints();
-        this.initSlides();
-        this.registerRootStyles();
-        this.registerTrackStyles();
-        this.registerSlideStyles();
-        this.registerListStyles();
-    };
-    _proto3.initSlides = function initSlides() {
-        var _this4 = this;
-        push(this.slides, this.contents.map(function(content, index) {
-            content = isString(content) ? {
-                html: content
-            } : content;
-            content.styles = content.styles || {};
-            content.attrs = content.attrs || {};
-            _this4.cover(content);
-            var classes = _this4.options.classes.slide + " " + (index === 0 ? CLASS_ACTIVE : "");
-            assign(content.attrs, {
-                class: (classes + " " + (content.attrs.class || "")).trim(),
-                style: _this4.buildStyles(content.styles)
-            });
-            return content;
-        }));
-        if (this.isLoop()) this.generateClones(this.slides);
-    };
-    _proto3.registerRootStyles = function registerRootStyles() {
-        var _this5 = this;
-        this.breakpoints.forEach(function(_ref2) {
-            var width = _ref2[0], options = _ref2[1];
-            _this5.Style.rule(" ", "max-width", unit(options.width), width);
-        });
-    };
-    _proto3.registerTrackStyles = function registerTrackStyles() {
-        var _this6 = this;
-        var Style2 = this.Style;
-        var selector = "." + CLASS_TRACK;
-        this.breakpoints.forEach(function(_ref3) {
-            var width = _ref3[0], options = _ref3[1];
-            Style2.rule(selector, _this6.resolve("paddingLeft"), _this6.cssPadding(options, false), width);
-            Style2.rule(selector, _this6.resolve("paddingRight"), _this6.cssPadding(options, true), width);
-            Style2.rule(selector, "height", _this6.cssTrackHeight(options), width);
-        });
-    };
-    _proto3.registerListStyles = function registerListStyles() {
-        var _this7 = this;
-        var Style2 = this.Style;
-        var selector = "." + CLASS_LIST;
-        this.breakpoints.forEach(function(_ref4) {
-            var width = _ref4[0], options = _ref4[1];
-            Style2.rule(selector, "transform", _this7.buildTranslate(options), width);
-            if (!_this7.cssSlideHeight(options)) Style2.rule(selector, "aspect-ratio", _this7.cssAspectRatio(options), width);
-        });
-    };
-    _proto3.registerSlideStyles = function registerSlideStyles() {
-        var _this8 = this;
-        var Style2 = this.Style;
-        var selector = "." + CLASS_SLIDE;
-        this.breakpoints.forEach(function(_ref5) {
-            var width = _ref5[0], options = _ref5[1];
-            Style2.rule(selector, "width", _this8.cssSlideWidth(options), width);
-            Style2.rule(selector, "height", _this8.cssSlideHeight(options) || "100%", width);
-            Style2.rule(selector, _this8.resolve("marginRight"), unit(options.gap) || "0px", width);
-            Style2.rule(selector + " > img", "display", options.cover ? "none" : "inline", width);
-        });
-    };
-    _proto3.buildTranslate = function buildTranslate(options) {
-        var _this$Direction = this.Direction, resolve = _this$Direction.resolve, orient = _this$Direction.orient;
-        var values = [];
-        values.push(this.cssOffsetClones(options));
-        values.push(this.cssOffsetGaps(options));
-        if (this.isCenter(options)) {
-            values.push(this.buildCssValue(orient(-50), "%"));
-            values.push.apply(values, this.cssOffsetCenter(options));
-        }
-        return values.filter(Boolean).map(function(value) {
-            return "translate" + resolve("X") + "(" + value + ")";
-        }).join(" ");
-    };
-    _proto3.cssOffsetClones = function cssOffsetClones(options) {
-        var _this$Direction2 = this.Direction, resolve = _this$Direction2.resolve, orient = _this$Direction2.orient;
-        var cloneCount = this.getCloneCount();
-        if (this.isFixedWidth(options)) {
-            var _this$parseCssValue = this.parseCssValue(options[resolve("fixedWidth")]), value = _this$parseCssValue.value, unit2 = _this$parseCssValue.unit;
-            return this.buildCssValue(orient(value) * cloneCount, unit2);
-        }
-        var percent = 100 * cloneCount / options.perPage;
-        return orient(percent) + "%";
-    };
-    _proto3.cssOffsetCenter = function cssOffsetCenter(options) {
-        var _this$Direction3 = this.Direction, resolve = _this$Direction3.resolve, orient = _this$Direction3.orient;
-        if (this.isFixedWidth(options)) {
-            var _this$parseCssValue2 = this.parseCssValue(options[resolve("fixedWidth")]), value = _this$parseCssValue2.value, unit2 = _this$parseCssValue2.unit;
-            return [
-                this.buildCssValue(orient(value / 2), unit2)
-            ];
-        }
-        var values = [];
-        var perPage = options.perPage, gap = options.gap;
-        values.push(orient(50 / perPage) + "%");
-        if (gap) {
-            var _this$parseCssValue3 = this.parseCssValue(gap), _value = _this$parseCssValue3.value, _unit = _this$parseCssValue3.unit;
-            var gapOffset = (_value / perPage - _value) / 2;
-            values.push(this.buildCssValue(orient(gapOffset), _unit));
-        }
-        return values;
-    };
-    _proto3.cssOffsetGaps = function cssOffsetGaps(options) {
-        var cloneCount = this.getCloneCount();
-        if (cloneCount && options.gap) {
-            var orient = this.Direction.orient;
-            var _this$parseCssValue4 = this.parseCssValue(options.gap), value = _this$parseCssValue4.value, unit2 = _this$parseCssValue4.unit;
-            if (this.isFixedWidth(options)) return this.buildCssValue(orient(value * cloneCount), unit2);
-            var perPage = options.perPage;
-            var gaps = cloneCount / perPage;
-            return this.buildCssValue(orient(gaps * value), unit2);
-        }
-        return "";
-    };
-    _proto3.resolve = function resolve(prop) {
-        return camelToKebab(this.Direction.resolve(prop));
-    };
-    _proto3.cssPadding = function cssPadding(options, right) {
-        var padding = options.padding;
-        var prop = this.Direction.resolve(right ? "right" : "left", true);
-        return padding && unit(padding[prop] || (isObject(padding) ? 0 : padding)) || "0px";
-    };
-    _proto3.cssTrackHeight = function cssTrackHeight(options) {
-        var height = "";
-        if (this.isVertical()) {
-            height = this.cssHeight(options);
-            assert(height, '"height" is missing.');
-            height = "calc(" + height + " - " + this.cssPadding(options, false) + " - " + this.cssPadding(options, true) + ")";
-        }
-        return height;
-    };
-    _proto3.cssHeight = function cssHeight(options) {
-        return unit(options.height);
-    };
-    _proto3.cssSlideWidth = function cssSlideWidth(options) {
-        return options.autoWidth ? "" : unit(options.fixedWidth) || (this.isVertical() ? "" : this.cssSlideSize(options));
-    };
-    _proto3.cssSlideHeight = function cssSlideHeight(options) {
-        return unit(options.fixedHeight) || (this.isVertical() ? options.autoHeight ? "" : this.cssSlideSize(options) : this.cssHeight(options));
-    };
-    _proto3.cssSlideSize = function cssSlideSize(options) {
-        var gap = unit(options.gap);
-        return "calc((100%" + (gap && " + " + gap) + ")/" + (options.perPage || 1) + (gap && " - " + gap) + ")";
-    };
-    _proto3.cssAspectRatio = function cssAspectRatio(options) {
-        var heightRatio = options.heightRatio;
-        return heightRatio ? "" + 1 / heightRatio : "";
-    };
-    _proto3.buildCssValue = function buildCssValue(value, unit2) {
-        return "" + value + unit2;
-    };
-    _proto3.parseCssValue = function parseCssValue(value) {
-        if (isString(value)) {
-            var number = parseFloat(value) || 0;
-            var unit2 = value.replace(/\d*(\.\d*)?/, "") || "px";
-            return {
-                value: number,
-                unit: unit2
-            };
-        }
-        return {
-            value: value,
-            unit: "px"
-        };
-    };
-    _proto3.parseBreakpoints = function parseBreakpoints() {
-        var _this9 = this;
-        var breakpoints = this.options.breakpoints;
-        this.breakpoints.push([
-            "default",
-            this.options
-        ]);
-        if (breakpoints) forOwn(breakpoints, function(options, width) {
-            _this9.breakpoints.push([
-                width,
-                merge(merge({}, _this9.options), options)
-            ]);
-        });
-    };
-    _proto3.isFixedWidth = function isFixedWidth(options) {
-        return !!options[this.Direction.resolve("fixedWidth")];
-    };
-    _proto3.isLoop = function isLoop() {
-        return this.options.type === LOOP;
-    };
-    _proto3.isCenter = function isCenter(options) {
-        if (options.focus === "center") {
-            if (this.isLoop()) return true;
-            if (this.options.type === SLIDE) return !this.options.trimSpace;
-        }
-        return false;
-    };
-    _proto3.isVertical = function isVertical() {
-        return this.options.direction === TTB;
-    };
-    _proto3.buildClasses = function buildClasses() {
-        var options = this.options;
-        return [
-            CLASS_ROOT,
-            CLASS_ROOT + "--" + options.type,
-            CLASS_ROOT + "--" + options.direction,
-            options.drag && CLASS_ROOT + "--draggable",
-            options.isNavigation && CLASS_ROOT + "--nav",
-            CLASS_ACTIVE,
-            !this.config.hidden && CLASS_RENDERED
-        ].filter(Boolean).join(" ");
-    };
-    _proto3.buildAttrs = function buildAttrs(attrs) {
-        var attr = "";
-        forOwn(attrs, function(value, key) {
-            attr += value ? " " + camelToKebab(key) + '="' + value + '"' : "";
-        });
-        return attr.trim();
-    };
-    _proto3.buildStyles = function buildStyles(styles) {
-        var style = "";
-        forOwn(styles, function(value, key) {
-            style += " " + camelToKebab(key) + ":" + value + ";";
-        });
-        return style.trim();
-    };
-    _proto3.renderSlides = function renderSlides() {
-        var _this10 = this;
-        var tag = this.config.slideTag;
-        return this.slides.map(function(content) {
-            return "<" + tag + " " + _this10.buildAttrs(content.attrs) + ">" + (content.html || "") + "</" + tag + ">";
-        }).join("");
-    };
-    _proto3.cover = function cover(content) {
-        var styles = content.styles, _content$html = content.html, html = _content$html === void 0 ? "" : _content$html;
-        if (this.options.cover && !this.options.lazyLoad) {
-            var src = html.match(/<img.*?src\s*=\s*(['"])(.+?)\1.*?>/);
-            if (src && src[2]) styles.background = "center/cover no-repeat url('" + src[2] + "')";
-        }
-    };
-    _proto3.generateClones = function generateClones(contents) {
-        var classes = this.options.classes;
-        var count = this.getCloneCount();
-        var slides = contents.slice();
-        while(slides.length < count)push(slides, slides);
-        push(slides.slice(-count).reverse(), slides.slice(0, count)).forEach(function(content, index) {
-            var attrs = assign({}, content.attrs, {
-                class: content.attrs.class + " " + classes.clone
-            });
-            var clone = assign({}, content, {
-                attrs: attrs
-            });
-            index < count ? contents.unshift(clone) : contents.push(clone);
-        });
-    };
-    _proto3.getCloneCount = function getCloneCount() {
-        if (this.isLoop()) {
-            var options = this.options;
-            if (options.clones) return options.clones;
-            var perPage = max.apply(void 0, this.breakpoints.map(function(_ref6) {
-                var options2 = _ref6[1];
-                return options2.perPage;
-            }));
-            return perPage * ((options.flickMaxPages || 1) + 1);
-        }
-        return 0;
-    };
-    _proto3.renderArrows = function renderArrows() {
-        var html = "";
-        html += '<div class="' + this.options.classes.arrows + '">';
-        html += this.renderArrow(true);
-        html += this.renderArrow(false);
-        html += "</div>";
-        return html;
-    };
-    _proto3.renderArrow = function renderArrow(prev) {
-        var _this$options = this.options, classes = _this$options.classes, i18n = _this$options.i18n;
-        var attrs = {
-            class: classes.arrow + " " + (prev ? classes.prev : classes.next),
-            type: "button",
-            ariaLabel: prev ? i18n.prev : i18n.next
-        };
-        return "<button " + this.buildAttrs(attrs) + '><svg xmlns="' + XML_NAME_SPACE + '" viewBox="0 0 ' + SIZE + " " + SIZE + '" width="' + SIZE + '" height="' + SIZE + '"><path d="' + (this.options.arrowPath || PATH) + '" /></svg></button>';
-    };
-    _proto3.html = function html() {
-        var _this$config = this.config, rootClass = _this$config.rootClass, listTag = _this$config.listTag, arrows = _this$config.arrows, beforeTrack = _this$config.beforeTrack, afterTrack = _this$config.afterTrack, slider = _this$config.slider, beforeSlider = _this$config.beforeSlider, afterSlider = _this$config.afterSlider;
-        var html = "";
-        html += '<div id="' + this.id + '" class="' + this.buildClasses() + " " + (rootClass || "") + '">';
-        html += "<style>" + this.Style.build() + "</style>";
-        if (slider) {
-            html += beforeSlider || "";
-            html += '<div class="splide__slider">';
-        }
-        html += beforeTrack || "";
-        if (arrows) html += this.renderArrows();
-        html += '<div class="splide__track">';
-        html += "<" + listTag + ' class="splide__list">';
-        html += this.renderSlides();
-        html += "</" + listTag + ">";
-        html += "</div>";
-        html += afterTrack || "";
-        if (slider) {
-            html += "</div>";
-            html += afterSlider || "";
-        }
-        html += "</div>";
-        return html;
-    };
-    return SplideRenderer;
-}();
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hB6A6":[function(require,module,exports) {
+},{"./gsap-core.js":"05eeC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hB6A6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "initRangeFunctional", ()=>initRangeFunctional);
@@ -8191,6 +8572,2384 @@ function switchPrice(attr) {
         });
     });
 }
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hsp1p":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "appearAnimations", ()=>appearAnimations);
+var _gsap = require("gsap");
+var _scrollTrigger = require("gsap/ScrollTrigger");
+function appearAnimations() {
+    const splider = document.querySelector("[data-hero-slider]");
+    const header = document.querySelector("[data-header]");
+    const headerElements = header.querySelectorAll("[data-header-appear]");
+    (0, _gsap.gsap).registerPlugin((0, _scrollTrigger.ScrollTrigger));
+    buttonAnimation();
+    cardsAnimation();
+    titleAnimation();
+    (0, _gsap.gsap).to("[data-ticker-media]", {
+        scrollTrigger: {
+            trigger: "[data-ticker]",
+            start: "90% bottom",
+            end: "bottom bottom",
+            toggleActions: "play reset play reset",
+            scrub: true
+        },
+        width: "100%",
+        height: "100%"
+    });
+    //cards under the text
+    (0, _gsap.gsap).from("[data-ticker-left]", {
+        scrollTrigger: {
+            trigger: "[data-ticker]",
+            start: "top bottom",
+            end: "bottom top",
+            toggleActions: "play reset play reset",
+            scrub: true
+        },
+        x: -500
+    });
+    //cards under the text
+    (0, _gsap.gsap).to("[data-ticker-right]", {
+        scrollTrigger: {
+            trigger: "[data-ticker]",
+            start: "top bottom",
+            end: "bottom top",
+            toggleActions: "play reset play reset",
+            scrub: true
+        },
+        x: -500
+    });
+    //cards under the text
+    (0, _gsap.gsap).to("[data-fix-cards]", {
+        scrollTrigger: {
+            trigger: "[data-fix-cards]",
+            start: "top bottom",
+            end: "bottom bottom",
+            toggleActions: "play reset play reset",
+            toggleClass: "is-active"
+        }
+    });
+    //changing-bg
+    (0, _gsap.gsap).to("body", {
+        scrollTrigger: {
+            trigger: "[data-changing-bg]",
+            start: "18% 90%",
+            end: "bottom 20%",
+            toggleActions: "play reset play reset"
+        },
+        delay: 0.1,
+        duration: 0.5,
+        background: "#FFDF00",
+        ease: "power1.inOut"
+    });
+    //timeline
+    const tl = (0, _gsap.gsap).timeline({});
+    tl.from(header, {
+        opacity: 0,
+        delay: 0.2,
+        duration: 0.3
+    });
+    tl.from(splider, {
+        opacity: 0,
+        delay: 0.05,
+        duration: 0.2
+    });
+    //header
+    headerElements.forEach((headerElement)=>{
+        (0, _gsap.gsap).from(headerElement, {
+            opacity: 0,
+            y: 10,
+            delay: 0.2,
+            ease: "power1.inOut",
+            duration: 0.3
+        });
+    });
+}
+function titleAnimation() {
+    const titleContainers = document.querySelectorAll("[data-title]");
+    titleContainers?.forEach((titleContainer)=>{
+        const title = titleContainer.querySelectorAll("[data-title-line]");
+        const descriptor = titleContainer.querySelector("[data-title-descriptor]");
+        (0, _gsap.gsap).from(title, {
+            scrollTrigger: {
+                trigger: titleContainer,
+                start: "top 95%"
+            },
+            delay: 0.1,
+            duration: 0.3,
+            y: 100,
+            stagger: 0.2,
+            ease: "power1.inOut"
+        });
+        (0, _gsap.gsap).from(descriptor, {
+            scrollTrigger: {
+                trigger: titleContainer,
+                start: "top 95%"
+            },
+            delay: 0.1,
+            duration: 0.2,
+            opacity: 0,
+            ease: "power1.inOut"
+        });
+    });
+}
+function buttonAnimation() {
+    const btns = document.querySelectorAll("[data-btn-appear]");
+    btns?.forEach((btn)=>{
+        (0, _gsap.gsap).from(btn, {
+            scrollTrigger: {
+                trigger: btn,
+                start: "top 95%",
+                end: "+=500"
+            },
+            delay: 0.1,
+            duration: 0.2,
+            y: 100,
+            ease: "power1.inOut"
+        });
+    });
+}
+function cardsAnimation() {
+    const cardContainers = document.querySelectorAll("[data-appear-card-container]");
+    cardContainers?.forEach((cardContainer)=>{
+        const dataCards = cardContainer.querySelectorAll("[data-appear-card]");
+        (0, _gsap.gsap).from(dataCards, {
+            scrollTrigger: {
+                trigger: cardContainer,
+                start: "top 90%"
+            },
+            y: 30,
+            opacity: 0,
+            duration: 0.4,
+            ease: "power1.inOut"
+        });
+    });
+}
+
+},{"gsap":"fPSuC","gsap/ScrollTrigger":"7wnFk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7wnFk":[function(require,module,exports) {
+/*!
+ * ScrollTrigger 3.12.5
+ * https://gsap.com
+ *
+ * @license Copyright 2008-2024, GreenSock. All rights reserved.
+ * Subject to the terms at https://gsap.com/standard-license or for
+ * Club GSAP members, the agreement issued with that membership.
+ * @author: Jack Doyle, jack@greensock.com
+*/ /* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ScrollTrigger", ()=>ScrollTrigger);
+parcelHelpers.export(exports, "default", ()=>ScrollTrigger);
+var _observerJs = require("./Observer.js");
+var gsap, _coreInitted, _win, _doc, _docEl, _body, _root, _resizeDelay, _toArray, _clamp, _time2, _syncInterval, _refreshing, _pointerIsDown, _transformProp, _i, _prevWidth, _prevHeight, _autoRefresh, _sort, _suppressOverwrites, _ignoreResize, _normalizer, _ignoreMobileResize, _baseScreenHeight, _baseScreenWidth, _fixIOSBug, _context, _scrollRestoration, _div100vh, _100vh, _isReverted, _clampingMax, _limitCallbacks, // if true, we'll only trigger callbacks if the active state toggles, so if you scroll immediately past both the start and end positions of a ScrollTrigger (thus inactive to inactive), neither its onEnter nor onLeave will be called. This is useful during startup.
+_startup = 1, _getTime = Date.now, _time1 = _getTime(), _lastScrollTime = 0, _enabled = 0, _parseClamp = function _parseClamp(value, type, self) {
+    var clamp = _isString(value) && (value.substr(0, 6) === "clamp(" || value.indexOf("max") > -1);
+    self["_" + type + "Clamp"] = clamp;
+    return clamp ? value.substr(6, value.length - 7) : value;
+}, _keepClamp = function _keepClamp(value, clamp) {
+    return clamp && (!_isString(value) || value.substr(0, 6) !== "clamp(") ? "clamp(" + value + ")" : value;
+}, _rafBugFix = function _rafBugFix() {
+    return _enabled && requestAnimationFrame(_rafBugFix);
+}, // in some browsers (like Firefox), screen repaints weren't consistent unless we had SOMETHING queued up in requestAnimationFrame()! So this just creates a super simple loop to keep it alive and smooth out repaints.
+_pointerDownHandler = function _pointerDownHandler() {
+    return _pointerIsDown = 1;
+}, _pointerUpHandler = function _pointerUpHandler() {
+    return _pointerIsDown = 0;
+}, _passThrough = function _passThrough(v) {
+    return v;
+}, _round = function _round(value) {
+    return Math.round(value * 100000) / 100000 || 0;
+}, _windowExists = function _windowExists() {
+    return typeof window !== "undefined";
+}, _getGSAP = function _getGSAP() {
+    return gsap || _windowExists() && (gsap = window.gsap) && gsap.registerPlugin && gsap;
+}, _isViewport = function _isViewport(e) {
+    return !!~_root.indexOf(e);
+}, _getViewportDimension = function _getViewportDimension(dimensionProperty) {
+    return (dimensionProperty === "Height" ? _100vh : _win["inner" + dimensionProperty]) || _docEl["client" + dimensionProperty] || _body["client" + dimensionProperty];
+}, _getBoundsFunc = function _getBoundsFunc(element) {
+    return (0, _observerJs._getProxyProp)(element, "getBoundingClientRect") || (_isViewport(element) ? function() {
+        _winOffsets.width = _win.innerWidth;
+        _winOffsets.height = _100vh;
+        return _winOffsets;
+    } : function() {
+        return _getBounds(element);
+    });
+}, _getSizeFunc = function _getSizeFunc(scroller, isViewport, _ref) {
+    var d = _ref.d, d2 = _ref.d2, a = _ref.a;
+    return (a = (0, _observerJs._getProxyProp)(scroller, "getBoundingClientRect")) ? function() {
+        return a()[d];
+    } : function() {
+        return (isViewport ? _getViewportDimension(d2) : scroller["client" + d2]) || 0;
+    };
+}, _getOffsetsFunc = function _getOffsetsFunc(element, isViewport) {
+    return !isViewport || ~(0, _observerJs._proxies).indexOf(element) ? _getBoundsFunc(element) : function() {
+        return _winOffsets;
+    };
+}, _maxScroll = function _maxScroll(element, _ref2) {
+    var s = _ref2.s, d2 = _ref2.d2, d = _ref2.d, a = _ref2.a;
+    return Math.max(0, (s = "scroll" + d2, a = (0, _observerJs._getProxyProp)(element, s)) ? a() - _getBoundsFunc(element)()[d] : _isViewport(element) ? (_docEl[s] || _body[s]) - _getViewportDimension(d2) : element[s] - element["offset" + d2]);
+}, _iterateAutoRefresh = function _iterateAutoRefresh(func, events) {
+    for(var i = 0; i < _autoRefresh.length; i += 3)(!events || ~events.indexOf(_autoRefresh[i + 1])) && func(_autoRefresh[i], _autoRefresh[i + 1], _autoRefresh[i + 2]);
+}, _isString = function _isString(value) {
+    return typeof value === "string";
+}, _isFunction = function _isFunction(value) {
+    return typeof value === "function";
+}, _isNumber = function _isNumber(value) {
+    return typeof value === "number";
+}, _isObject = function _isObject(value) {
+    return typeof value === "object";
+}, _endAnimation = function _endAnimation(animation, reversed, pause) {
+    return animation && animation.progress(reversed ? 0 : 1) && pause && animation.pause();
+}, _callback = function _callback(self, func) {
+    if (self.enabled) {
+        var result = self._ctx ? self._ctx.add(function() {
+            return func(self);
+        }) : func(self);
+        result && result.totalTime && (self.callbackAnimation = result);
+    }
+}, _abs = Math.abs, _left = "left", _top = "top", _right = "right", _bottom = "bottom", _width = "width", _height = "height", _Right = "Right", _Left = "Left", _Top = "Top", _Bottom = "Bottom", _padding = "padding", _margin = "margin", _Width = "Width", _Height = "Height", _px = "px", _getComputedStyle = function _getComputedStyle(element) {
+    return _win.getComputedStyle(element);
+}, _makePositionable = function _makePositionable(element) {
+    // if the element already has position: absolute or fixed, leave that, otherwise make it position: relative
+    var position = _getComputedStyle(element).position;
+    element.style.position = position === "absolute" || position === "fixed" ? position : "relative";
+}, _setDefaults = function _setDefaults(obj, defaults) {
+    for(var p in defaults)p in obj || (obj[p] = defaults[p]);
+    return obj;
+}, _getBounds = function _getBounds(element, withoutTransforms) {
+    var tween = withoutTransforms && _getComputedStyle(element)[_transformProp] !== "matrix(1, 0, 0, 1, 0, 0)" && gsap.to(element, {
+        x: 0,
+        y: 0,
+        xPercent: 0,
+        yPercent: 0,
+        rotation: 0,
+        rotationX: 0,
+        rotationY: 0,
+        scale: 1,
+        skewX: 0,
+        skewY: 0
+    }).progress(1), bounds = element.getBoundingClientRect();
+    tween && tween.progress(0).kill();
+    return bounds;
+}, _getSize = function _getSize(element, _ref3) {
+    var d2 = _ref3.d2;
+    return element["offset" + d2] || element["client" + d2] || 0;
+}, _getLabelRatioArray = function _getLabelRatioArray(timeline) {
+    var a = [], labels = timeline.labels, duration = timeline.duration(), p;
+    for(p in labels)a.push(labels[p] / duration);
+    return a;
+}, _getClosestLabel = function _getClosestLabel(animation) {
+    return function(value) {
+        return gsap.utils.snap(_getLabelRatioArray(animation), value);
+    };
+}, _snapDirectional = function _snapDirectional(snapIncrementOrArray) {
+    var snap = gsap.utils.snap(snapIncrementOrArray), a = Array.isArray(snapIncrementOrArray) && snapIncrementOrArray.slice(0).sort(function(a, b) {
+        return a - b;
+    });
+    return a ? function(value, direction, threshold) {
+        if (threshold === void 0) threshold = 1e-3;
+        var i;
+        if (!direction) return snap(value);
+        if (direction > 0) {
+            value -= threshold; // to avoid rounding errors. If we're too strict, it might snap forward, then immediately again, and again.
+            for(i = 0; i < a.length; i++){
+                if (a[i] >= value) return a[i];
+            }
+            return a[i - 1];
+        } else {
+            i = a.length;
+            value += threshold;
+            while(i--){
+                if (a[i] <= value) return a[i];
+            }
+        }
+        return a[0];
+    } : function(value, direction, threshold) {
+        if (threshold === void 0) threshold = 1e-3;
+        var snapped = snap(value);
+        return !direction || Math.abs(snapped - value) < threshold || snapped - value < 0 === direction < 0 ? snapped : snap(direction < 0 ? value - snapIncrementOrArray : value + snapIncrementOrArray);
+    };
+}, _getLabelAtDirection = function _getLabelAtDirection(timeline) {
+    return function(value, st) {
+        return _snapDirectional(_getLabelRatioArray(timeline))(value, st.direction);
+    };
+}, _multiListener = function _multiListener(func, element, types, callback) {
+    return types.split(",").forEach(function(type) {
+        return func(element, type, callback);
+    });
+}, _addListener = function _addListener(element, type, func, nonPassive, capture) {
+    return element.addEventListener(type, func, {
+        passive: !nonPassive,
+        capture: !!capture
+    });
+}, _removeListener = function _removeListener(element, type, func, capture) {
+    return element.removeEventListener(type, func, !!capture);
+}, _wheelListener = function _wheelListener(func, el, scrollFunc) {
+    scrollFunc = scrollFunc && scrollFunc.wheelHandler;
+    if (scrollFunc) {
+        func(el, "wheel", scrollFunc);
+        func(el, "touchmove", scrollFunc);
+    }
+}, _markerDefaults = {
+    startColor: "green",
+    endColor: "red",
+    indent: 0,
+    fontSize: "16px",
+    fontWeight: "normal"
+}, _defaults = {
+    toggleActions: "play",
+    anticipatePin: 0
+}, _keywords = {
+    top: 0,
+    left: 0,
+    center: 0.5,
+    bottom: 1,
+    right: 1
+}, _offsetToPx = function _offsetToPx(value, size) {
+    if (_isString(value)) {
+        var eqIndex = value.indexOf("="), relative = ~eqIndex ? +(value.charAt(eqIndex - 1) + 1) * parseFloat(value.substr(eqIndex + 1)) : 0;
+        if (~eqIndex) {
+            value.indexOf("%") > eqIndex && (relative *= size / 100);
+            value = value.substr(0, eqIndex - 1);
+        }
+        value = relative + (value in _keywords ? _keywords[value] * size : ~value.indexOf("%") ? parseFloat(value) * size / 100 : parseFloat(value) || 0);
+    }
+    return value;
+}, _createMarker = function _createMarker(type, name, container, direction, _ref4, offset, matchWidthEl, containerAnimation) {
+    var startColor = _ref4.startColor, endColor = _ref4.endColor, fontSize = _ref4.fontSize, indent = _ref4.indent, fontWeight = _ref4.fontWeight;
+    var e = _doc.createElement("div"), useFixedPosition = _isViewport(container) || (0, _observerJs._getProxyProp)(container, "pinType") === "fixed", isScroller = type.indexOf("scroller") !== -1, parent = useFixedPosition ? _body : container, isStart = type.indexOf("start") !== -1, color = isStart ? startColor : endColor, css = "border-color:" + color + ";font-size:" + fontSize + ";color:" + color + ";font-weight:" + fontWeight + ";pointer-events:none;white-space:nowrap;font-family:sans-serif,Arial;z-index:1000;padding:4px 8px;border-width:0;border-style:solid;";
+    css += "position:" + ((isScroller || containerAnimation) && useFixedPosition ? "fixed;" : "absolute;");
+    (isScroller || containerAnimation || !useFixedPosition) && (css += (direction === (0, _observerJs._vertical) ? _right : _bottom) + ":" + (offset + parseFloat(indent)) + "px;");
+    matchWidthEl && (css += "box-sizing:border-box;text-align:left;width:" + matchWidthEl.offsetWidth + "px;");
+    e._isStart = isStart;
+    e.setAttribute("class", "gsap-marker-" + type + (name ? " marker-" + name : ""));
+    e.style.cssText = css;
+    e.innerText = name || name === 0 ? type + "-" + name : type;
+    parent.children[0] ? parent.insertBefore(e, parent.children[0]) : parent.appendChild(e);
+    e._offset = e["offset" + direction.op.d2];
+    _positionMarker(e, 0, direction, isStart);
+    return e;
+}, _positionMarker = function _positionMarker(marker, start, direction, flipped) {
+    var vars = {
+        display: "block"
+    }, side = direction[flipped ? "os2" : "p2"], oppositeSide = direction[flipped ? "p2" : "os2"];
+    marker._isFlipped = flipped;
+    vars[direction.a + "Percent"] = flipped ? -100 : 0;
+    vars[direction.a] = flipped ? "1px" : 0;
+    vars["border" + side + _Width] = 1;
+    vars["border" + oppositeSide + _Width] = 0;
+    vars[direction.p] = start + "px";
+    gsap.set(marker, vars);
+}, _triggers = [], _ids = {}, _rafID, _sync = function _sync() {
+    return _getTime() - _lastScrollTime > 34 && (_rafID || (_rafID = requestAnimationFrame(_updateAll)));
+}, _onScroll = function _onScroll() {
+    // previously, we tried to optimize performance by batching/deferring to the next requestAnimationFrame(), but discovered that Safari has a few bugs that make this unworkable (especially on iOS). See https://codepen.io/GreenSock/pen/16c435b12ef09c38125204818e7b45fc?editors=0010 and https://codepen.io/GreenSock/pen/JjOxYpQ/3dd65ccec5a60f1d862c355d84d14562?editors=0010 and https://codepen.io/GreenSock/pen/ExbrPNa/087cef197dc35445a0951e8935c41503?editors=0010
+    if (!_normalizer || !_normalizer.isPressed || _normalizer.startX > _body.clientWidth) {
+        // if the user is dragging the scrollbar, allow it.
+        (0, _observerJs._scrollers).cache++;
+        if (_normalizer) _rafID || (_rafID = requestAnimationFrame(_updateAll));
+        else _updateAll(); // Safari in particular (on desktop) NEEDS the immediate update rather than waiting for a requestAnimationFrame() whereas iOS seems to benefit from waiting for the requestAnimationFrame() tick, at least when normalizing. See https://codepen.io/GreenSock/pen/qBYozqO?editors=0110
+        _lastScrollTime || _dispatch("scrollStart");
+        _lastScrollTime = _getTime();
+    }
+}, _setBaseDimensions = function _setBaseDimensions() {
+    _baseScreenWidth = _win.innerWidth;
+    _baseScreenHeight = _win.innerHeight;
+}, _onResize = function _onResize() {
+    (0, _observerJs._scrollers).cache++;
+    !_refreshing && !_ignoreResize && !_doc.fullscreenElement && !_doc.webkitFullscreenElement && (!_ignoreMobileResize || _baseScreenWidth !== _win.innerWidth || Math.abs(_win.innerHeight - _baseScreenHeight) > _win.innerHeight * 0.25) && _resizeDelay.restart(true);
+}, // ignore resizes triggered by refresh()
+_listeners = {}, _emptyArray = [], _softRefresh = function _softRefresh() {
+    return _removeListener(ScrollTrigger, "scrollEnd", _softRefresh) || _refreshAll(true);
+}, _dispatch = function _dispatch(type) {
+    return _listeners[type] && _listeners[type].map(function(f) {
+        return f();
+    }) || _emptyArray;
+}, _savedStyles = [], // when ScrollTrigger.saveStyles() is called, the inline styles are recorded in this Array in a sequential format like [element, cssText, gsCache, media]. This keeps it very memory-efficient and fast to iterate through.
+_revertRecorded = function _revertRecorded(media) {
+    for(var i = 0; i < _savedStyles.length; i += 5)if (!media || _savedStyles[i + 4] && _savedStyles[i + 4].query === media) {
+        _savedStyles[i].style.cssText = _savedStyles[i + 1];
+        _savedStyles[i].getBBox && _savedStyles[i].setAttribute("transform", _savedStyles[i + 2] || "");
+        _savedStyles[i + 3].uncache = 1;
+    }
+}, _revertAll = function _revertAll(kill, media) {
+    var trigger;
+    for(_i = 0; _i < _triggers.length; _i++){
+        trigger = _triggers[_i];
+        if (trigger && (!media || trigger._ctx === media)) {
+            if (kill) trigger.kill(1);
+            else trigger.revert(true, true);
+        }
+    }
+    _isReverted = true;
+    media && _revertRecorded(media);
+    media || _dispatch("revert");
+}, _clearScrollMemory = function _clearScrollMemory(scrollRestoration, force) {
+    // zero-out all the recorded scroll positions. Don't use _triggers because if, for example, .matchMedia() is used to create some ScrollTriggers and then the user resizes and it removes ALL ScrollTriggers, and then go back to a size where there are ScrollTriggers, it would have kept the position(s) saved from the initial state.
+    (0, _observerJs._scrollers).cache++;
+    (force || !_refreshingAll) && (0, _observerJs._scrollers).forEach(function(obj) {
+        return _isFunction(obj) && obj.cacheID++ && (obj.rec = 0);
+    });
+    _isString(scrollRestoration) && (_win.history.scrollRestoration = _scrollRestoration = scrollRestoration);
+}, _refreshingAll, _refreshID = 0, _queueRefreshID, _queueRefreshAll = function _queueRefreshAll() {
+    // we don't want to call _refreshAll() every time we create a new ScrollTrigger (for performance reasons) - it's better to batch them. Some frameworks dynamically load content and we can't rely on the window's "load" or "DOMContentLoaded" events to trigger it.
+    if (_queueRefreshID !== _refreshID) {
+        var id = _queueRefreshID = _refreshID;
+        requestAnimationFrame(function() {
+            return id === _refreshID && _refreshAll(true);
+        });
+    }
+}, _refresh100vh = function _refresh100vh() {
+    _body.appendChild(_div100vh);
+    _100vh = !_normalizer && _div100vh.offsetHeight || _win.innerHeight;
+    _body.removeChild(_div100vh);
+}, _hideAllMarkers = function _hideAllMarkers(hide) {
+    return _toArray(".gsap-marker-start, .gsap-marker-end, .gsap-marker-scroller-start, .gsap-marker-scroller-end").forEach(function(el) {
+        return el.style.display = hide ? "none" : "block";
+    });
+}, _refreshAll = function _refreshAll(force, skipRevert) {
+    if (_lastScrollTime && !force && !_isReverted) {
+        _addListener(ScrollTrigger, "scrollEnd", _softRefresh);
+        return;
+    }
+    _refresh100vh();
+    _refreshingAll = ScrollTrigger.isRefreshing = true;
+    (0, _observerJs._scrollers).forEach(function(obj) {
+        return _isFunction(obj) && ++obj.cacheID && (obj.rec = obj());
+    }); // force the clearing of the cache because some browsers take a little while to dispatch the "scroll" event and the user may have changed the scroll position and then called ScrollTrigger.refresh() right away
+    var refreshInits = _dispatch("refreshInit");
+    _sort && ScrollTrigger.sort();
+    skipRevert || _revertAll();
+    (0, _observerJs._scrollers).forEach(function(obj) {
+        if (_isFunction(obj)) {
+            obj.smooth && (obj.target.style.scrollBehavior = "auto"); // smooth scrolling interferes
+            obj(0);
+        }
+    });
+    _triggers.slice(0).forEach(function(t) {
+        return t.refresh();
+    }); // don't loop with _i because during a refresh() someone could call ScrollTrigger.update() which would iterate through _i resulting in a skip.
+    _isReverted = false;
+    _triggers.forEach(function(t) {
+        // nested pins (pinnedContainer) with pinSpacing may expand the container, so we must accommodate that here.
+        if (t._subPinOffset && t.pin) {
+            var prop = t.vars.horizontal ? "offsetWidth" : "offsetHeight", original = t.pin[prop];
+            t.revert(true, 1);
+            t.adjustPinSpacing(t.pin[prop] - original);
+            t.refresh();
+        }
+    });
+    _clampingMax = 1; // pinSpacing might be propping a page open, thus when we .setPositions() to clamp a ScrollTrigger's end we should leave the pinSpacing alone. That's what this flag is for.
+    _hideAllMarkers(true);
+    _triggers.forEach(function(t) {
+        // the scroller's max scroll position may change after all the ScrollTriggers refreshed (like pinning could push it down), so we need to loop back and correct any with end: "max". Same for anything with a clamped end
+        var max = _maxScroll(t.scroller, t._dir), endClamp = t.vars.end === "max" || t._endClamp && t.end > max, startClamp = t._startClamp && t.start >= max;
+        (endClamp || startClamp) && t.setPositions(startClamp ? max - 1 : t.start, endClamp ? Math.max(startClamp ? max : t.start + 1, max) : t.end, true);
+    });
+    _hideAllMarkers(false);
+    _clampingMax = 0;
+    refreshInits.forEach(function(result) {
+        return result && result.render && result.render(-1);
+    }); // if the onRefreshInit() returns an animation (typically a gsap.set()), revert it. This makes it easy to put things in a certain spot before refreshing for measurement purposes, and then put things back.
+    (0, _observerJs._scrollers).forEach(function(obj) {
+        if (_isFunction(obj)) {
+            obj.smooth && requestAnimationFrame(function() {
+                return obj.target.style.scrollBehavior = "smooth";
+            });
+            obj.rec && obj(obj.rec);
+        }
+    });
+    _clearScrollMemory(_scrollRestoration, 1);
+    _resizeDelay.pause();
+    _refreshID++;
+    _refreshingAll = 2;
+    _updateAll(2);
+    _triggers.forEach(function(t) {
+        return _isFunction(t.vars.onRefresh) && t.vars.onRefresh(t);
+    });
+    _refreshingAll = ScrollTrigger.isRefreshing = false;
+    _dispatch("refresh");
+}, _lastScroll = 0, _direction = 1, _primary, _updateAll = function _updateAll(force) {
+    if (force === 2 || !_refreshingAll && !_isReverted) {
+        // _isReverted could be true if, for example, a matchMedia() is in the process of executing. We don't want to update during the time everything is reverted.
+        ScrollTrigger.isUpdating = true;
+        _primary && _primary.update(0); // ScrollSmoother uses refreshPriority -9999 to become the primary that gets updated before all others because it affects the scroll position.
+        var l = _triggers.length, time = _getTime(), recordVelocity = time - _time1 >= 50, scroll = l && _triggers[0].scroll();
+        _direction = _lastScroll > scroll ? -1 : 1;
+        _refreshingAll || (_lastScroll = scroll);
+        if (recordVelocity) {
+            if (_lastScrollTime && !_pointerIsDown && time - _lastScrollTime > 200) {
+                _lastScrollTime = 0;
+                _dispatch("scrollEnd");
+            }
+            _time2 = _time1;
+            _time1 = time;
+        }
+        if (_direction < 0) {
+            _i = l;
+            while(_i-- > 0)_triggers[_i] && _triggers[_i].update(0, recordVelocity);
+            _direction = 1;
+        } else for(_i = 0; _i < l; _i++)_triggers[_i] && _triggers[_i].update(0, recordVelocity);
+        ScrollTrigger.isUpdating = false;
+    }
+    _rafID = 0;
+}, _propNamesToCopy = [
+    _left,
+    _top,
+    _bottom,
+    _right,
+    _margin + _Bottom,
+    _margin + _Right,
+    _margin + _Top,
+    _margin + _Left,
+    "display",
+    "flexShrink",
+    "float",
+    "zIndex",
+    "gridColumnStart",
+    "gridColumnEnd",
+    "gridRowStart",
+    "gridRowEnd",
+    "gridArea",
+    "justifySelf",
+    "alignSelf",
+    "placeSelf",
+    "order"
+], _stateProps = _propNamesToCopy.concat([
+    _width,
+    _height,
+    "boxSizing",
+    "max" + _Width,
+    "max" + _Height,
+    "position",
+    _margin,
+    _padding,
+    _padding + _Top,
+    _padding + _Right,
+    _padding + _Bottom,
+    _padding + _Left
+]), _swapPinOut = function _swapPinOut(pin, spacer, state) {
+    _setState(state);
+    var cache = pin._gsap;
+    if (cache.spacerIsNative) _setState(cache.spacerState);
+    else if (pin._gsap.swappedIn) {
+        var parent = spacer.parentNode;
+        if (parent) {
+            parent.insertBefore(pin, spacer);
+            parent.removeChild(spacer);
+        }
+    }
+    pin._gsap.swappedIn = false;
+}, _swapPinIn = function _swapPinIn(pin, spacer, cs, spacerState) {
+    if (!pin._gsap.swappedIn) {
+        var i = _propNamesToCopy.length, spacerStyle = spacer.style, pinStyle = pin.style, p;
+        while(i--){
+            p = _propNamesToCopy[i];
+            spacerStyle[p] = cs[p];
+        }
+        spacerStyle.position = cs.position === "absolute" ? "absolute" : "relative";
+        cs.display === "inline" && (spacerStyle.display = "inline-block");
+        pinStyle[_bottom] = pinStyle[_right] = "auto";
+        spacerStyle.flexBasis = cs.flexBasis || "auto";
+        spacerStyle.overflow = "visible";
+        spacerStyle.boxSizing = "border-box";
+        spacerStyle[_width] = _getSize(pin, (0, _observerJs._horizontal)) + _px;
+        spacerStyle[_height] = _getSize(pin, (0, _observerJs._vertical)) + _px;
+        spacerStyle[_padding] = pinStyle[_margin] = pinStyle[_top] = pinStyle[_left] = "0";
+        _setState(spacerState);
+        pinStyle[_width] = pinStyle["max" + _Width] = cs[_width];
+        pinStyle[_height] = pinStyle["max" + _Height] = cs[_height];
+        pinStyle[_padding] = cs[_padding];
+        if (pin.parentNode !== spacer) {
+            pin.parentNode.insertBefore(spacer, pin);
+            spacer.appendChild(pin);
+        }
+        pin._gsap.swappedIn = true;
+    }
+}, _capsExp = /([A-Z])/g, _setState = function _setState(state) {
+    if (state) {
+        var style = state.t.style, l = state.length, i = 0, p, value;
+        (state.t._gsap || gsap.core.getCache(state.t)).uncache = 1; // otherwise transforms may be off
+        for(; i < l; i += 2){
+            value = state[i + 1];
+            p = state[i];
+            if (value) style[p] = value;
+            else if (style[p]) style.removeProperty(p.replace(_capsExp, "-$1").toLowerCase());
+        }
+    }
+}, _getState = function _getState(element) {
+    // returns an Array with alternating values like [property, value, property, value] and a "t" property pointing to the target (element). Makes it fast and cheap.
+    var l = _stateProps.length, style = element.style, state = [], i = 0;
+    for(; i < l; i++)state.push(_stateProps[i], style[_stateProps[i]]);
+    state.t = element;
+    return state;
+}, _copyState = function _copyState(state, override, omitOffsets) {
+    var result = [], l = state.length, i = omitOffsets ? 8 : 0, // skip top, left, right, bottom if omitOffsets is true
+    p;
+    for(; i < l; i += 2){
+        p = state[i];
+        result.push(p, p in override ? override[p] : state[i + 1]);
+    }
+    result.t = state.t;
+    return result;
+}, _winOffsets = {
+    left: 0,
+    top: 0
+}, // // potential future feature (?) Allow users to calculate where a trigger hits (scroll position) like getScrollPosition("#id", "top bottom")
+// _getScrollPosition = (trigger, position, {scroller, containerAnimation, horizontal}) => {
+// 	scroller = _getTarget(scroller || _win);
+// 	let direction = horizontal ? _horizontal : _vertical,
+// 		isViewport = _isViewport(scroller);
+// 	_getSizeFunc(scroller, isViewport, direction);
+// 	return _parsePosition(position, _getTarget(trigger), _getSizeFunc(scroller, isViewport, direction)(), direction, _getScrollFunc(scroller, direction)(), 0, 0, 0, _getOffsetsFunc(scroller, isViewport)(), isViewport ? 0 : parseFloat(_getComputedStyle(scroller)["border" + direction.p2 + _Width]) || 0, 0, containerAnimation ? containerAnimation.duration() : _maxScroll(scroller), containerAnimation);
+// },
+_parsePosition = function _parsePosition(value, trigger, scrollerSize, direction, scroll, marker, markerScroller, self, scrollerBounds, borderWidth, useFixedPosition, scrollerMax, containerAnimation, clampZeroProp) {
+    _isFunction(value) && (value = value(self));
+    if (_isString(value) && value.substr(0, 3) === "max") value = scrollerMax + (value.charAt(4) === "=" ? _offsetToPx("0" + value.substr(3), scrollerSize) : 0);
+    var time = containerAnimation ? containerAnimation.time() : 0, p1, p2, element;
+    containerAnimation && containerAnimation.seek(0);
+    isNaN(value) || (value = +value); // convert a string number like "45" to an actual number
+    if (!_isNumber(value)) {
+        _isFunction(trigger) && (trigger = trigger(self));
+        var offsets = (value || "0").split(" "), bounds, localOffset, globalOffset, display;
+        element = (0, _observerJs._getTarget)(trigger, self) || _body;
+        bounds = _getBounds(element) || {};
+        if ((!bounds || !bounds.left && !bounds.top) && _getComputedStyle(element).display === "none") {
+            // if display is "none", it won't report getBoundingClientRect() properly
+            display = element.style.display;
+            element.style.display = "block";
+            bounds = _getBounds(element);
+            display ? element.style.display = display : element.style.removeProperty("display");
+        }
+        localOffset = _offsetToPx(offsets[0], bounds[direction.d]);
+        globalOffset = _offsetToPx(offsets[1] || "0", scrollerSize);
+        value = bounds[direction.p] - scrollerBounds[direction.p] - borderWidth + localOffset + scroll - globalOffset;
+        markerScroller && _positionMarker(markerScroller, globalOffset, direction, scrollerSize - globalOffset < 20 || markerScroller._isStart && globalOffset > 20);
+        scrollerSize -= scrollerSize - globalOffset; // adjust for the marker
+    } else {
+        containerAnimation && (value = gsap.utils.mapRange(containerAnimation.scrollTrigger.start, containerAnimation.scrollTrigger.end, 0, scrollerMax, value));
+        markerScroller && _positionMarker(markerScroller, scrollerSize, direction, true);
+    }
+    if (clampZeroProp) {
+        self[clampZeroProp] = value || -0.001;
+        value < 0 && (value = 0);
+    }
+    if (marker) {
+        var position = value + scrollerSize, isStart = marker._isStart;
+        p1 = "scroll" + direction.d2;
+        _positionMarker(marker, position, direction, isStart && position > 20 || !isStart && (useFixedPosition ? Math.max(_body[p1], _docEl[p1]) : marker.parentNode[p1]) <= position + 1);
+        if (useFixedPosition) {
+            scrollerBounds = _getBounds(markerScroller);
+            useFixedPosition && (marker.style[direction.op.p] = scrollerBounds[direction.op.p] - direction.op.m - marker._offset + _px);
+        }
+    }
+    if (containerAnimation && element) {
+        p1 = _getBounds(element);
+        containerAnimation.seek(scrollerMax);
+        p2 = _getBounds(element);
+        containerAnimation._caScrollDist = p1[direction.p] - p2[direction.p];
+        value = value / containerAnimation._caScrollDist * scrollerMax;
+    }
+    containerAnimation && containerAnimation.seek(time);
+    return containerAnimation ? value : Math.round(value);
+}, _prefixExp = /(webkit|moz|length|cssText|inset)/i, _reparent = function _reparent(element, parent, top, left) {
+    if (element.parentNode !== parent) {
+        var style = element.style, p, cs;
+        if (parent === _body) {
+            element._stOrig = style.cssText; // record original inline styles so we can revert them later
+            cs = _getComputedStyle(element);
+            for(p in cs)// must copy all relevant styles to ensure that nothing changes visually when we reparent to the <body>. Skip the vendor prefixed ones.
+            if (!+p && !_prefixExp.test(p) && cs[p] && typeof style[p] === "string" && p !== "0") style[p] = cs[p];
+            style.top = top;
+            style.left = left;
+        } else style.cssText = element._stOrig;
+        gsap.core.getCache(element).uncache = 1;
+        parent.appendChild(element);
+    }
+}, _interruptionTracker = function _interruptionTracker(getValueFunc, initialValue, onInterrupt) {
+    var last1 = initialValue, last2 = last1;
+    return function(value) {
+        var current = Math.round(getValueFunc()); // round because in some [very uncommon] Windows environments, scroll can get reported with decimals even though it was set without.
+        if (current !== last1 && current !== last2 && Math.abs(current - last1) > 3 && Math.abs(current - last2) > 3) {
+            // if the user scrolls, kill the tween. iOS Safari intermittently misreports the scroll position, it may be the most recently-set one or the one before that! When Safari is zoomed (CMD-+), it often misreports as 1 pixel off too! So if we set the scroll position to 125, for example, it'll actually report it as 124.
+            value = current;
+            onInterrupt && onInterrupt();
+        }
+        last2 = last1;
+        last1 = value;
+        return value;
+    };
+}, _shiftMarker = function _shiftMarker(marker, direction, value) {
+    var vars = {};
+    vars[direction.p] = "+=" + value;
+    gsap.set(marker, vars);
+}, // _mergeAnimations = animations => {
+// 	let tl = gsap.timeline({smoothChildTiming: true}).startTime(Math.min(...animations.map(a => a.globalTime(0))));
+// 	animations.forEach(a => {let time = a.totalTime(); tl.add(a); a.totalTime(time); });
+// 	tl.smoothChildTiming = false;
+// 	return tl;
+// },
+// returns a function that can be used to tween the scroll position in the direction provided, and when doing so it'll add a .tween property to the FUNCTION itself, and remove it when the tween completes or gets killed. This gives us a way to have multiple ScrollTriggers use a central function for any given scroller and see if there's a scroll tween running (which would affect if/how things get updated)
+_getTweenCreator = function _getTweenCreator(scroller, direction) {
+    var getScroll = (0, _observerJs._getScrollFunc)(scroller, direction), prop = "_scroll" + direction.p2, // add a tweenable property to the scroller that's a getter/setter function, like _scrollTop or _scrollLeft. This way, if someone does gsap.killTweensOf(scroller) it'll kill the scroll tween.
+    getTween = function getTween(scrollTo, vars, initialValue, change1, change2) {
+        var tween = getTween.tween, onComplete = vars.onComplete, modifiers = {};
+        initialValue = initialValue || getScroll();
+        var checkForInterruption = _interruptionTracker(getScroll, initialValue, function() {
+            tween.kill();
+            getTween.tween = 0;
+        });
+        change2 = change1 && change2 || 0; // if change1 is 0, we set that to the difference and ignore change2. Otherwise, there would be a compound effect.
+        change1 = change1 || scrollTo - initialValue;
+        tween && tween.kill();
+        vars[prop] = scrollTo;
+        vars.inherit = false;
+        vars.modifiers = modifiers;
+        modifiers[prop] = function() {
+            return checkForInterruption(initialValue + change1 * tween.ratio + change2 * tween.ratio * tween.ratio);
+        };
+        vars.onUpdate = function() {
+            (0, _observerJs._scrollers).cache++;
+            getTween.tween && _updateAll(); // if it was interrupted/killed, like in a context.revert(), don't force an updateAll()
+        };
+        vars.onComplete = function() {
+            getTween.tween = 0;
+            onComplete && onComplete.call(tween);
+        };
+        tween = getTween.tween = gsap.to(scroller, vars);
+        return tween;
+    };
+    scroller[prop] = getScroll;
+    getScroll.wheelHandler = function() {
+        return getTween.tween && getTween.tween.kill() && (getTween.tween = 0);
+    };
+    _addListener(scroller, "wheel", getScroll.wheelHandler); // Windows machines handle mousewheel scrolling in chunks (like "3 lines per scroll") meaning the typical strategy for cancelling the scroll isn't as sensitive. It's much more likely to match one of the previous 2 scroll event positions. So we kill any snapping as soon as there's a wheel event.
+    ScrollTrigger.isTouch && _addListener(scroller, "touchmove", getScroll.wheelHandler);
+    return getTween;
+};
+var ScrollTrigger = /*#__PURE__*/ function() {
+    function ScrollTrigger(vars, animation) {
+        _coreInitted || ScrollTrigger.register(gsap) || console.warn("Please gsap.registerPlugin(ScrollTrigger)");
+        _context(this);
+        this.init(vars, animation);
+    }
+    var _proto = ScrollTrigger.prototype;
+    _proto.init = function init(vars, animation) {
+        this.progress = this.start = 0;
+        this.vars && this.kill(true, true); // in case it's being initted again
+        if (!_enabled) {
+            this.update = this.refresh = this.kill = _passThrough;
+            return;
+        }
+        vars = _setDefaults(_isString(vars) || _isNumber(vars) || vars.nodeType ? {
+            trigger: vars
+        } : vars, _defaults);
+        var _vars = vars, onUpdate = _vars.onUpdate, toggleClass = _vars.toggleClass, id = _vars.id, onToggle = _vars.onToggle, onRefresh = _vars.onRefresh, scrub = _vars.scrub, trigger = _vars.trigger, pin = _vars.pin, pinSpacing = _vars.pinSpacing, invalidateOnRefresh = _vars.invalidateOnRefresh, anticipatePin = _vars.anticipatePin, onScrubComplete = _vars.onScrubComplete, onSnapComplete = _vars.onSnapComplete, once = _vars.once, snap = _vars.snap, pinReparent = _vars.pinReparent, pinSpacer = _vars.pinSpacer, containerAnimation = _vars.containerAnimation, fastScrollEnd = _vars.fastScrollEnd, preventOverlaps = _vars.preventOverlaps, direction = vars.horizontal || vars.containerAnimation && vars.horizontal !== false ? (0, _observerJs._horizontal) : (0, _observerJs._vertical), isToggle = !scrub && scrub !== 0, scroller = (0, _observerJs._getTarget)(vars.scroller || _win), scrollerCache = gsap.core.getCache(scroller), isViewport = _isViewport(scroller), useFixedPosition = ("pinType" in vars ? vars.pinType : (0, _observerJs._getProxyProp)(scroller, "pinType") || isViewport && "fixed") === "fixed", callbacks = [
+            vars.onEnter,
+            vars.onLeave,
+            vars.onEnterBack,
+            vars.onLeaveBack
+        ], toggleActions = isToggle && vars.toggleActions.split(" "), markers = "markers" in vars ? vars.markers : _defaults.markers, borderWidth = isViewport ? 0 : parseFloat(_getComputedStyle(scroller)["border" + direction.p2 + _Width]) || 0, self = this, onRefreshInit = vars.onRefreshInit && function() {
+            return vars.onRefreshInit(self);
+        }, getScrollerSize = _getSizeFunc(scroller, isViewport, direction), getScrollerOffsets = _getOffsetsFunc(scroller, isViewport), lastSnap = 0, lastRefresh = 0, prevProgress = 0, scrollFunc = (0, _observerJs._getScrollFunc)(scroller, direction), tweenTo, pinCache, snapFunc, scroll1, scroll2, start, end, markerStart, markerEnd, markerStartTrigger, markerEndTrigger, markerVars, executingOnRefresh, change, pinOriginalState, pinActiveState, pinState, spacer, offset, pinGetter, pinSetter, pinStart, pinChange, spacingStart, spacerState, markerStartSetter, pinMoves, markerEndSetter, cs, snap1, snap2, scrubTween, scrubSmooth, snapDurClamp, snapDelayedCall, prevScroll, prevAnimProgress, caMarkerSetter, customRevertReturn; // for the sake of efficiency, _startClamp/_endClamp serve like a truthy value indicating that clamping was enabled on the start/end, and ALSO store the actual pre-clamped numeric value. We tap into that in ScrollSmoother for speed effects. So for example, if start="clamp(top bottom)" results in a start of -100 naturally, it would get clamped to 0 but -100 would be stored in _startClamp.
+        self._startClamp = self._endClamp = false;
+        self._dir = direction;
+        anticipatePin *= 45;
+        self.scroller = scroller;
+        self.scroll = containerAnimation ? containerAnimation.time.bind(containerAnimation) : scrollFunc;
+        scroll1 = scrollFunc();
+        self.vars = vars;
+        animation = animation || vars.animation;
+        if ("refreshPriority" in vars) {
+            _sort = 1;
+            vars.refreshPriority === -9999 && (_primary = self); // used by ScrollSmoother
+        }
+        scrollerCache.tweenScroll = scrollerCache.tweenScroll || {
+            top: _getTweenCreator(scroller, (0, _observerJs._vertical)),
+            left: _getTweenCreator(scroller, (0, _observerJs._horizontal))
+        };
+        self.tweenTo = tweenTo = scrollerCache.tweenScroll[direction.p];
+        self.scrubDuration = function(value) {
+            scrubSmooth = _isNumber(value) && value;
+            if (!scrubSmooth) {
+                scrubTween && scrubTween.progress(1).kill();
+                scrubTween = 0;
+            } else scrubTween ? scrubTween.duration(value) : scrubTween = gsap.to(animation, {
+                ease: "expo",
+                totalProgress: "+=0",
+                inherit: false,
+                duration: scrubSmooth,
+                paused: true,
+                onComplete: function onComplete() {
+                    return onScrubComplete && onScrubComplete(self);
+                }
+            });
+        };
+        if (animation) {
+            animation.vars.lazy = false;
+            animation._initted && !self.isReverted || animation.vars.immediateRender !== false && vars.immediateRender !== false && animation.duration() && animation.render(0, true, true); // special case: if this ScrollTrigger gets re-initted, a from() tween with a stagger could get initted initially and then reverted on the re-init which means it'll need to get rendered again here to properly display things. Otherwise, See https://gsap.com/forums/topic/36777-scrollsmoother-splittext-nextjs/ and https://codepen.io/GreenSock/pen/eYPyPpd?editors=0010
+            self.animation = animation.pause();
+            animation.scrollTrigger = self;
+            self.scrubDuration(scrub);
+            snap1 = 0;
+            id || (id = animation.vars.id);
+        }
+        if (snap) {
+            // TODO: potential idea: use legitimate CSS scroll snapping by pushing invisible elements into the DOM that serve as snap positions, and toggle the document.scrollingElement.style.scrollSnapType onToggle. See https://codepen.io/GreenSock/pen/JjLrgWM for a quick proof of concept.
+            if (!_isObject(snap) || snap.push) snap = {
+                snapTo: snap
+            };
+            "scrollBehavior" in _body.style && gsap.set(isViewport ? [
+                _body,
+                _docEl
+            ] : scroller, {
+                scrollBehavior: "auto"
+            }); // smooth scrolling doesn't work with snap.
+            (0, _observerJs._scrollers).forEach(function(o) {
+                return _isFunction(o) && o.target === (isViewport ? _doc.scrollingElement || _docEl : scroller) && (o.smooth = false);
+            }); // note: set smooth to false on both the vertical and horizontal scroll getters/setters
+            snapFunc = _isFunction(snap.snapTo) ? snap.snapTo : snap.snapTo === "labels" ? _getClosestLabel(animation) : snap.snapTo === "labelsDirectional" ? _getLabelAtDirection(animation) : snap.directional !== false ? function(value, st) {
+                return _snapDirectional(snap.snapTo)(value, _getTime() - lastRefresh < 500 ? 0 : st.direction);
+            } : gsap.utils.snap(snap.snapTo);
+            snapDurClamp = snap.duration || {
+                min: 0.1,
+                max: 2
+            };
+            snapDurClamp = _isObject(snapDurClamp) ? _clamp(snapDurClamp.min, snapDurClamp.max) : _clamp(snapDurClamp, snapDurClamp);
+            snapDelayedCall = gsap.delayedCall(snap.delay || scrubSmooth / 2 || 0.1, function() {
+                var scroll = scrollFunc(), refreshedRecently = _getTime() - lastRefresh < 500, tween = tweenTo.tween;
+                if ((refreshedRecently || Math.abs(self.getVelocity()) < 10) && !tween && !_pointerIsDown && lastSnap !== scroll) {
+                    var progress = (scroll - start) / change, totalProgress = animation && !isToggle ? animation.totalProgress() : progress, velocity = refreshedRecently ? 0 : (totalProgress - snap2) / (_getTime() - _time2) * 1000 || 0, change1 = gsap.utils.clamp(-progress, 1 - progress, _abs(velocity / 2) * velocity / 0.185), naturalEnd = progress + (snap.inertia === false ? 0 : change1), endValue, endScroll, _snap = snap, onStart = _snap.onStart, _onInterrupt = _snap.onInterrupt, _onComplete = _snap.onComplete;
+                    endValue = snapFunc(naturalEnd, self);
+                    _isNumber(endValue) || (endValue = naturalEnd); // in case the function didn't return a number, fall back to using the naturalEnd
+                    endScroll = Math.round(start + endValue * change);
+                    if (scroll <= end && scroll >= start && endScroll !== scroll) {
+                        if (tween && !tween._initted && tween.data <= _abs(endScroll - scroll)) // there's an overlapping snap! So we must figure out which one is closer and let that tween live.
+                        return;
+                        if (snap.inertia === false) change1 = endValue - progress;
+                        tweenTo(endScroll, {
+                            duration: snapDurClamp(_abs(Math.max(_abs(naturalEnd - totalProgress), _abs(endValue - totalProgress)) * 0.185 / velocity / 0.05 || 0)),
+                            ease: snap.ease || "power3",
+                            data: _abs(endScroll - scroll),
+                            // record the distance so that if another snap tween occurs (conflict) we can prioritize the closest snap.
+                            onInterrupt: function onInterrupt() {
+                                return snapDelayedCall.restart(true) && _onInterrupt && _onInterrupt(self);
+                            },
+                            onComplete: function onComplete() {
+                                self.update();
+                                lastSnap = scrollFunc();
+                                if (animation) // the resolution of the scrollbar is limited, so we should correct the scrubbed animation's playhead at the end to match EXACTLY where it was supposed to snap
+                                scrubTween ? scrubTween.resetTo("totalProgress", endValue, animation._tTime / animation._tDur) : animation.progress(endValue);
+                                snap1 = snap2 = animation && !isToggle ? animation.totalProgress() : self.progress;
+                                onSnapComplete && onSnapComplete(self);
+                                _onComplete && _onComplete(self);
+                            }
+                        }, scroll, change1 * change, endScroll - scroll - change1 * change);
+                        onStart && onStart(self, tweenTo.tween);
+                    }
+                } else if (self.isActive && lastSnap !== scroll) snapDelayedCall.restart(true);
+            }).pause();
+        }
+        id && (_ids[id] = self);
+        trigger = self.trigger = (0, _observerJs._getTarget)(trigger || pin !== true && pin); // if a trigger has some kind of scroll-related effect applied that could contaminate the "y" or "x" position (like a ScrollSmoother effect), we needed a way to temporarily revert it, so we use the stRevert property of the gsCache. It can return another function that we'll call at the end so it can return to its normal state.
+        customRevertReturn = trigger && trigger._gsap && trigger._gsap.stRevert;
+        customRevertReturn && (customRevertReturn = customRevertReturn(self));
+        pin = pin === true ? trigger : (0, _observerJs._getTarget)(pin);
+        _isString(toggleClass) && (toggleClass = {
+            targets: trigger,
+            className: toggleClass
+        });
+        if (pin) {
+            pinSpacing === false || pinSpacing === _margin || (pinSpacing = !pinSpacing && pin.parentNode && pin.parentNode.style && _getComputedStyle(pin.parentNode).display === "flex" ? false : _padding); // if the parent is display: flex, don't apply pinSpacing by default. We should check that pin.parentNode is an element (not shadow dom window)
+            self.pin = pin;
+            pinCache = gsap.core.getCache(pin);
+            if (!pinCache.spacer) {
+                // record the spacer and pinOriginalState on the cache in case someone tries pinning the same element with MULTIPLE ScrollTriggers - we don't want to have multiple spacers or record the "original" pin state after it has already been affected by another ScrollTrigger.
+                if (pinSpacer) {
+                    pinSpacer = (0, _observerJs._getTarget)(pinSpacer);
+                    pinSpacer && !pinSpacer.nodeType && (pinSpacer = pinSpacer.current || pinSpacer.nativeElement); // for React & Angular
+                    pinCache.spacerIsNative = !!pinSpacer;
+                    pinSpacer && (pinCache.spacerState = _getState(pinSpacer));
+                }
+                pinCache.spacer = spacer = pinSpacer || _doc.createElement("div");
+                spacer.classList.add("pin-spacer");
+                id && spacer.classList.add("pin-spacer-" + id);
+                pinCache.pinState = pinOriginalState = _getState(pin);
+            } else pinOriginalState = pinCache.pinState;
+            vars.force3D !== false && gsap.set(pin, {
+                force3D: true
+            });
+            self.spacer = spacer = pinCache.spacer;
+            cs = _getComputedStyle(pin);
+            spacingStart = cs[pinSpacing + direction.os2];
+            pinGetter = gsap.getProperty(pin);
+            pinSetter = gsap.quickSetter(pin, direction.a, _px); // pin.firstChild && !_maxScroll(pin, direction) && (pin.style.overflow = "hidden"); // protects from collapsing margins, but can have unintended consequences as demonstrated here: https://codepen.io/GreenSock/pen/1e42c7a73bfa409d2cf1e184e7a4248d so it was removed in favor of just telling people to set up their CSS to avoid the collapsing margins (overflow: hidden | auto is just one option. Another is border-top: 1px solid transparent).
+            _swapPinIn(pin, spacer, cs);
+            pinState = _getState(pin);
+        }
+        if (markers) {
+            markerVars = _isObject(markers) ? _setDefaults(markers, _markerDefaults) : _markerDefaults;
+            markerStartTrigger = _createMarker("scroller-start", id, scroller, direction, markerVars, 0);
+            markerEndTrigger = _createMarker("scroller-end", id, scroller, direction, markerVars, 0, markerStartTrigger);
+            offset = markerStartTrigger["offset" + direction.op.d2];
+            var content = (0, _observerJs._getTarget)((0, _observerJs._getProxyProp)(scroller, "content") || scroller);
+            markerStart = this.markerStart = _createMarker("start", id, content, direction, markerVars, offset, 0, containerAnimation);
+            markerEnd = this.markerEnd = _createMarker("end", id, content, direction, markerVars, offset, 0, containerAnimation);
+            containerAnimation && (caMarkerSetter = gsap.quickSetter([
+                markerStart,
+                markerEnd
+            ], direction.a, _px));
+            if (!useFixedPosition && !((0, _observerJs._proxies).length && (0, _observerJs._getProxyProp)(scroller, "fixedMarkers") === true)) {
+                _makePositionable(isViewport ? _body : scroller);
+                gsap.set([
+                    markerStartTrigger,
+                    markerEndTrigger
+                ], {
+                    force3D: true
+                });
+                markerStartSetter = gsap.quickSetter(markerStartTrigger, direction.a, _px);
+                markerEndSetter = gsap.quickSetter(markerEndTrigger, direction.a, _px);
+            }
+        }
+        if (containerAnimation) {
+            var oldOnUpdate = containerAnimation.vars.onUpdate, oldParams = containerAnimation.vars.onUpdateParams;
+            containerAnimation.eventCallback("onUpdate", function() {
+                self.update(0, 0, 1);
+                oldOnUpdate && oldOnUpdate.apply(containerAnimation, oldParams || []);
+            });
+        }
+        self.previous = function() {
+            return _triggers[_triggers.indexOf(self) - 1];
+        };
+        self.next = function() {
+            return _triggers[_triggers.indexOf(self) + 1];
+        };
+        self.revert = function(revert, temp) {
+            if (!temp) return self.kill(true);
+             // for compatibility with gsap.context() and gsap.matchMedia() which call revert()
+            var r = revert !== false || !self.enabled, prevRefreshing = _refreshing;
+            if (r !== self.isReverted) {
+                if (r) {
+                    prevScroll = Math.max(scrollFunc(), self.scroll.rec || 0); // record the scroll so we can revert later (repositioning/pinning things can affect scroll position). In the static refresh() method, we first record all the scroll positions as a reference.
+                    prevProgress = self.progress;
+                    prevAnimProgress = animation && animation.progress();
+                }
+                markerStart && [
+                    markerStart,
+                    markerEnd,
+                    markerStartTrigger,
+                    markerEndTrigger
+                ].forEach(function(m) {
+                    return m.style.display = r ? "none" : "block";
+                });
+                if (r) {
+                    _refreshing = self;
+                    self.update(r); // make sure the pin is back in its original position so that all the measurements are correct. do this BEFORE swapping the pin out
+                }
+                if (pin && (!pinReparent || !self.isActive)) {
+                    if (r) _swapPinOut(pin, spacer, pinOriginalState);
+                    else _swapPinIn(pin, spacer, _getComputedStyle(pin), spacerState);
+                }
+                r || self.update(r); // when we're restoring, the update should run AFTER swapping the pin into its pin-spacer.
+                _refreshing = prevRefreshing; // restore. We set it to true during the update() so that things fire properly in there.
+                self.isReverted = r;
+            }
+        };
+        self.refresh = function(soft, force, position, pinOffset) {
+            // position is typically only defined if it's coming from setPositions() - it's a way to skip the normal parsing. pinOffset is also only from setPositions() and is mostly related to fancy stuff we need to do in ScrollSmoother with effects
+            if ((_refreshing || !self.enabled) && !force) return;
+            if (pin && soft && _lastScrollTime) {
+                _addListener(ScrollTrigger, "scrollEnd", _softRefresh);
+                return;
+            }
+            !_refreshingAll && onRefreshInit && onRefreshInit(self);
+            _refreshing = self;
+            if (tweenTo.tween && !position) {
+                // we skip this if a position is passed in because typically that's from .setPositions() and it's best to allow in-progress snapping to continue.
+                tweenTo.tween.kill();
+                tweenTo.tween = 0;
+            }
+            scrubTween && scrubTween.pause();
+            invalidateOnRefresh && animation && animation.revert({
+                kill: false
+            }).invalidate();
+            self.isReverted || self.revert(true, true);
+            self._subPinOffset = false; // we'll set this to true in the sub-pins if we find any
+            var size = getScrollerSize(), scrollerBounds = getScrollerOffsets(), max = containerAnimation ? containerAnimation.duration() : _maxScroll(scroller, direction), isFirstRefresh = change <= 0.01, offset = 0, otherPinOffset = pinOffset || 0, parsedEnd = _isObject(position) ? position.end : vars.end, parsedEndTrigger = vars.endTrigger || trigger, parsedStart = _isObject(position) ? position.start : vars.start || (vars.start === 0 || !trigger ? 0 : pin ? "0 0" : "0 100%"), pinnedContainer = self.pinnedContainer = vars.pinnedContainer && (0, _observerJs._getTarget)(vars.pinnedContainer, self), triggerIndex = trigger && Math.max(0, _triggers.indexOf(self)) || 0, i = triggerIndex, cs, bounds, scroll, isVertical, override, curTrigger, curPin, oppositeScroll, initted, revertedPins, forcedOverflow, markerStartOffset, markerEndOffset;
+            if (markers && _isObject(position)) {
+                // if we alter the start/end positions with .setPositions(), it generally feeds in absolute NUMBERS which don't convey information about where to line up the markers, so to keep it intuitive, we record how far the trigger positions shift after applying the new numbers and then offset by that much in the opposite direction. We do the same to the associated trigger markers too of course.
+                markerStartOffset = gsap.getProperty(markerStartTrigger, direction.p);
+                markerEndOffset = gsap.getProperty(markerEndTrigger, direction.p);
+            }
+            while(i--){
+                // user might try to pin the same element more than once, so we must find any prior triggers with the same pin, revert them, and determine how long they're pinning so that we can offset things appropriately. Make sure we revert from last to first so that things "rewind" properly.
+                curTrigger = _triggers[i];
+                curTrigger.end || curTrigger.refresh(0, 1) || (_refreshing = self); // if it's a timeline-based trigger that hasn't been fully initialized yet because it's waiting for 1 tick, just force the refresh() here, otherwise if it contains a pin that's supposed to affect other ScrollTriggers further down the page, they won't be adjusted properly.
+                curPin = curTrigger.pin;
+                if (curPin && (curPin === trigger || curPin === pin || curPin === pinnedContainer) && !curTrigger.isReverted) {
+                    revertedPins || (revertedPins = []);
+                    revertedPins.unshift(curTrigger); // we'll revert from first to last to make sure things reach their end state properly
+                    curTrigger.revert(true, true);
+                }
+                if (curTrigger !== _triggers[i]) {
+                    // in case it got removed.
+                    triggerIndex--;
+                    i--;
+                }
+            }
+            _isFunction(parsedStart) && (parsedStart = parsedStart(self));
+            parsedStart = _parseClamp(parsedStart, "start", self);
+            start = _parsePosition(parsedStart, trigger, size, direction, scrollFunc(), markerStart, markerStartTrigger, self, scrollerBounds, borderWidth, useFixedPosition, max, containerAnimation, self._startClamp && "_startClamp") || (pin ? -0.001 : 0);
+            _isFunction(parsedEnd) && (parsedEnd = parsedEnd(self));
+            if (_isString(parsedEnd) && !parsedEnd.indexOf("+=")) {
+                if (~parsedEnd.indexOf(" ")) parsedEnd = (_isString(parsedStart) ? parsedStart.split(" ")[0] : "") + parsedEnd;
+                else {
+                    offset = _offsetToPx(parsedEnd.substr(2), size);
+                    parsedEnd = _isString(parsedStart) ? parsedStart : (containerAnimation ? gsap.utils.mapRange(0, containerAnimation.duration(), containerAnimation.scrollTrigger.start, containerAnimation.scrollTrigger.end, start) : start) + offset; // _parsePosition won't factor in the offset if the start is a number, so do it here.
+                    parsedEndTrigger = trigger;
+                }
+            }
+            parsedEnd = _parseClamp(parsedEnd, "end", self);
+            end = Math.max(start, _parsePosition(parsedEnd || (parsedEndTrigger ? "100% 0" : max), parsedEndTrigger, size, direction, scrollFunc() + offset, markerEnd, markerEndTrigger, self, scrollerBounds, borderWidth, useFixedPosition, max, containerAnimation, self._endClamp && "_endClamp")) || -0.001;
+            offset = 0;
+            i = triggerIndex;
+            while(i--){
+                curTrigger = _triggers[i];
+                curPin = curTrigger.pin;
+                if (curPin && curTrigger.start - curTrigger._pinPush <= start && !containerAnimation && curTrigger.end > 0) {
+                    cs = curTrigger.end - (self._startClamp ? Math.max(0, curTrigger.start) : curTrigger.start);
+                    if ((curPin === trigger && curTrigger.start - curTrigger._pinPush < start || curPin === pinnedContainer) && isNaN(parsedStart)) // numeric start values shouldn't be offset at all - treat them as absolute
+                    offset += cs * (1 - curTrigger.progress);
+                    curPin === pin && (otherPinOffset += cs);
+                }
+            }
+            start += offset;
+            end += offset;
+            self._startClamp && (self._startClamp += offset);
+            if (self._endClamp && !_refreshingAll) {
+                self._endClamp = end || -0.001;
+                end = Math.min(end, _maxScroll(scroller, direction));
+            }
+            change = end - start || (start -= 0.01) && 0.001;
+            if (isFirstRefresh) // on the very first refresh(), the prevProgress couldn't have been accurate yet because the start/end were never calculated, so we set it here. Before 3.11.5, it could lead to an inaccurate scroll position restoration with snapping.
+            prevProgress = gsap.utils.clamp(0, 1, gsap.utils.normalize(start, end, prevScroll));
+            self._pinPush = otherPinOffset;
+            if (markerStart && offset) {
+                // offset the markers if necessary
+                cs = {};
+                cs[direction.a] = "+=" + offset;
+                pinnedContainer && (cs[direction.p] = "-=" + scrollFunc());
+                gsap.set([
+                    markerStart,
+                    markerEnd
+                ], cs);
+            }
+            if (pin && !(_clampingMax && self.end >= _maxScroll(scroller, direction))) {
+                cs = _getComputedStyle(pin);
+                isVertical = direction === (0, _observerJs._vertical);
+                scroll = scrollFunc(); // recalculate because the triggers can affect the scroll
+                pinStart = parseFloat(pinGetter(direction.a)) + otherPinOffset;
+                if (!max && end > 1) {
+                    // makes sure the scroller has a scrollbar, otherwise if something has width: 100%, for example, it would be too big (exclude the scrollbar). See https://gsap.com/forums/topic/25182-scrolltrigger-width-of-page-increase-where-markers-are-set-to-false/
+                    forcedOverflow = (isViewport ? _doc.scrollingElement || _docEl : scroller).style;
+                    forcedOverflow = {
+                        style: forcedOverflow,
+                        value: forcedOverflow["overflow" + direction.a.toUpperCase()]
+                    };
+                    if (isViewport && _getComputedStyle(_body)["overflow" + direction.a.toUpperCase()] !== "scroll") // avoid an extra scrollbar if BOTH <html> and <body> have overflow set to "scroll"
+                    forcedOverflow.style["overflow" + direction.a.toUpperCase()] = "scroll";
+                }
+                _swapPinIn(pin, spacer, cs);
+                pinState = _getState(pin); // transforms will interfere with the top/left/right/bottom placement, so remove them temporarily. getBoundingClientRect() factors in transforms.
+                bounds = _getBounds(pin, true);
+                oppositeScroll = useFixedPosition && (0, _observerJs._getScrollFunc)(scroller, isVertical ? (0, _observerJs._horizontal) : (0, _observerJs._vertical))();
+                if (pinSpacing) {
+                    spacerState = [
+                        pinSpacing + direction.os2,
+                        change + otherPinOffset + _px
+                    ];
+                    spacerState.t = spacer;
+                    i = pinSpacing === _padding ? _getSize(pin, direction) + change + otherPinOffset : 0;
+                    if (i) {
+                        spacerState.push(direction.d, i + _px); // for box-sizing: border-box (must include padding).
+                        spacer.style.flexBasis !== "auto" && (spacer.style.flexBasis = i + _px);
+                    }
+                    _setState(spacerState);
+                    if (pinnedContainer) // in ScrollTrigger.refresh(), we need to re-evaluate the pinContainer's size because this pinSpacing may stretch it out, but we can't just add the exact distance because depending on layout, it may not push things down or it may only do so partially.
+                    _triggers.forEach(function(t) {
+                        if (t.pin === pinnedContainer && t.vars.pinSpacing !== false) t._subPinOffset = true;
+                    });
+                    useFixedPosition && scrollFunc(prevScroll);
+                } else {
+                    i = _getSize(pin, direction);
+                    i && spacer.style.flexBasis !== "auto" && (spacer.style.flexBasis = i + _px);
+                }
+                if (useFixedPosition) {
+                    override = {
+                        top: bounds.top + (isVertical ? scroll - start : oppositeScroll) + _px,
+                        left: bounds.left + (isVertical ? oppositeScroll : scroll - start) + _px,
+                        boxSizing: "border-box",
+                        position: "fixed"
+                    };
+                    override[_width] = override["max" + _Width] = Math.ceil(bounds.width) + _px;
+                    override[_height] = override["max" + _Height] = Math.ceil(bounds.height) + _px;
+                    override[_margin] = override[_margin + _Top] = override[_margin + _Right] = override[_margin + _Bottom] = override[_margin + _Left] = "0";
+                    override[_padding] = cs[_padding];
+                    override[_padding + _Top] = cs[_padding + _Top];
+                    override[_padding + _Right] = cs[_padding + _Right];
+                    override[_padding + _Bottom] = cs[_padding + _Bottom];
+                    override[_padding + _Left] = cs[_padding + _Left];
+                    pinActiveState = _copyState(pinOriginalState, override, pinReparent);
+                    _refreshingAll && scrollFunc(0);
+                }
+                if (animation) {
+                    // the animation might be affecting the transform, so we must jump to the end, check the value, and compensate accordingly. Otherwise, when it becomes unpinned, the pinSetter() will get set to a value that doesn't include whatever the animation did.
+                    initted = animation._initted; // if not, we must invalidate() after this step, otherwise it could lock in starting values prematurely.
+                    _suppressOverwrites(1);
+                    animation.render(animation.duration(), true, true);
+                    pinChange = pinGetter(direction.a) - pinStart + change + otherPinOffset;
+                    pinMoves = Math.abs(change - pinChange) > 1;
+                    useFixedPosition && pinMoves && pinActiveState.splice(pinActiveState.length - 2, 2); // transform is the last property/value set in the state Array. Since the animation is controlling that, we should omit it.
+                    animation.render(0, true, true);
+                    initted || animation.invalidate(true);
+                    animation.parent || animation.totalTime(animation.totalTime()); // if, for example, a toggleAction called play() and then refresh() happens and when we render(1) above, it would cause the animation to complete and get removed from its parent, so this makes sure it gets put back in.
+                    _suppressOverwrites(0);
+                } else pinChange = change;
+                forcedOverflow && (forcedOverflow.value ? forcedOverflow.style["overflow" + direction.a.toUpperCase()] = forcedOverflow.value : forcedOverflow.style.removeProperty("overflow-" + direction.a));
+            } else if (trigger && scrollFunc() && !containerAnimation) {
+                // it may be INSIDE a pinned element, so walk up the tree and look for any elements with _pinOffset to compensate because anything with pinSpacing that's already scrolled would throw off the measurements in getBoundingClientRect()
+                bounds = trigger.parentNode;
+                while(bounds && bounds !== _body){
+                    if (bounds._pinOffset) {
+                        start -= bounds._pinOffset;
+                        end -= bounds._pinOffset;
+                    }
+                    bounds = bounds.parentNode;
+                }
+            }
+            revertedPins && revertedPins.forEach(function(t) {
+                return t.revert(false, true);
+            });
+            self.start = start;
+            self.end = end;
+            scroll1 = scroll2 = _refreshingAll ? prevScroll : scrollFunc(); // reset velocity
+            if (!containerAnimation && !_refreshingAll) {
+                scroll1 < prevScroll && scrollFunc(prevScroll);
+                self.scroll.rec = 0;
+            }
+            self.revert(false, true);
+            lastRefresh = _getTime();
+            if (snapDelayedCall) {
+                lastSnap = -1; // just so snapping gets re-enabled, clear out any recorded last value
+                // self.isActive && scrollFunc(start + change * prevProgress); // previously this line was here to ensure that when snapping kicks in, it's from the previous progress but in some cases that's not desirable, like an all-page ScrollTrigger when new content gets added to the page, that'd totally change the progress.
+                snapDelayedCall.restart(true);
+            }
+            _refreshing = 0;
+            animation && isToggle && (animation._initted || prevAnimProgress) && animation.progress() !== prevAnimProgress && animation.progress(prevAnimProgress || 0, true).render(animation.time(), true, true); // must force a re-render because if saveStyles() was used on the target(s), the styles could have been wiped out during the refresh().
+            if (isFirstRefresh || prevProgress !== self.progress || containerAnimation || invalidateOnRefresh) {
+                // ensures that the direction is set properly (when refreshing, progress is set back to 0 initially, then back again to wherever it needs to be) and that callbacks are triggered.
+                animation && !isToggle && animation.totalProgress(containerAnimation && start < -0.001 && !prevProgress ? gsap.utils.normalize(start, end, 0) : prevProgress, true); // to avoid issues where animation callbacks like onStart aren't triggered.
+                self.progress = isFirstRefresh || (scroll1 - start) / change === prevProgress ? 0 : prevProgress;
+            }
+            pin && pinSpacing && (spacer._pinOffset = Math.round(self.progress * pinChange));
+            scrubTween && scrubTween.invalidate();
+            if (!isNaN(markerStartOffset)) {
+                // numbers were passed in for the position which are absolute, so instead of just putting the markers at the very bottom of the viewport, we figure out how far they shifted down (it's safe to assume they were originally positioned in closer relation to the trigger element with values like "top", "center", a percentage or whatever, so we offset that much in the opposite direction to basically revert them to the relative position thy were at previously.
+                markerStartOffset -= gsap.getProperty(markerStartTrigger, direction.p);
+                markerEndOffset -= gsap.getProperty(markerEndTrigger, direction.p);
+                _shiftMarker(markerStartTrigger, direction, markerStartOffset);
+                _shiftMarker(markerStart, direction, markerStartOffset - (pinOffset || 0));
+                _shiftMarker(markerEndTrigger, direction, markerEndOffset);
+                _shiftMarker(markerEnd, direction, markerEndOffset - (pinOffset || 0));
+            }
+            isFirstRefresh && !_refreshingAll && self.update(); // edge case - when you reload a page when it's already scrolled down, some browsers fire a "scroll" event before DOMContentLoaded, triggering an updateAll(). If we don't update the self.progress as part of refresh(), then when it happens next, it may record prevProgress as 0 when it really shouldn't, potentially causing a callback in an animation to fire again.
+            if (onRefresh && !_refreshingAll && !executingOnRefresh) {
+                // when refreshing all, we do extra work to correct pinnedContainer sizes and ensure things don't exceed the maxScroll, so we should do all the refreshes at the end after all that work so that the start/end values are corrected.
+                executingOnRefresh = true;
+                onRefresh(self);
+                executingOnRefresh = false;
+            }
+        };
+        self.getVelocity = function() {
+            return (scrollFunc() - scroll2) / (_getTime() - _time2) * 1000 || 0;
+        };
+        self.endAnimation = function() {
+            _endAnimation(self.callbackAnimation);
+            if (animation) scrubTween ? scrubTween.progress(1) : !animation.paused() ? _endAnimation(animation, animation.reversed()) : isToggle || _endAnimation(animation, self.direction < 0, 1);
+        };
+        self.labelToScroll = function(label) {
+            return animation && animation.labels && (start || self.refresh() || start) + animation.labels[label] / animation.duration() * change || 0;
+        };
+        self.getTrailing = function(name) {
+            var i = _triggers.indexOf(self), a = self.direction > 0 ? _triggers.slice(0, i).reverse() : _triggers.slice(i + 1);
+            return (_isString(name) ? a.filter(function(t) {
+                return t.vars.preventOverlaps === name;
+            }) : a).filter(function(t) {
+                return self.direction > 0 ? t.end <= start : t.start >= end;
+            });
+        };
+        self.update = function(reset, recordVelocity, forceFake) {
+            if (containerAnimation && !forceFake && !reset) return;
+            var scroll = _refreshingAll === true ? prevScroll : self.scroll(), p = reset ? 0 : (scroll - start) / change, clipped = p < 0 ? 0 : p > 1 ? 1 : p || 0, prevProgress = self.progress, isActive, wasActive, toggleState, action, stateChanged, toggled, isAtMax, isTakingAction;
+            if (recordVelocity) {
+                scroll2 = scroll1;
+                scroll1 = containerAnimation ? scrollFunc() : scroll;
+                if (snap) {
+                    snap2 = snap1;
+                    snap1 = animation && !isToggle ? animation.totalProgress() : clipped;
+                }
+            } // anticipate the pinning a few ticks ahead of time based on velocity to avoid a visual glitch due to the fact that most browsers do scrolling on a separate thread (not synced with requestAnimationFrame).
+            if (anticipatePin && pin && !_refreshing && !_startup && _lastScrollTime) {
+                if (!clipped && start < scroll + (scroll - scroll2) / (_getTime() - _time2) * anticipatePin) clipped = 0.0001;
+                else if (clipped === 1 && end > scroll + (scroll - scroll2) / (_getTime() - _time2) * anticipatePin) clipped = 0.9999;
+            }
+            if (clipped !== prevProgress && self.enabled) {
+                isActive = self.isActive = !!clipped && clipped < 1;
+                wasActive = !!prevProgress && prevProgress < 1;
+                toggled = isActive !== wasActive;
+                stateChanged = toggled || !!clipped !== !!prevProgress; // could go from start all the way to end, thus it didn't toggle but it did change state in a sense (may need to fire a callback)
+                self.direction = clipped > prevProgress ? 1 : -1;
+                self.progress = clipped;
+                if (stateChanged && !_refreshing) {
+                    toggleState = clipped && !prevProgress ? 0 : clipped === 1 ? 1 : prevProgress === 1 ? 2 : 3; // 0 = enter, 1 = leave, 2 = enterBack, 3 = leaveBack (we prioritize the FIRST encounter, thus if you scroll really fast past the onEnter and onLeave in one tick, it'd prioritize onEnter.
+                    if (isToggle) {
+                        action = !toggled && toggleActions[toggleState + 1] !== "none" && toggleActions[toggleState + 1] || toggleActions[toggleState]; // if it didn't toggle, that means it shot right past and since we prioritize the "enter" action, we should switch to the "leave" in this case (but only if one is defined)
+                        isTakingAction = animation && (action === "complete" || action === "reset" || action in animation);
+                    }
+                }
+                preventOverlaps && (toggled || isTakingAction) && (isTakingAction || scrub || !animation) && (_isFunction(preventOverlaps) ? preventOverlaps(self) : self.getTrailing(preventOverlaps).forEach(function(t) {
+                    return t.endAnimation();
+                }));
+                if (!isToggle) {
+                    if (scrubTween && !_refreshing && !_startup) {
+                        scrubTween._dp._time - scrubTween._start !== scrubTween._time && scrubTween.render(scrubTween._dp._time - scrubTween._start); // if there's a scrub on both the container animation and this one (or a ScrollSmoother), the update order would cause this one not to have rendered yet, so it wouldn't make any progress before we .restart() it heading toward the new progress so it'd appear stuck thus we force a render here.
+                        if (scrubTween.resetTo) scrubTween.resetTo("totalProgress", clipped, animation._tTime / animation._tDur);
+                        else {
+                            // legacy support (courtesy), before 3.10.0
+                            scrubTween.vars.totalProgress = clipped;
+                            scrubTween.invalidate().restart();
+                        }
+                    } else if (animation) animation.totalProgress(clipped, !!(_refreshing && (lastRefresh || reset)));
+                }
+                if (pin) {
+                    reset && pinSpacing && (spacer.style[pinSpacing + direction.os2] = spacingStart);
+                    if (!useFixedPosition) pinSetter(_round(pinStart + pinChange * clipped));
+                    else if (stateChanged) {
+                        isAtMax = !reset && clipped > prevProgress && end + 1 > scroll && scroll + 1 >= _maxScroll(scroller, direction); // if it's at the VERY end of the page, don't switch away from position: fixed because it's pointless and it could cause a brief flash when the user scrolls back up (when it gets pinned again)
+                        if (pinReparent) {
+                            if (!reset && (isActive || isAtMax)) {
+                                var bounds = _getBounds(pin, true), _offset = scroll - start;
+                                _reparent(pin, _body, bounds.top + (direction === (0, _observerJs._vertical) ? _offset : 0) + _px, bounds.left + (direction === (0, _observerJs._vertical) ? 0 : _offset) + _px);
+                            } else _reparent(pin, spacer);
+                        }
+                        _setState(isActive || isAtMax ? pinActiveState : pinState);
+                        pinMoves && clipped < 1 && isActive || pinSetter(pinStart + (clipped === 1 && !isAtMax ? pinChange : 0));
+                    }
+                }
+                snap && !tweenTo.tween && !_refreshing && !_startup && snapDelayedCall.restart(true);
+                toggleClass && (toggled || once && clipped && (clipped < 1 || !_limitCallbacks)) && _toArray(toggleClass.targets).forEach(function(el) {
+                    return el.classList[isActive || once ? "add" : "remove"](toggleClass.className);
+                }); // classes could affect positioning, so do it even if reset or refreshing is true.
+                onUpdate && !isToggle && !reset && onUpdate(self);
+                if (stateChanged && !_refreshing) {
+                    if (isToggle) {
+                        if (isTakingAction) {
+                            if (action === "complete") animation.pause().totalProgress(1);
+                            else if (action === "reset") animation.restart(true).pause();
+                            else if (action === "restart") animation.restart(true);
+                            else animation[action]();
+                        }
+                        onUpdate && onUpdate(self);
+                    }
+                    if (toggled || !_limitCallbacks) {
+                        // on startup, the page could be scrolled and we don't want to fire callbacks that didn't toggle. For example onEnter shouldn't fire if the ScrollTrigger isn't actually entered.
+                        onToggle && toggled && _callback(self, onToggle);
+                        callbacks[toggleState] && _callback(self, callbacks[toggleState]);
+                        once && (clipped === 1 ? self.kill(false, 1) : callbacks[toggleState] = 0); // a callback shouldn't be called again if once is true.
+                        if (!toggled) {
+                            // it's possible to go completely past, like from before the start to after the end (or vice-versa) in which case BOTH callbacks should be fired in that order
+                            toggleState = clipped === 1 ? 1 : 3;
+                            callbacks[toggleState] && _callback(self, callbacks[toggleState]);
+                        }
+                    }
+                    if (fastScrollEnd && !isActive && Math.abs(self.getVelocity()) > (_isNumber(fastScrollEnd) ? fastScrollEnd : 2500)) {
+                        _endAnimation(self.callbackAnimation);
+                        scrubTween ? scrubTween.progress(1) : _endAnimation(animation, action === "reverse" ? 1 : !clipped, 1);
+                    }
+                } else if (isToggle && onUpdate && !_refreshing) onUpdate(self);
+            } // update absolutely-positioned markers (only if the scroller isn't the viewport)
+            if (markerEndSetter) {
+                var n = containerAnimation ? scroll / containerAnimation.duration() * (containerAnimation._caScrollDist || 0) : scroll;
+                markerStartSetter(n + (markerStartTrigger._isFlipped ? 1 : 0));
+                markerEndSetter(n);
+            }
+            caMarkerSetter && caMarkerSetter(-scroll / containerAnimation.duration() * (containerAnimation._caScrollDist || 0));
+        };
+        self.enable = function(reset, refresh) {
+            if (!self.enabled) {
+                self.enabled = true;
+                _addListener(scroller, "resize", _onResize);
+                isViewport || _addListener(scroller, "scroll", _onScroll);
+                onRefreshInit && _addListener(ScrollTrigger, "refreshInit", onRefreshInit);
+                if (reset !== false) {
+                    self.progress = prevProgress = 0;
+                    scroll1 = scroll2 = lastSnap = scrollFunc();
+                }
+                refresh !== false && self.refresh();
+            }
+        };
+        self.getTween = function(snap) {
+            return snap && tweenTo ? tweenTo.tween : scrubTween;
+        };
+        self.setPositions = function(newStart, newEnd, keepClamp, pinOffset) {
+            // doesn't persist after refresh()! Intended to be a way to override values that were set during refresh(), like you could set it in onRefresh()
+            if (containerAnimation) {
+                // convert ratios into scroll positions. Remember, start/end values on ScrollTriggers that have a containerAnimation refer to the time (in seconds), NOT scroll positions.
+                var st = containerAnimation.scrollTrigger, duration = containerAnimation.duration(), _change = st.end - st.start;
+                newStart = st.start + _change * newStart / duration;
+                newEnd = st.start + _change * newEnd / duration;
+            }
+            self.refresh(false, false, {
+                start: _keepClamp(newStart, keepClamp && !!self._startClamp),
+                end: _keepClamp(newEnd, keepClamp && !!self._endClamp)
+            }, pinOffset);
+            self.update();
+        };
+        self.adjustPinSpacing = function(amount) {
+            if (spacerState && amount) {
+                var i = spacerState.indexOf(direction.d) + 1;
+                spacerState[i] = parseFloat(spacerState[i]) + amount + _px;
+                spacerState[1] = parseFloat(spacerState[1]) + amount + _px;
+                _setState(spacerState);
+            }
+        };
+        self.disable = function(reset, allowAnimation) {
+            if (self.enabled) {
+                reset !== false && self.revert(true, true);
+                self.enabled = self.isActive = false;
+                allowAnimation || scrubTween && scrubTween.pause();
+                prevScroll = 0;
+                pinCache && (pinCache.uncache = 1);
+                onRefreshInit && _removeListener(ScrollTrigger, "refreshInit", onRefreshInit);
+                if (snapDelayedCall) {
+                    snapDelayedCall.pause();
+                    tweenTo.tween && tweenTo.tween.kill() && (tweenTo.tween = 0);
+                }
+                if (!isViewport) {
+                    var i = _triggers.length;
+                    while(i--){
+                        if (_triggers[i].scroller === scroller && _triggers[i] !== self) return; //don't remove the listeners if there are still other triggers referencing it.
+                    }
+                    _removeListener(scroller, "resize", _onResize);
+                    isViewport || _removeListener(scroller, "scroll", _onScroll);
+                }
+            }
+        };
+        self.kill = function(revert, allowAnimation) {
+            self.disable(revert, allowAnimation);
+            scrubTween && !allowAnimation && scrubTween.kill();
+            id && delete _ids[id];
+            var i = _triggers.indexOf(self);
+            i >= 0 && _triggers.splice(i, 1);
+            i === _i && _direction > 0 && _i--; // if we're in the middle of a refresh() or update(), splicing would cause skips in the index, so adjust...
+            // if no other ScrollTrigger instances of the same scroller are found, wipe out any recorded scroll position. Otherwise, in a single page application, for example, it could maintain scroll position when it really shouldn't.
+            i = 0;
+            _triggers.forEach(function(t) {
+                return t.scroller === self.scroller && (i = 1);
+            });
+            i || _refreshingAll || (self.scroll.rec = 0);
+            if (animation) {
+                animation.scrollTrigger = null;
+                revert && animation.revert({
+                    kill: false
+                });
+                allowAnimation || animation.kill();
+            }
+            markerStart && [
+                markerStart,
+                markerEnd,
+                markerStartTrigger,
+                markerEndTrigger
+            ].forEach(function(m) {
+                return m.parentNode && m.parentNode.removeChild(m);
+            });
+            _primary === self && (_primary = 0);
+            if (pin) {
+                pinCache && (pinCache.uncache = 1);
+                i = 0;
+                _triggers.forEach(function(t) {
+                    return t.pin === pin && i++;
+                });
+                i || (pinCache.spacer = 0); // if there aren't any more ScrollTriggers with the same pin, remove the spacer, otherwise it could be contaminated with old/stale values if the user re-creates a ScrollTrigger for the same element.
+            }
+            vars.onKill && vars.onKill(self);
+        };
+        _triggers.push(self);
+        self.enable(false, false);
+        customRevertReturn && customRevertReturn(self);
+        if (animation && animation.add && !change) {
+            // if the animation is a timeline, it may not have been populated yet, so it wouldn't render at the proper place on the first refresh(), thus we should schedule one for the next tick. If "change" is defined, we know it must be re-enabling, thus we can refresh() right away.
+            var updateFunc = self.update; // some browsers may fire a scroll event BEFORE a tick elapses and/or the DOMContentLoaded fires. So there's a chance update() will be called BEFORE a refresh() has happened on a Timeline-attached ScrollTrigger which means the start/end won't be calculated yet. We don't want to add conditional logic inside the update() method (like check to see if end is defined and if not, force a refresh()) because that's a function that gets hit a LOT (performance). So we swap out the real update() method for this one that'll re-attach it the first time it gets called and of course forces a refresh().
+            self.update = function() {
+                self.update = updateFunc;
+                start || end || self.refresh();
+            };
+            gsap.delayedCall(0.01, self.update);
+            change = 0.01;
+            start = end = 0;
+        } else self.refresh();
+        pin && _queueRefreshAll(); // pinning could affect the positions of other things, so make sure we queue a full refresh()
+    };
+    ScrollTrigger.register = function register(core) {
+        if (!_coreInitted) {
+            gsap = core || _getGSAP();
+            _windowExists() && window.document && ScrollTrigger.enable();
+            _coreInitted = _enabled;
+        }
+        return _coreInitted;
+    };
+    ScrollTrigger.defaults = function defaults(config) {
+        if (config) for(var p in config)_defaults[p] = config[p];
+        return _defaults;
+    };
+    ScrollTrigger.disable = function disable(reset, kill) {
+        _enabled = 0;
+        _triggers.forEach(function(trigger) {
+            return trigger[kill ? "kill" : "disable"](reset);
+        });
+        _removeListener(_win, "wheel", _onScroll);
+        _removeListener(_doc, "scroll", _onScroll);
+        clearInterval(_syncInterval);
+        _removeListener(_doc, "touchcancel", _passThrough);
+        _removeListener(_body, "touchstart", _passThrough);
+        _multiListener(_removeListener, _doc, "pointerdown,touchstart,mousedown", _pointerDownHandler);
+        _multiListener(_removeListener, _doc, "pointerup,touchend,mouseup", _pointerUpHandler);
+        _resizeDelay.kill();
+        _iterateAutoRefresh(_removeListener);
+        for(var i = 0; i < (0, _observerJs._scrollers).length; i += 3){
+            _wheelListener(_removeListener, (0, _observerJs._scrollers)[i], (0, _observerJs._scrollers)[i + 1]);
+            _wheelListener(_removeListener, (0, _observerJs._scrollers)[i], (0, _observerJs._scrollers)[i + 2]);
+        }
+    };
+    ScrollTrigger.enable = function enable() {
+        _win = window;
+        _doc = document;
+        _docEl = _doc.documentElement;
+        _body = _doc.body;
+        if (gsap) {
+            _toArray = gsap.utils.toArray;
+            _clamp = gsap.utils.clamp;
+            _context = gsap.core.context || _passThrough;
+            _suppressOverwrites = gsap.core.suppressOverwrites || _passThrough;
+            _scrollRestoration = _win.history.scrollRestoration || "auto";
+            _lastScroll = _win.pageYOffset;
+            gsap.core.globals("ScrollTrigger", ScrollTrigger); // must register the global manually because in Internet Explorer, functions (classes) don't have a "name" property.
+            if (_body) {
+                _enabled = 1;
+                _div100vh = document.createElement("div"); // to solve mobile browser address bar show/hide resizing, we shouldn't rely on window.innerHeight. Instead, use a <div> with its height set to 100vh and measure that since that's what the scrolling is based on anyway and it's not affected by address bar showing/hiding.
+                _div100vh.style.height = "100vh";
+                _div100vh.style.position = "absolute";
+                _refresh100vh();
+                _rafBugFix();
+                (0, _observerJs.Observer).register(gsap); // isTouch is 0 if no touch, 1 if ONLY touch, and 2 if it can accommodate touch but also other types like mouse/pointer.
+                ScrollTrigger.isTouch = (0, _observerJs.Observer).isTouch;
+                _fixIOSBug = (0, _observerJs.Observer).isTouch && /(iPad|iPhone|iPod|Mac)/g.test(navigator.userAgent); // since 2017, iOS has had a bug that causes event.clientX/Y to be inaccurate when a scroll occurs, thus we must alternate ignoring every other touchmove event to work around it. See https://bugs.webkit.org/show_bug.cgi?id=181954 and https://codepen.io/GreenSock/pen/ExbrPNa/087cef197dc35445a0951e8935c41503
+                _ignoreMobileResize = (0, _observerJs.Observer).isTouch === 1;
+                _addListener(_win, "wheel", _onScroll); // mostly for 3rd party smooth scrolling libraries.
+                _root = [
+                    _win,
+                    _doc,
+                    _docEl,
+                    _body
+                ];
+                if (gsap.matchMedia) {
+                    ScrollTrigger.matchMedia = function(vars) {
+                        var mm = gsap.matchMedia(), p;
+                        for(p in vars)mm.add(p, vars[p]);
+                        return mm;
+                    };
+                    gsap.addEventListener("matchMediaInit", function() {
+                        return _revertAll();
+                    });
+                    gsap.addEventListener("matchMediaRevert", function() {
+                        return _revertRecorded();
+                    });
+                    gsap.addEventListener("matchMedia", function() {
+                        _refreshAll(0, 1);
+                        _dispatch("matchMedia");
+                    });
+                    gsap.matchMedia("(orientation: portrait)", function() {
+                        // when orientation changes, we should take new base measurements for the ignoreMobileResize feature.
+                        _setBaseDimensions();
+                        return _setBaseDimensions;
+                    });
+                } else console.warn("Requires GSAP 3.11.0 or later");
+                _setBaseDimensions();
+                _addListener(_doc, "scroll", _onScroll); // some browsers (like Chrome), the window stops dispatching scroll events on the window if you scroll really fast, but it's consistent on the document!
+                var bodyStyle = _body.style, border = bodyStyle.borderTopStyle, AnimationProto = gsap.core.Animation.prototype, bounds, i;
+                AnimationProto.revert || Object.defineProperty(AnimationProto, "revert", {
+                    value: function value() {
+                        return this.time(-0.01, true);
+                    }
+                }); // only for backwards compatibility (Animation.revert() was added after 3.10.4)
+                bodyStyle.borderTopStyle = "solid"; // works around an issue where a margin of a child element could throw off the bounds of the _body, making it seem like there's a margin when there actually isn't. The border ensures that the bounds are accurate.
+                bounds = _getBounds(_body);
+                (0, _observerJs._vertical).m = Math.round(bounds.top + (0, _observerJs._vertical).sc()) || 0; // accommodate the offset of the <body> caused by margins and/or padding
+                (0, _observerJs._horizontal).m = Math.round(bounds.left + (0, _observerJs._horizontal).sc()) || 0;
+                border ? bodyStyle.borderTopStyle = border : bodyStyle.removeProperty("border-top-style"); // TODO: (?) maybe move to leveraging the velocity mechanism in Observer and skip intervals.
+                _syncInterval = setInterval(_sync, 250);
+                gsap.delayedCall(0.5, function() {
+                    return _startup = 0;
+                });
+                _addListener(_doc, "touchcancel", _passThrough); // some older Android devices intermittently stop dispatching "touchmove" events if we don't listen for "touchcancel" on the document.
+                _addListener(_body, "touchstart", _passThrough); //works around Safari bug: https://gsap.com/forums/topic/21450-draggable-in-iframe-on-mobile-is-buggy/
+                _multiListener(_addListener, _doc, "pointerdown,touchstart,mousedown", _pointerDownHandler);
+                _multiListener(_addListener, _doc, "pointerup,touchend,mouseup", _pointerUpHandler);
+                _transformProp = gsap.utils.checkPrefix("transform");
+                _stateProps.push(_transformProp);
+                _coreInitted = _getTime();
+                _resizeDelay = gsap.delayedCall(0.2, _refreshAll).pause();
+                _autoRefresh = [
+                    _doc,
+                    "visibilitychange",
+                    function() {
+                        var w = _win.innerWidth, h = _win.innerHeight;
+                        if (_doc.hidden) {
+                            _prevWidth = w;
+                            _prevHeight = h;
+                        } else if (_prevWidth !== w || _prevHeight !== h) _onResize();
+                    },
+                    _doc,
+                    "DOMContentLoaded",
+                    _refreshAll,
+                    _win,
+                    "load",
+                    _refreshAll,
+                    _win,
+                    "resize",
+                    _onResize
+                ];
+                _iterateAutoRefresh(_addListener);
+                _triggers.forEach(function(trigger) {
+                    return trigger.enable(0, 1);
+                });
+                for(i = 0; i < (0, _observerJs._scrollers).length; i += 3){
+                    _wheelListener(_removeListener, (0, _observerJs._scrollers)[i], (0, _observerJs._scrollers)[i + 1]);
+                    _wheelListener(_removeListener, (0, _observerJs._scrollers)[i], (0, _observerJs._scrollers)[i + 2]);
+                }
+            }
+        }
+    };
+    ScrollTrigger.config = function config(vars) {
+        "limitCallbacks" in vars && (_limitCallbacks = !!vars.limitCallbacks);
+        var ms = vars.syncInterval;
+        ms && clearInterval(_syncInterval) || (_syncInterval = ms) && setInterval(_sync, ms);
+        "ignoreMobileResize" in vars && (_ignoreMobileResize = ScrollTrigger.isTouch === 1 && vars.ignoreMobileResize);
+        if ("autoRefreshEvents" in vars) {
+            _iterateAutoRefresh(_removeListener) || _iterateAutoRefresh(_addListener, vars.autoRefreshEvents || "none");
+            _ignoreResize = (vars.autoRefreshEvents + "").indexOf("resize") === -1;
+        }
+    };
+    ScrollTrigger.scrollerProxy = function scrollerProxy(target, vars) {
+        var t = (0, _observerJs._getTarget)(target), i = (0, _observerJs._scrollers).indexOf(t), isViewport = _isViewport(t);
+        if (~i) (0, _observerJs._scrollers).splice(i, isViewport ? 6 : 2);
+        if (vars) isViewport ? (0, _observerJs._proxies).unshift(_win, vars, _body, vars, _docEl, vars) : (0, _observerJs._proxies).unshift(t, vars);
+    };
+    ScrollTrigger.clearMatchMedia = function clearMatchMedia(query) {
+        _triggers.forEach(function(t) {
+            return t._ctx && t._ctx.query === query && t._ctx.kill(true, true);
+        });
+    };
+    ScrollTrigger.isInViewport = function isInViewport(element, ratio, horizontal) {
+        var bounds = (_isString(element) ? (0, _observerJs._getTarget)(element) : element).getBoundingClientRect(), offset = bounds[horizontal ? _width : _height] * ratio || 0;
+        return horizontal ? bounds.right - offset > 0 && bounds.left + offset < _win.innerWidth : bounds.bottom - offset > 0 && bounds.top + offset < _win.innerHeight;
+    };
+    ScrollTrigger.positionInViewport = function positionInViewport(element, referencePoint, horizontal) {
+        _isString(element) && (element = (0, _observerJs._getTarget)(element));
+        var bounds = element.getBoundingClientRect(), size = bounds[horizontal ? _width : _height], offset = referencePoint == null ? size / 2 : referencePoint in _keywords ? _keywords[referencePoint] * size : ~referencePoint.indexOf("%") ? parseFloat(referencePoint) * size / 100 : parseFloat(referencePoint) || 0;
+        return horizontal ? (bounds.left + offset) / _win.innerWidth : (bounds.top + offset) / _win.innerHeight;
+    };
+    ScrollTrigger.killAll = function killAll(allowListeners) {
+        _triggers.slice(0).forEach(function(t) {
+            return t.vars.id !== "ScrollSmoother" && t.kill();
+        });
+        if (allowListeners !== true) {
+            var listeners = _listeners.killAll || [];
+            _listeners = {};
+            listeners.forEach(function(f) {
+                return f();
+            });
+        }
+    };
+    return ScrollTrigger;
+}();
+ScrollTrigger.version = "3.12.5";
+ScrollTrigger.saveStyles = function(targets) {
+    return targets ? _toArray(targets).forEach(function(target) {
+        // saved styles are recorded in a consecutive alternating Array, like [element, cssText, transform attribute, cache, matchMedia, ...]
+        if (target && target.style) {
+            var i = _savedStyles.indexOf(target);
+            i >= 0 && _savedStyles.splice(i, 5);
+            _savedStyles.push(target, target.style.cssText, target.getBBox && target.getAttribute("transform"), gsap.core.getCache(target), _context());
+        }
+    }) : _savedStyles;
+};
+ScrollTrigger.revert = function(soft, media) {
+    return _revertAll(!soft, media);
+};
+ScrollTrigger.create = function(vars, animation) {
+    return new ScrollTrigger(vars, animation);
+};
+ScrollTrigger.refresh = function(safe) {
+    return safe ? _onResize() : (_coreInitted || ScrollTrigger.register()) && _refreshAll(true);
+};
+ScrollTrigger.update = function(force) {
+    return ++(0, _observerJs._scrollers).cache && _updateAll(force === true ? 2 : 0);
+};
+ScrollTrigger.clearScrollMemory = _clearScrollMemory;
+ScrollTrigger.maxScroll = function(element, horizontal) {
+    return _maxScroll(element, horizontal ? (0, _observerJs._horizontal) : (0, _observerJs._vertical));
+};
+ScrollTrigger.getScrollFunc = function(element, horizontal) {
+    return (0, _observerJs._getScrollFunc)((0, _observerJs._getTarget)(element), horizontal ? (0, _observerJs._horizontal) : (0, _observerJs._vertical));
+};
+ScrollTrigger.getById = function(id) {
+    return _ids[id];
+};
+ScrollTrigger.getAll = function() {
+    return _triggers.filter(function(t) {
+        return t.vars.id !== "ScrollSmoother";
+    });
+}; // it's common for people to ScrollTrigger.getAll(t => t.kill()) on page routes, for example, and we don't want it to ruin smooth scrolling by killing the main ScrollSmoother one.
+ScrollTrigger.isScrolling = function() {
+    return !!_lastScrollTime;
+};
+ScrollTrigger.snapDirectional = _snapDirectional;
+ScrollTrigger.addEventListener = function(type, callback) {
+    var a = _listeners[type] || (_listeners[type] = []);
+    ~a.indexOf(callback) || a.push(callback);
+};
+ScrollTrigger.removeEventListener = function(type, callback) {
+    var a = _listeners[type], i = a && a.indexOf(callback);
+    i >= 0 && a.splice(i, 1);
+};
+ScrollTrigger.batch = function(targets, vars) {
+    var result = [], varsCopy = {}, interval = vars.interval || 0.016, batchMax = vars.batchMax || 1e9, proxyCallback = function proxyCallback(type, callback) {
+        var elements = [], triggers = [], delay = gsap.delayedCall(interval, function() {
+            callback(elements, triggers);
+            elements = [];
+            triggers = [];
+        }).pause();
+        return function(self) {
+            elements.length || delay.restart(true);
+            elements.push(self.trigger);
+            triggers.push(self);
+            batchMax <= elements.length && delay.progress(1);
+        };
+    }, p;
+    for(p in vars)varsCopy[p] = p.substr(0, 2) === "on" && _isFunction(vars[p]) && p !== "onRefreshInit" ? proxyCallback(p, vars[p]) : vars[p];
+    if (_isFunction(batchMax)) {
+        batchMax = batchMax();
+        _addListener(ScrollTrigger, "refresh", function() {
+            return batchMax = vars.batchMax();
+        });
+    }
+    _toArray(targets).forEach(function(target) {
+        var config = {};
+        for(p in varsCopy)config[p] = varsCopy[p];
+        config.trigger = target;
+        result.push(ScrollTrigger.create(config));
+    });
+    return result;
+}; // to reduce file size. clamps the scroll and also returns a duration multiplier so that if the scroll gets chopped shorter, the duration gets curtailed as well (otherwise if you're very close to the top of the page, for example, and swipe up really fast, it'll suddenly slow down and take a long time to reach the top).
+var _clampScrollAndGetDurationMultiplier = function _clampScrollAndGetDurationMultiplier(scrollFunc, current, end, max) {
+    current > max ? scrollFunc(max) : current < 0 && scrollFunc(0);
+    return end > max ? (max - current) / (end - current) : end < 0 ? current / (current - end) : 1;
+}, _allowNativePanning = function _allowNativePanning(target, direction) {
+    if (direction === true) target.style.removeProperty("touch-action");
+    else target.style.touchAction = direction === true ? "auto" : direction ? "pan-" + direction + ((0, _observerJs.Observer).isTouch ? " pinch-zoom" : "") : "none"; // note: Firefox doesn't support it pinch-zoom properly, at least in addition to a pan-x or pan-y.
+    target === _docEl && _allowNativePanning(_body, direction);
+}, _overflow = {
+    auto: 1,
+    scroll: 1
+}, _nestedScroll = function _nestedScroll(_ref5) {
+    var event = _ref5.event, target = _ref5.target, axis = _ref5.axis;
+    var node = (event.changedTouches ? event.changedTouches[0] : event).target, cache = node._gsap || gsap.core.getCache(node), time = _getTime(), cs;
+    if (!cache._isScrollT || time - cache._isScrollT > 2000) {
+        // cache for 2 seconds to improve performance.
+        while(node && node !== _body && (node.scrollHeight <= node.clientHeight && node.scrollWidth <= node.clientWidth || !(_overflow[(cs = _getComputedStyle(node)).overflowY] || _overflow[cs.overflowX])))node = node.parentNode;
+        cache._isScroll = node && node !== target && !_isViewport(node) && (_overflow[(cs = _getComputedStyle(node)).overflowY] || _overflow[cs.overflowX]);
+        cache._isScrollT = time;
+    }
+    if (cache._isScroll || axis === "x") {
+        event.stopPropagation();
+        event._gsapAllow = true;
+    }
+}, // capture events on scrollable elements INSIDE the <body> and allow those by calling stopPropagation() when we find a scrollable ancestor
+_inputObserver = function _inputObserver(target, type, inputs, nested) {
+    return (0, _observerJs.Observer).create({
+        target: target,
+        capture: true,
+        debounce: false,
+        lockAxis: true,
+        type: type,
+        onWheel: nested = nested && _nestedScroll,
+        onPress: nested,
+        onDrag: nested,
+        onScroll: nested,
+        onEnable: function onEnable() {
+            return inputs && _addListener(_doc, (0, _observerJs.Observer).eventTypes[0], _captureInputs, false, true);
+        },
+        onDisable: function onDisable() {
+            return _removeListener(_doc, (0, _observerJs.Observer).eventTypes[0], _captureInputs, true);
+        }
+    });
+}, _inputExp = /(input|label|select|textarea)/i, _inputIsFocused, _captureInputs = function _captureInputs(e) {
+    var isInput = _inputExp.test(e.target.tagName);
+    if (isInput || _inputIsFocused) {
+        e._gsapAllow = true;
+        _inputIsFocused = isInput;
+    }
+}, _getScrollNormalizer = function _getScrollNormalizer(vars) {
+    _isObject(vars) || (vars = {});
+    vars.preventDefault = vars.isNormalizer = vars.allowClicks = true;
+    vars.type || (vars.type = "wheel,touch");
+    vars.debounce = !!vars.debounce;
+    vars.id = vars.id || "normalizer";
+    var _vars2 = vars, normalizeScrollX = _vars2.normalizeScrollX, momentum = _vars2.momentum, allowNestedScroll = _vars2.allowNestedScroll, onRelease = _vars2.onRelease, self, maxY, target = (0, _observerJs._getTarget)(vars.target) || _docEl, smoother = gsap.core.globals().ScrollSmoother, smootherInstance = smoother && smoother.get(), content = _fixIOSBug && (vars.content && (0, _observerJs._getTarget)(vars.content) || smootherInstance && vars.content !== false && !smootherInstance.smooth() && smootherInstance.content()), scrollFuncY = (0, _observerJs._getScrollFunc)(target, (0, _observerJs._vertical)), scrollFuncX = (0, _observerJs._getScrollFunc)(target, (0, _observerJs._horizontal)), scale = 1, initialScale = ((0, _observerJs.Observer).isTouch && _win.visualViewport ? _win.visualViewport.scale * _win.visualViewport.width : _win.outerWidth) / _win.innerWidth, wheelRefresh = 0, resolveMomentumDuration = _isFunction(momentum) ? function() {
+        return momentum(self);
+    } : function() {
+        return momentum || 2.8;
+    }, lastRefreshID, skipTouchMove, inputObserver = _inputObserver(target, vars.type, true, allowNestedScroll), resumeTouchMove = function resumeTouchMove() {
+        return skipTouchMove = false;
+    }, scrollClampX = _passThrough, scrollClampY = _passThrough, updateClamps = function updateClamps() {
+        maxY = _maxScroll(target, (0, _observerJs._vertical));
+        scrollClampY = _clamp(_fixIOSBug ? 1 : 0, maxY);
+        normalizeScrollX && (scrollClampX = _clamp(0, _maxScroll(target, (0, _observerJs._horizontal))));
+        lastRefreshID = _refreshID;
+    }, removeContentOffset = function removeContentOffset() {
+        content._gsap.y = _round(parseFloat(content._gsap.y) + scrollFuncY.offset) + "px";
+        content.style.transform = "matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, " + parseFloat(content._gsap.y) + ", 0, 1)";
+        scrollFuncY.offset = scrollFuncY.cacheID = 0;
+    }, ignoreDrag = function ignoreDrag() {
+        if (skipTouchMove) {
+            requestAnimationFrame(resumeTouchMove);
+            var offset = _round(self.deltaY / 2), scroll = scrollClampY(scrollFuncY.v - offset);
+            if (content && scroll !== scrollFuncY.v + scrollFuncY.offset) {
+                scrollFuncY.offset = scroll - scrollFuncY.v;
+                var y = _round((parseFloat(content && content._gsap.y) || 0) - scrollFuncY.offset);
+                content.style.transform = "matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, " + y + ", 0, 1)";
+                content._gsap.y = y + "px";
+                scrollFuncY.cacheID = (0, _observerJs._scrollers).cache;
+                _updateAll();
+            }
+            return true;
+        }
+        scrollFuncY.offset && removeContentOffset();
+        skipTouchMove = true;
+    }, tween, startScrollX, startScrollY, onStopDelayedCall, onResize = function onResize() {
+        // if the window resizes, like on an iPhone which Apple FORCES the address bar to show/hide even if we event.preventDefault(), it may be scrolling too far now that the address bar is showing, so we must dynamically adjust the momentum tween.
+        updateClamps();
+        if (tween.isActive() && tween.vars.scrollY > maxY) scrollFuncY() > maxY ? tween.progress(1) && scrollFuncY(maxY) : tween.resetTo("scrollY", maxY);
+    };
+    content && gsap.set(content, {
+        y: "+=0"
+    }); // to ensure there's a cache (element._gsap)
+    vars.ignoreCheck = function(e) {
+        return _fixIOSBug && e.type === "touchmove" && ignoreDrag(e) || scale > 1.05 && e.type !== "touchstart" || self.isGesturing || e.touches && e.touches.length > 1;
+    };
+    vars.onPress = function() {
+        skipTouchMove = false;
+        var prevScale = scale;
+        scale = _round((_win.visualViewport && _win.visualViewport.scale || 1) / initialScale);
+        tween.pause();
+        prevScale !== scale && _allowNativePanning(target, scale > 1.01 ? true : normalizeScrollX ? false : "x");
+        startScrollX = scrollFuncX();
+        startScrollY = scrollFuncY();
+        updateClamps();
+        lastRefreshID = _refreshID;
+    };
+    vars.onRelease = vars.onGestureStart = function(self, wasDragging) {
+        scrollFuncY.offset && removeContentOffset();
+        if (!wasDragging) onStopDelayedCall.restart(true);
+        else {
+            (0, _observerJs._scrollers).cache++; // make sure we're pulling the non-cached value
+            // alternate algorithm: durX = Math.min(6, Math.abs(self.velocityX / 800)),	dur = Math.max(durX, Math.min(6, Math.abs(self.velocityY / 800))); dur = dur * (0.4 + (1 - _power4In(dur / 6)) * 0.6)) * (momentumSpeed || 1)
+            var dur = resolveMomentumDuration(), currentScroll, endScroll;
+            if (normalizeScrollX) {
+                currentScroll = scrollFuncX();
+                endScroll = currentScroll + dur * 0.05 * -self.velocityX / 0.227; // the constant .227 is from power4(0.05). velocity is inverted because scrolling goes in the opposite direction.
+                dur *= _clampScrollAndGetDurationMultiplier(scrollFuncX, currentScroll, endScroll, _maxScroll(target, (0, _observerJs._horizontal)));
+                tween.vars.scrollX = scrollClampX(endScroll);
+            }
+            currentScroll = scrollFuncY();
+            endScroll = currentScroll + dur * 0.05 * -self.velocityY / 0.227; // the constant .227 is from power4(0.05)
+            dur *= _clampScrollAndGetDurationMultiplier(scrollFuncY, currentScroll, endScroll, _maxScroll(target, (0, _observerJs._vertical)));
+            tween.vars.scrollY = scrollClampY(endScroll);
+            tween.invalidate().duration(dur).play(0.01);
+            if (_fixIOSBug && tween.vars.scrollY >= maxY || currentScroll >= maxY - 1) // iOS bug: it'll show the address bar but NOT fire the window "resize" event until the animation is done but we must protect against overshoot so we leverage an onUpdate to do so.
+            gsap.to({}, {
+                onUpdate: onResize,
+                duration: dur
+            });
+        }
+        onRelease && onRelease(self);
+    };
+    vars.onWheel = function() {
+        tween._ts && tween.pause();
+        if (_getTime() - wheelRefresh > 1000) {
+            // after 1 second, refresh the clamps otherwise that'll only happen when ScrollTrigger.refresh() is called or for touch-scrolling.
+            lastRefreshID = 0;
+            wheelRefresh = _getTime();
+        }
+    };
+    vars.onChange = function(self, dx, dy, xArray, yArray) {
+        _refreshID !== lastRefreshID && updateClamps();
+        dx && normalizeScrollX && scrollFuncX(scrollClampX(xArray[2] === dx ? startScrollX + (self.startX - self.x) : scrollFuncX() + dx - xArray[1])); // for more precision, we track pointer/touch movement from the start, otherwise it'll drift.
+        if (dy) {
+            scrollFuncY.offset && removeContentOffset();
+            var isTouch = yArray[2] === dy, y = isTouch ? startScrollY + self.startY - self.y : scrollFuncY() + dy - yArray[1], yClamped = scrollClampY(y);
+            isTouch && y !== yClamped && (startScrollY += yClamped - y);
+            scrollFuncY(yClamped);
+        }
+        (dy || dx) && _updateAll();
+    };
+    vars.onEnable = function() {
+        _allowNativePanning(target, normalizeScrollX ? false : "x");
+        ScrollTrigger.addEventListener("refresh", onResize);
+        _addListener(_win, "resize", onResize);
+        if (scrollFuncY.smooth) {
+            scrollFuncY.target.style.scrollBehavior = "auto";
+            scrollFuncY.smooth = scrollFuncX.smooth = false;
+        }
+        inputObserver.enable();
+    };
+    vars.onDisable = function() {
+        _allowNativePanning(target, true);
+        _removeListener(_win, "resize", onResize);
+        ScrollTrigger.removeEventListener("refresh", onResize);
+        inputObserver.kill();
+    };
+    vars.lockAxis = vars.lockAxis !== false;
+    self = new (0, _observerJs.Observer)(vars);
+    self.iOS = _fixIOSBug; // used in the Observer getCachedScroll() function to work around an iOS bug that wreaks havoc with TouchEvent.clientY if we allow scroll to go all the way back to 0.
+    _fixIOSBug && !scrollFuncY() && scrollFuncY(1); // iOS bug causes event.clientY values to freak out (wildly inaccurate) if the scroll position is exactly 0.
+    _fixIOSBug && gsap.ticker.add(_passThrough); // prevent the ticker from sleeping
+    onStopDelayedCall = self._dc;
+    tween = gsap.to(self, {
+        ease: "power4",
+        paused: true,
+        inherit: false,
+        scrollX: normalizeScrollX ? "+=0.1" : "+=0",
+        scrollY: "+=0.1",
+        modifiers: {
+            scrollY: _interruptionTracker(scrollFuncY, scrollFuncY(), function() {
+                return tween.pause();
+            })
+        },
+        onUpdate: _updateAll,
+        onComplete: onStopDelayedCall.vars.onComplete
+    }); // we need the modifier to sense if the scroll position is altered outside of the momentum tween (like with a scrollTo tween) so we can pause() it to prevent conflicts.
+    return self;
+};
+ScrollTrigger.sort = function(func) {
+    return _triggers.sort(func || function(a, b) {
+        return (a.vars.refreshPriority || 0) * -1000000 + a.start - (b.start + (b.vars.refreshPriority || 0) * -1000000);
+    });
+};
+ScrollTrigger.observe = function(vars) {
+    return new (0, _observerJs.Observer)(vars);
+};
+ScrollTrigger.normalizeScroll = function(vars) {
+    if (typeof vars === "undefined") return _normalizer;
+    if (vars === true && _normalizer) return _normalizer.enable();
+    if (vars === false) {
+        _normalizer && _normalizer.kill();
+        _normalizer = vars;
+        return;
+    }
+    var normalizer = vars instanceof (0, _observerJs.Observer) ? vars : _getScrollNormalizer(vars);
+    _normalizer && _normalizer.target === normalizer.target && _normalizer.kill();
+    _isViewport(normalizer.target) && (_normalizer = normalizer);
+    return normalizer;
+};
+ScrollTrigger.core = {
+    // smaller file size way to leverage in ScrollSmoother and Observer
+    _getVelocityProp: (0, _observerJs._getVelocityProp),
+    _inputObserver: _inputObserver,
+    _scrollers: (0, _observerJs._scrollers),
+    _proxies: (0, _observerJs._proxies),
+    bridge: {
+        // when normalizeScroll sets the scroll position (ss = setScroll)
+        ss: function ss() {
+            _lastScrollTime || _dispatch("scrollStart");
+            _lastScrollTime = _getTime();
+        },
+        // a way to get the _refreshing value in Observer
+        ref: function ref() {
+            return _refreshing;
+        }
+    }
+};
+_getGSAP() && gsap.registerPlugin(ScrollTrigger);
+
+},{"./Observer.js":"aAWxM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aAWxM":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Observer", ()=>Observer);
+parcelHelpers.export(exports, "default", ()=>Observer);
+parcelHelpers.export(exports, "_isViewport", ()=>_isViewport);
+parcelHelpers.export(exports, "_scrollers", ()=>_scrollers);
+parcelHelpers.export(exports, "_getScrollFunc", ()=>_getScrollFunc);
+parcelHelpers.export(exports, "_getProxyProp", ()=>_getProxyProp);
+parcelHelpers.export(exports, "_proxies", ()=>_proxies);
+parcelHelpers.export(exports, "_getVelocityProp", ()=>_getVelocityProp);
+parcelHelpers.export(exports, "_vertical", ()=>_vertical);
+parcelHelpers.export(exports, "_horizontal", ()=>_horizontal);
+parcelHelpers.export(exports, "_getTarget", ()=>_getTarget);
+function _defineProperties(target, props) {
+    for(var i = 0; i < props.length; i++){
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+    }
+}
+function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) _defineProperties(Constructor, staticProps);
+    return Constructor;
+}
+/*!
+ * Observer 3.12.5
+ * https://gsap.com
+ *
+ * @license Copyright 2008-2024, GreenSock. All rights reserved.
+ * Subject to the terms at https://gsap.com/standard-license or for
+ * Club GSAP members, the agreement issued with that membership.
+ * @author: Jack Doyle, jack@greensock.com
+*/ /* eslint-disable */ var gsap, _coreInitted, _clamp, _win, _doc, _docEl, _body, _isTouch, _pointerType, ScrollTrigger, _root, _normalizer, _eventTypes, _context, _getGSAP = function _getGSAP() {
+    return gsap || typeof window !== "undefined" && (gsap = window.gsap) && gsap.registerPlugin && gsap;
+}, _startup = 1, _observers = [], _scrollers = [], _proxies = [], _getTime = Date.now, _bridge = function _bridge(name, value) {
+    return value;
+}, _integrate = function _integrate() {
+    var core = ScrollTrigger.core, data = core.bridge || {}, scrollers = core._scrollers, proxies = core._proxies;
+    scrollers.push.apply(scrollers, _scrollers);
+    proxies.push.apply(proxies, _proxies);
+    _scrollers = scrollers;
+    _proxies = proxies;
+    _bridge = function _bridge(name, value) {
+        return data[name](value);
+    };
+}, _getProxyProp = function _getProxyProp(element, property) {
+    return ~_proxies.indexOf(element) && _proxies[_proxies.indexOf(element) + 1][property];
+}, _isViewport = function _isViewport(el) {
+    return !!~_root.indexOf(el);
+}, _addListener = function _addListener(element, type, func, passive, capture) {
+    return element.addEventListener(type, func, {
+        passive: passive !== false,
+        capture: !!capture
+    });
+}, _removeListener = function _removeListener(element, type, func, capture) {
+    return element.removeEventListener(type, func, !!capture);
+}, _scrollLeft = "scrollLeft", _scrollTop = "scrollTop", _onScroll = function _onScroll() {
+    return _normalizer && _normalizer.isPressed || _scrollers.cache++;
+}, _scrollCacheFunc = function _scrollCacheFunc(f, doNotCache) {
+    var cachingFunc = function cachingFunc(value) {
+        // since reading the scrollTop/scrollLeft/pageOffsetY/pageOffsetX can trigger a layout, this function allows us to cache the value so it only gets read fresh after a "scroll" event fires (or while we're refreshing because that can lengthen the page and alter the scroll position). when "soft" is true, that means don't actually set the scroll, but cache the new value instead (useful in ScrollSmoother)
+        if (value || value === 0) {
+            _startup && (_win.history.scrollRestoration = "manual"); // otherwise the new position will get overwritten by the browser onload.
+            var isNormalizing = _normalizer && _normalizer.isPressed;
+            value = cachingFunc.v = Math.round(value) || (_normalizer && _normalizer.iOS ? 1 : 0); //TODO: iOS Bug: if you allow it to go to 0, Safari can start to report super strange (wildly inaccurate) touch positions!
+            f(value);
+            cachingFunc.cacheID = _scrollers.cache;
+            isNormalizing && _bridge("ss", value); // set scroll (notify ScrollTrigger so it can dispatch a "scrollStart" event if necessary
+        } else if (doNotCache || _scrollers.cache !== cachingFunc.cacheID || _bridge("ref")) {
+            cachingFunc.cacheID = _scrollers.cache;
+            cachingFunc.v = f();
+        }
+        return cachingFunc.v + cachingFunc.offset;
+    };
+    cachingFunc.offset = 0;
+    return f && cachingFunc;
+}, _horizontal = {
+    s: _scrollLeft,
+    p: "left",
+    p2: "Left",
+    os: "right",
+    os2: "Right",
+    d: "width",
+    d2: "Width",
+    a: "x",
+    sc: _scrollCacheFunc(function(value) {
+        return arguments.length ? _win.scrollTo(value, _vertical.sc()) : _win.pageXOffset || _doc[_scrollLeft] || _docEl[_scrollLeft] || _body[_scrollLeft] || 0;
+    })
+}, _vertical = {
+    s: _scrollTop,
+    p: "top",
+    p2: "Top",
+    os: "bottom",
+    os2: "Bottom",
+    d: "height",
+    d2: "Height",
+    a: "y",
+    op: _horizontal,
+    sc: _scrollCacheFunc(function(value) {
+        return arguments.length ? _win.scrollTo(_horizontal.sc(), value) : _win.pageYOffset || _doc[_scrollTop] || _docEl[_scrollTop] || _body[_scrollTop] || 0;
+    })
+}, _getTarget = function _getTarget(t, self) {
+    return (self && self._ctx && self._ctx.selector || gsap.utils.toArray)(t)[0] || (typeof t === "string" && gsap.config().nullTargetWarn !== false ? console.warn("Element not found:", t) : null);
+}, _getScrollFunc = function _getScrollFunc(element, _ref) {
+    var s = _ref.s, sc = _ref.sc;
+    // we store the scroller functions in an alternating sequenced Array like [element, verticalScrollFunc, horizontalScrollFunc, ...] so that we can minimize memory, maximize performance, and we also record the last position as a ".rec" property in order to revert to that after refreshing to ensure things don't shift around.
+    _isViewport(element) && (element = _doc.scrollingElement || _docEl);
+    var i = _scrollers.indexOf(element), offset = sc === _vertical.sc ? 1 : 2;
+    !~i && (i = _scrollers.push(element) - 1);
+    _scrollers[i + offset] || _addListener(element, "scroll", _onScroll); // clear the cache when a scroll occurs
+    var prev = _scrollers[i + offset], func = prev || (_scrollers[i + offset] = _scrollCacheFunc(_getProxyProp(element, s), true) || (_isViewport(element) ? sc : _scrollCacheFunc(function(value) {
+        return arguments.length ? element[s] = value : element[s];
+    })));
+    func.target = element;
+    prev || (func.smooth = gsap.getProperty(element, "scrollBehavior") === "smooth"); // only set it the first time (don't reset every time a scrollFunc is requested because perhaps it happens during a refresh() when it's disabled in ScrollTrigger.
+    return func;
+}, _getVelocityProp = function _getVelocityProp(value, minTimeRefresh, useDelta) {
+    var v1 = value, v2 = value, t1 = _getTime(), t2 = t1, min = minTimeRefresh || 50, dropToZeroTime = Math.max(500, min * 3), update = function update(value, force) {
+        var t = _getTime();
+        if (force || t - t1 > min) {
+            v2 = v1;
+            v1 = value;
+            t2 = t1;
+            t1 = t;
+        } else if (useDelta) v1 += value;
+        else // not totally necessary, but makes it a bit more accurate by adjusting the v1 value according to the new slope. This way we're not just ignoring the incoming data. Removing for now because it doesn't seem to make much practical difference and it's probably not worth the kb.
+        v1 = v2 + (value - v2) / (t - t2) * (t1 - t2);
+    }, reset = function reset() {
+        v2 = v1 = useDelta ? 0 : v1;
+        t2 = t1 = 0;
+    }, getVelocity = function getVelocity(latestValue) {
+        var tOld = t2, vOld = v2, t = _getTime();
+        (latestValue || latestValue === 0) && latestValue !== v1 && update(latestValue);
+        return t1 === t2 || t - t2 > dropToZeroTime ? 0 : (v1 + (useDelta ? vOld : -vOld)) / ((useDelta ? t : t1) - tOld) * 1000;
+    };
+    return {
+        update: update,
+        reset: reset,
+        getVelocity: getVelocity
+    };
+}, _getEvent = function _getEvent(e, preventDefault) {
+    preventDefault && !e._gsapAllow && e.preventDefault();
+    return e.changedTouches ? e.changedTouches[0] : e;
+}, _getAbsoluteMax = function _getAbsoluteMax(a) {
+    var max = Math.max.apply(Math, a), min = Math.min.apply(Math, a);
+    return Math.abs(max) >= Math.abs(min) ? max : min;
+}, _setScrollTrigger = function _setScrollTrigger() {
+    ScrollTrigger = gsap.core.globals().ScrollTrigger;
+    ScrollTrigger && ScrollTrigger.core && _integrate();
+}, _initCore = function _initCore(core) {
+    gsap = core || _getGSAP();
+    if (!_coreInitted && gsap && typeof document !== "undefined" && document.body) {
+        _win = window;
+        _doc = document;
+        _docEl = _doc.documentElement;
+        _body = _doc.body;
+        _root = [
+            _win,
+            _doc,
+            _docEl,
+            _body
+        ];
+        _clamp = gsap.utils.clamp;
+        _context = gsap.core.context || function() {};
+        _pointerType = "onpointerenter" in _body ? "pointer" : "mouse"; // isTouch is 0 if no touch, 1 if ONLY touch, and 2 if it can accommodate touch but also other types like mouse/pointer.
+        _isTouch = Observer.isTouch = _win.matchMedia && _win.matchMedia("(hover: none), (pointer: coarse)").matches ? 1 : "ontouchstart" in _win || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0 ? 2 : 0;
+        _eventTypes = Observer.eventTypes = ("ontouchstart" in _docEl ? "touchstart,touchmove,touchcancel,touchend" : !("onpointerdown" in _docEl) ? "mousedown,mousemove,mouseup,mouseup" : "pointerdown,pointermove,pointercancel,pointerup").split(",");
+        setTimeout(function() {
+            return _startup = 0;
+        }, 500);
+        _setScrollTrigger();
+        _coreInitted = 1;
+    }
+    return _coreInitted;
+};
+_horizontal.op = _vertical;
+_scrollers.cache = 0;
+var Observer = /*#__PURE__*/ function() {
+    function Observer(vars) {
+        this.init(vars);
+    }
+    var _proto = Observer.prototype;
+    _proto.init = function init(vars) {
+        _coreInitted || _initCore(gsap) || console.warn("Please gsap.registerPlugin(Observer)");
+        ScrollTrigger || _setScrollTrigger();
+        var tolerance = vars.tolerance, dragMinimum = vars.dragMinimum, type = vars.type, target = vars.target, lineHeight = vars.lineHeight, debounce = vars.debounce, preventDefault = vars.preventDefault, onStop = vars.onStop, onStopDelay = vars.onStopDelay, ignore = vars.ignore, wheelSpeed = vars.wheelSpeed, event = vars.event, onDragStart = vars.onDragStart, onDragEnd = vars.onDragEnd, onDrag = vars.onDrag, onPress = vars.onPress, onRelease = vars.onRelease, onRight = vars.onRight, onLeft = vars.onLeft, onUp = vars.onUp, onDown = vars.onDown, onChangeX = vars.onChangeX, onChangeY = vars.onChangeY, onChange = vars.onChange, onToggleX = vars.onToggleX, onToggleY = vars.onToggleY, onHover = vars.onHover, onHoverEnd = vars.onHoverEnd, onMove = vars.onMove, ignoreCheck = vars.ignoreCheck, isNormalizer = vars.isNormalizer, onGestureStart = vars.onGestureStart, onGestureEnd = vars.onGestureEnd, onWheel = vars.onWheel, onEnable = vars.onEnable, onDisable = vars.onDisable, onClick = vars.onClick, scrollSpeed = vars.scrollSpeed, capture = vars.capture, allowClicks = vars.allowClicks, lockAxis = vars.lockAxis, onLockAxis = vars.onLockAxis;
+        this.target = target = _getTarget(target) || _docEl;
+        this.vars = vars;
+        ignore && (ignore = gsap.utils.toArray(ignore));
+        tolerance = tolerance || 1e-9;
+        dragMinimum = dragMinimum || 0;
+        wheelSpeed = wheelSpeed || 1;
+        scrollSpeed = scrollSpeed || 1;
+        type = type || "wheel,touch,pointer";
+        debounce = debounce !== false;
+        lineHeight || (lineHeight = parseFloat(_win.getComputedStyle(_body).lineHeight) || 22); // note: browser may report "normal", so default to 22.
+        var id, onStopDelayedCall, dragged, moved, wheeled, locked, axis, self = this, prevDeltaX = 0, prevDeltaY = 0, passive = vars.passive || !preventDefault, scrollFuncX = _getScrollFunc(target, _horizontal), scrollFuncY = _getScrollFunc(target, _vertical), scrollX = scrollFuncX(), scrollY = scrollFuncY(), limitToTouch = ~type.indexOf("touch") && !~type.indexOf("pointer") && _eventTypes[0] === "pointerdown", // for devices that accommodate mouse events and touch events, we need to distinguish.
+        isViewport = _isViewport(target), ownerDoc = target.ownerDocument || _doc, deltaX = [
+            0,
+            0,
+            0
+        ], // wheel, scroll, pointer/touch
+        deltaY = [
+            0,
+            0,
+            0
+        ], onClickTime = 0, clickCapture = function clickCapture() {
+            return onClickTime = _getTime();
+        }, _ignoreCheck = function _ignoreCheck(e, isPointerOrTouch) {
+            return (self.event = e) && ignore && ~ignore.indexOf(e.target) || isPointerOrTouch && limitToTouch && e.pointerType !== "touch" || ignoreCheck && ignoreCheck(e, isPointerOrTouch);
+        }, onStopFunc = function onStopFunc() {
+            self._vx.reset();
+            self._vy.reset();
+            onStopDelayedCall.pause();
+            onStop && onStop(self);
+        }, update = function update() {
+            var dx = self.deltaX = _getAbsoluteMax(deltaX), dy = self.deltaY = _getAbsoluteMax(deltaY), changedX = Math.abs(dx) >= tolerance, changedY = Math.abs(dy) >= tolerance;
+            onChange && (changedX || changedY) && onChange(self, dx, dy, deltaX, deltaY); // in ScrollTrigger.normalizeScroll(), we need to know if it was touch/pointer so we need access to the deltaX/deltaY Arrays before we clear them out.
+            if (changedX) {
+                onRight && self.deltaX > 0 && onRight(self);
+                onLeft && self.deltaX < 0 && onLeft(self);
+                onChangeX && onChangeX(self);
+                onToggleX && self.deltaX < 0 !== prevDeltaX < 0 && onToggleX(self);
+                prevDeltaX = self.deltaX;
+                deltaX[0] = deltaX[1] = deltaX[2] = 0;
+            }
+            if (changedY) {
+                onDown && self.deltaY > 0 && onDown(self);
+                onUp && self.deltaY < 0 && onUp(self);
+                onChangeY && onChangeY(self);
+                onToggleY && self.deltaY < 0 !== prevDeltaY < 0 && onToggleY(self);
+                prevDeltaY = self.deltaY;
+                deltaY[0] = deltaY[1] = deltaY[2] = 0;
+            }
+            if (moved || dragged) {
+                onMove && onMove(self);
+                if (dragged) {
+                    onDrag(self);
+                    dragged = false;
+                }
+                moved = false;
+            }
+            locked && (locked = false, true) && onLockAxis && onLockAxis(self);
+            if (wheeled) {
+                onWheel(self);
+                wheeled = false;
+            }
+            id = 0;
+        }, onDelta = function onDelta(x, y, index) {
+            deltaX[index] += x;
+            deltaY[index] += y;
+            self._vx.update(x);
+            self._vy.update(y);
+            debounce ? id || (id = requestAnimationFrame(update)) : update();
+        }, onTouchOrPointerDelta = function onTouchOrPointerDelta(x, y) {
+            if (lockAxis && !axis) {
+                self.axis = axis = Math.abs(x) > Math.abs(y) ? "x" : "y";
+                locked = true;
+            }
+            if (axis !== "y") {
+                deltaX[2] += x;
+                self._vx.update(x, true); // update the velocity as frequently as possible instead of in the debounced function so that very quick touch-scrolls (flicks) feel natural. If it's the mouse/touch/pointer, force it so that we get snappy/accurate momentum scroll.
+            }
+            if (axis !== "x") {
+                deltaY[2] += y;
+                self._vy.update(y, true);
+            }
+            debounce ? id || (id = requestAnimationFrame(update)) : update();
+        }, _onDrag = function _onDrag(e) {
+            if (_ignoreCheck(e, 1)) return;
+            e = _getEvent(e, preventDefault);
+            var x = e.clientX, y = e.clientY, dx = x - self.x, dy = y - self.y, isDragging = self.isDragging;
+            self.x = x;
+            self.y = y;
+            if (isDragging || Math.abs(self.startX - x) >= dragMinimum || Math.abs(self.startY - y) >= dragMinimum) {
+                onDrag && (dragged = true);
+                isDragging || (self.isDragging = true);
+                onTouchOrPointerDelta(dx, dy);
+                isDragging || onDragStart && onDragStart(self);
+            }
+        }, _onPress = self.onPress = function(e) {
+            if (_ignoreCheck(e, 1) || e && e.button) return;
+            self.axis = axis = null;
+            onStopDelayedCall.pause();
+            self.isPressed = true;
+            e = _getEvent(e); // note: may need to preventDefault(?) Won't side-scroll on iOS Safari if we do, though.
+            prevDeltaX = prevDeltaY = 0;
+            self.startX = self.x = e.clientX;
+            self.startY = self.y = e.clientY;
+            self._vx.reset(); // otherwise the t2 may be stale if the user touches and flicks super fast and releases in less than 2 requestAnimationFrame ticks, causing velocity to be 0.
+            self._vy.reset();
+            _addListener(isNormalizer ? target : ownerDoc, _eventTypes[1], _onDrag, passive, true);
+            self.deltaX = self.deltaY = 0;
+            onPress && onPress(self);
+        }, _onRelease = self.onRelease = function(e) {
+            if (_ignoreCheck(e, 1)) return;
+            _removeListener(isNormalizer ? target : ownerDoc, _eventTypes[1], _onDrag, true);
+            var isTrackingDrag = !isNaN(self.y - self.startY), wasDragging = self.isDragging, isDragNotClick = wasDragging && (Math.abs(self.x - self.startX) > 3 || Math.abs(self.y - self.startY) > 3), // some touch devices need some wiggle room in terms of sensing clicks - the finger may move a few pixels.
+            eventData = _getEvent(e);
+            if (!isDragNotClick && isTrackingDrag) {
+                self._vx.reset();
+                self._vy.reset(); //if (preventDefault && allowClicks && self.isPressed) { // check isPressed because in a rare edge case, the inputObserver in ScrollTrigger may stopPropagation() on the press/drag, so the onRelease may get fired without the onPress/onDrag ever getting called, thus it could trigger a click to occur on a link after scroll-dragging it.
+                if (preventDefault && allowClicks) gsap.delayedCall(0.08, function() {
+                    // some browsers (like Firefox) won't trust script-generated clicks, so if the user tries to click on a video to play it, for example, it simply won't work. Since a regular "click" event will most likely be generated anyway (one that has its isTrusted flag set to true), we must slightly delay our script-generated click so that the "real"/trusted one is prioritized. Remember, when there are duplicate events in quick succession, we suppress all but the first one. Some browsers don't even trigger the "real" one at all, so our synthetic one is a safety valve that ensures that no matter what, a click event does get dispatched.
+                    if (_getTime() - onClickTime > 300 && !e.defaultPrevented) {
+                        if (e.target.click) //some browsers (like mobile Safari) don't properly trigger the click event
+                        e.target.click();
+                        else if (ownerDoc.createEvent) {
+                            var syntheticEvent = ownerDoc.createEvent("MouseEvents");
+                            syntheticEvent.initMouseEvent("click", true, true, _win, 1, eventData.screenX, eventData.screenY, eventData.clientX, eventData.clientY, false, false, false, false, 0, null);
+                            e.target.dispatchEvent(syntheticEvent);
+                        }
+                    }
+                });
+            }
+            self.isDragging = self.isGesturing = self.isPressed = false;
+            onStop && wasDragging && !isNormalizer && onStopDelayedCall.restart(true);
+            onDragEnd && wasDragging && onDragEnd(self);
+            onRelease && onRelease(self, isDragNotClick);
+        }, _onGestureStart = function _onGestureStart(e) {
+            return e.touches && e.touches.length > 1 && (self.isGesturing = true) && onGestureStart(e, self.isDragging);
+        }, _onGestureEnd = function _onGestureEnd() {
+            return self.isGesturing = false, onGestureEnd(self);
+        }, onScroll = function onScroll(e) {
+            if (_ignoreCheck(e)) return;
+            var x = scrollFuncX(), y = scrollFuncY();
+            onDelta((x - scrollX) * scrollSpeed, (y - scrollY) * scrollSpeed, 1);
+            scrollX = x;
+            scrollY = y;
+            onStop && onStopDelayedCall.restart(true);
+        }, _onWheel = function _onWheel(e) {
+            if (_ignoreCheck(e)) return;
+            e = _getEvent(e, preventDefault);
+            onWheel && (wheeled = true);
+            var multiplier = (e.deltaMode === 1 ? lineHeight : e.deltaMode === 2 ? _win.innerHeight : 1) * wheelSpeed;
+            onDelta(e.deltaX * multiplier, e.deltaY * multiplier, 0);
+            onStop && !isNormalizer && onStopDelayedCall.restart(true);
+        }, _onMove = function _onMove(e) {
+            if (_ignoreCheck(e)) return;
+            var x = e.clientX, y = e.clientY, dx = x - self.x, dy = y - self.y;
+            self.x = x;
+            self.y = y;
+            moved = true;
+            onStop && onStopDelayedCall.restart(true);
+            (dx || dy) && onTouchOrPointerDelta(dx, dy);
+        }, _onHover = function _onHover(e) {
+            self.event = e;
+            onHover(self);
+        }, _onHoverEnd = function _onHoverEnd(e) {
+            self.event = e;
+            onHoverEnd(self);
+        }, _onClick = function _onClick(e) {
+            return _ignoreCheck(e) || _getEvent(e, preventDefault) && onClick(self);
+        };
+        onStopDelayedCall = self._dc = gsap.delayedCall(onStopDelay || 0.25, onStopFunc).pause();
+        self.deltaX = self.deltaY = 0;
+        self._vx = _getVelocityProp(0, 50, true);
+        self._vy = _getVelocityProp(0, 50, true);
+        self.scrollX = scrollFuncX;
+        self.scrollY = scrollFuncY;
+        self.isDragging = self.isGesturing = self.isPressed = false;
+        _context(this);
+        self.enable = function(e) {
+            if (!self.isEnabled) {
+                _addListener(isViewport ? ownerDoc : target, "scroll", _onScroll);
+                type.indexOf("scroll") >= 0 && _addListener(isViewport ? ownerDoc : target, "scroll", onScroll, passive, capture);
+                type.indexOf("wheel") >= 0 && _addListener(target, "wheel", _onWheel, passive, capture);
+                if (type.indexOf("touch") >= 0 && _isTouch || type.indexOf("pointer") >= 0) {
+                    _addListener(target, _eventTypes[0], _onPress, passive, capture);
+                    _addListener(ownerDoc, _eventTypes[2], _onRelease);
+                    _addListener(ownerDoc, _eventTypes[3], _onRelease);
+                    allowClicks && _addListener(target, "click", clickCapture, true, true);
+                    onClick && _addListener(target, "click", _onClick);
+                    onGestureStart && _addListener(ownerDoc, "gesturestart", _onGestureStart);
+                    onGestureEnd && _addListener(ownerDoc, "gestureend", _onGestureEnd);
+                    onHover && _addListener(target, _pointerType + "enter", _onHover);
+                    onHoverEnd && _addListener(target, _pointerType + "leave", _onHoverEnd);
+                    onMove && _addListener(target, _pointerType + "move", _onMove);
+                }
+                self.isEnabled = true;
+                e && e.type && _onPress(e);
+                onEnable && onEnable(self);
+            }
+            return self;
+        };
+        self.disable = function() {
+            if (self.isEnabled) {
+                // only remove the _onScroll listener if there aren't any others that rely on the functionality.
+                _observers.filter(function(o) {
+                    return o !== self && _isViewport(o.target);
+                }).length || _removeListener(isViewport ? ownerDoc : target, "scroll", _onScroll);
+                if (self.isPressed) {
+                    self._vx.reset();
+                    self._vy.reset();
+                    _removeListener(isNormalizer ? target : ownerDoc, _eventTypes[1], _onDrag, true);
+                }
+                _removeListener(isViewport ? ownerDoc : target, "scroll", onScroll, capture);
+                _removeListener(target, "wheel", _onWheel, capture);
+                _removeListener(target, _eventTypes[0], _onPress, capture);
+                _removeListener(ownerDoc, _eventTypes[2], _onRelease);
+                _removeListener(ownerDoc, _eventTypes[3], _onRelease);
+                _removeListener(target, "click", clickCapture, true);
+                _removeListener(target, "click", _onClick);
+                _removeListener(ownerDoc, "gesturestart", _onGestureStart);
+                _removeListener(ownerDoc, "gestureend", _onGestureEnd);
+                _removeListener(target, _pointerType + "enter", _onHover);
+                _removeListener(target, _pointerType + "leave", _onHoverEnd);
+                _removeListener(target, _pointerType + "move", _onMove);
+                self.isEnabled = self.isPressed = self.isDragging = false;
+                onDisable && onDisable(self);
+            }
+        };
+        self.kill = self.revert = function() {
+            self.disable();
+            var i = _observers.indexOf(self);
+            i >= 0 && _observers.splice(i, 1);
+            _normalizer === self && (_normalizer = 0);
+        };
+        _observers.push(self);
+        isNormalizer && _isViewport(target) && (_normalizer = self);
+        self.enable(event);
+    };
+    _createClass(Observer, [
+        {
+            key: "velocityX",
+            get: function get() {
+                return this._vx.getVelocity();
+            }
+        },
+        {
+            key: "velocityY",
+            get: function get() {
+                return this._vy.getVelocity();
+            }
+        }
+    ]);
+    return Observer;
+}();
+Observer.version = "3.12.5";
+Observer.create = function(vars) {
+    return new Observer(vars);
+};
+Observer.register = _initCore;
+Observer.getAll = function() {
+    return _observers.slice();
+};
+Observer.getById = function(id) {
+    return _observers.filter(function(o) {
+        return o.vars.id === id;
+    })[0];
+};
+_getGSAP() && gsap.registerPlugin(Observer);
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")
 

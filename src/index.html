@@ -11,7 +11,7 @@
             data-header
     > 
       <div class="header__container">
-        <div class="header__logo">
+        <div class="header__logo" data-header-appear>
           <a href="#">
            <img src="./assets/images/mobile.svg">
           </a>  
@@ -27,6 +27,7 @@
 
           <button class="header__catalog-btn"
                   data-header-open-btn
+                  data-header-appear
           >
             <span class="header__catalog-btn__burger">
             </span>
@@ -260,7 +261,7 @@
               ООО «РОКСОЛ». Поставка товаров по всей России
             </span>
           </div>
-        </div> 
+        </div>
 
         <div class="header__searching"
              data-header-open
@@ -273,6 +274,7 @@
 
           <button class="header__searching-btn" 
                   data-header-open-btn
+                  data-header-appear
                   data-header-hide-mobile
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
@@ -300,7 +302,7 @@
           </div>
         </div>
 
-        <nav class="header__nav">
+        <nav class="header__nav" data-header-appear>
           <div class="header__nav-block">
             <div class="header__nav-item">
               <a href="#">
@@ -801,34 +803,71 @@
     <main>
       <section class="hero">
         <div class="hero__container">
-          <div class="hero__slider" data-hero-slider>
-            <h1 class="hero__slider-title">   
-              Смазочные материалы ROX
-            </h1>
+          <div class="hero__slider splide" data-hero-slider>
+            <div class="splide__slider">
+              <div class="hero__track splide__track">
+                <ul class="splide__list">
+                  <li class="hero__slide splide__slide">
+                    <h1 class="hero__slider-title" data-slider-title>   
+                      Смазочные материалы ROX
+                    </h1>
 
-            <p class="hero__slider-text">
-              Производим современные смазочные материалы для защиты от износа и неблагоприятных факторов промышленного оборудования.
-            </p>
+                    <img class="hero__slider-img" src="./assets/images/hero-home-2x.jpg">
+                    <img class="hero__slider-img hero__slider-img--mobile" src="./assets/images/hero-slide-mob.jpg">
 
-            <a class="hero__slider-btn"
-               href="#"
-            >
-             <span>
-              О компании
-             </span>
-            </a>
-          </div>
-          <div class="hero__line-wr">
-            <span class="hero__line-number hero__line-number--left">
-              01
-            </span>
-            <div class="hero__line">
-              <span class="hero__line-mesure">
-              </span>
+                    <p class="hero__slider-text" data-slider-text>
+                      Производим современные смазочные материалы для защиты от износа и неблагоприятных факторов промышленного оборудования.
+                    </p>
+        
+                    <div class="hero__slider-btn-wr">
+                      <a class="hero__slider-btn" data-slider-btn
+                         href="#"
+                      >
+                        <span>
+                        О компании
+                        </span>
+                      </a>
+                    </div>
+                  </li>
+
+                  <li class="hero__slide splide__slide">
+                    <h1 class="hero__slider-title" data-slider-title>   
+                      С2
+                    </h1>
+
+                    <img class="hero__slider-img" src="./assets/images/hero-2.png">
+                    <img class="hero__slider-img hero__slider-img--mobile" src="./assets/images/hero-2-mob.jpg">
+        
+                    <p class="hero__slider-text" data-slider-text>
+                      Производим современные смазочные материалы для защиты от износа и неблагоприятных факторов промышленного оборудования.
+                    </p>
+        
+                    <div class="hero__slider-btn-wr">
+                      <a class="hero__slider-btn" data-slider-btn
+                        href="#"
+                      >
+                      <span>
+                        О компании
+                      </span>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="hero__line-wr" data-slider-line>
+                <span class="hero__line-number hero__line-number--left">
+                  01
+                </span>
+                <div class="hero__line">
+                  <span data-slider-line-progress class="hero__line-mesure">
+                  </span>
+                </div>
+                <span class="hero__line-number hero__line-number--right">
+                  02
+                </span>
+              </div>
             </div>
-            <span class="hero__line-number hero__line-number--right">
-              02
-            </span>
           </div>
         </div>
       </section>
@@ -1006,10 +1045,11 @@
 
           <div class="popular-purchase__slider splide"
                data-mobile-slider
+               data-appear-card-container
           >
             <div class="popular-purchase__track splide__track">
               <ul class="popular-purchase__list splide__list">
-                <li class="popular-purchase__item splide__slide">
+                <li class="popular-purchase__item splide__slide" data-appear-card>
                   <a class="card" data-product
                      href="#"
                   >
@@ -1061,7 +1101,7 @@
                   </a>
                 </li>
     
-                <li class="popular-purchase__item splide__slide">
+                <li class="popular-purchase__item splide__slide" data-appear-card>
                   <a class="card" data-product
                      href="#"
                   >
@@ -1113,7 +1153,7 @@
                   </a>
                 </li>
     
-                <li class="popular-purchase__item splide__slide">
+                <li class="popular-purchase__item splide__slide" data-appear-card>
                   <a class="card" data-product
                      href="#"
                   >
@@ -1165,7 +1205,7 @@
                   </a>
                 </li>
     
-                <li class="popular-purchase__item splide__slide">
+                <li class="popular-purchase__item splide__slide" data-appear-card>
                   <a class="card" data-product
                      href="#"
                   >
@@ -1217,7 +1257,7 @@
                   </a>
                 </li>
     
-                <li class="popular-purchase__item splide__slide">
+                <li class="popular-purchase__item splide__slide" data-appear-card>
                   <a class="card" data-product
                      href="#"
                   >
@@ -1283,16 +1323,32 @@
 
       <section class="analogs">
         <div class="analogs__container">
-          <h2 class="analogs__title">
-            <span>
+          <h2 class="analogs__title title" data-title>
+            <span class="analogs__title-subtitle title-descriptor" data-title-descriptor>
               Преимущества наших аналогов
             </span>
 
-            Производим аналоги смазочных материалов зарубежных производителей, благодаря опытным технологам и оснащённой лаборатории
+              <span class="title-line-wr">
+                <span class="title-line" data-title-line>
+                  Производим аналоги смазочных
+                </span> 
+              </span>
+  
+              <span class="title-line-wr">
+                <span class="title-line" data-title-line>
+                  материалов зарубежных производителей,  благодаря
+                </span>
+              </span>
+  
+              <span class="title-line-wr">
+                <span class="title-line" data-title-line>
+                  опытным технологам и оснащённой лаборатории
+                </span>
+              </span>
           </h2>
 
-          <ul class="analogs__list">
-            <li class="analogs__item">
+          <ul class="analogs__list" data-appear-card-container>
+            <li class="analogs__item" data-appear-card>
               <div class="point-card">
                 <div class="point-card__media">
                   <img src="./assets/images/analogs-1.png" alt="">
@@ -1304,7 +1360,7 @@
               </div>
             </li>
 
-            <li class="analogs__item">
+            <li class="analogs__item" data-appear-card>
               <div class="point-card">
                 <div class="point-card__media">
                   <img src="./assets/images/analogs-2.png" alt="">
@@ -1316,7 +1372,7 @@
               </div>
             </li>
 
-            <li class="analogs__item">
+            <li class="analogs__item" data-appear-card>
               <div class="point-card">
                 <div class="point-card__media">
                   <img src="./assets/images/analogs-3.png" alt="">
@@ -1328,7 +1384,7 @@
               </div>
             </li>
 
-            <li class="analogs__item">
+            <li class="analogs__item" data-appear-card>
               <div class="point-card">
                 <div class="point-card__media">
                   <img src="./assets/images/analogs-4.png" alt="">
@@ -1341,17 +1397,21 @@
             </li>
           </ul>
 
-          <a class="analogs__btn"
-             href="#"
-          >
-            <span>
-              Перейти к аналогам
-            </span>
-          </a>
+          <div class="btn-border__wr">
+            <a class=" btn-border analogs__btn"
+               href="#"
+               data-btn-appear
+            >
+
+           <span>
+             Перейти к аналогам
+           </span>
+         </a>
+          </div>
         </div>
       </section>
  
-      <section class="industry-solutions">
+      <section class="industry-solutions" data-changing-bg>
         <div class="industry-solutions__container">
           <p class="industry-solutions__description">
             Отраслевые решения 
@@ -1362,7 +1422,7 @@
           </h2>
           </div> 
 
-        <div class="industry-solutions__cards">
+        <div class="industry-solutions__cards" data-fix-cards>
           <a href="" class="industry-solutions__card">
             <img src="./assets/images/indastry-1.png" alt="">
 
@@ -1437,20 +1497,29 @@
 
       <section class="assortment">
         <div class="assortment__container">
-          <h2 class="assortment__title">
-            <span>
+          <h2 class="assortment__title title" data-title>
+            <span class="assortment__title-subtitle title-descriptor" data-title-descriptor>
               Ассортимент смазок и масел
             </span>
-
-            Производимые масла и смазки представлены в широком ассортименте:
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line>
+                Производимые масла и смазки
+              </span> 
+            </span>
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line>
+                представлены в широком ассортименте:
+              </span> 
+            </span>
           </h2>
 
           <div class="assortment__slider splide"
                data-mobile-slider
+               data-appear-card-container
           >
             <div class="assortment__track splide__track">
               <ul class="assortment__list splide__list">
-                <li class="assortment__list-item  splide__slide">
+                <li class="assortment__list-item  splide__slide" data-appear-card>
                   <div class="point-card">
                     <h3 class="point-card__title">
                       Пластичные многоцелевые
@@ -1462,7 +1531,7 @@
                   </div>
                 </li>
 
-                <li class="assortment__list-item  splide__slide">
+                <li class="assortment__list-item  splide__slide" data-appear-card>
                   <div class="point-card">
                     <h3 class="point-card__title">
                       Резьбовые
@@ -1474,7 +1543,7 @@
                   </div>
                 </li>
 
-                <li class="assortment__list-item  splide__slide">
+                <li class="assortment__list-item  splide__slide" data-appear-card>
                   <div class="point-card">
                     <h3 class="point-card__title">
                       Силиконовые
@@ -1486,7 +1555,7 @@
                   </div>
                 </li>
 
-                <li class="assortment__list-item  splide__slide">
+                <li class="assortment__list-item  splide__slide" data-appear-card>
                   <div class="point-card">
                     <h3 class="point-card__title">
                       Фторопластовые
@@ -1498,7 +1567,7 @@
                   </div>
                 </li>
 
-                <li class="assortment__list-item  splide__slide">
+                <li class="assortment__list-item  splide__slide" data-appear-card>
                   <div class="point-card">
                     <h3 class="point-card__title">
                       Электропроводящие
@@ -1510,7 +1579,7 @@
                   </div>
                 </li>
 
-                <li class="assortment__list-item  splide__slide">
+                <li class="assortment__list-item  splide__slide" data-appear-card>
                   <div class="point-card">
                     <h3 class="point-card__title">
                       Пищевые
@@ -1522,7 +1591,7 @@
                   </div>
                 </li>
 
-                <li class="assortment__list-item  splide__slide">
+                <li class="assortment__list-item  splide__slide" data-appear-card>
                   <div class="point-card">
                     <h3 class="point-card__title">
                       Высоко- и низкотемпетарурные
@@ -1546,10 +1615,10 @@
         </div>
       </section>
 
-      <section class="ticker">
+      <section class="ticker" data-ticker>
         <div class="ticker__container">
           <div class="ticker__group">
-            <div class="ticker__group-line ticker__group-line--left">
+            <div class="ticker__group-line ticker__group-line--left"  data-ticker-left>
               <span>
                 Качество
               </span> 
@@ -1574,7 +1643,8 @@
                 Уникальность
               </span>
             </div>
-            <div class="ticker__group-line ticker__group-line--right">
+
+            <div class="ticker__group-line ticker__group-line--right"  data-ticker-right>
               <span>
                 Качество
               </span> 
@@ -1601,7 +1671,7 @@
             </div>
           </div>
 
-          <div class="ticker__media">
+          <div class="ticker__media"  data-ticker-media>
             <img src="./assets/images/liefs.jpg" alt="">
           </div>
         </div>
@@ -2054,7 +2124,7 @@
         </div>
       </div>
     </footer>
-    
+   
     <script type="module" src="./scripts/index.js"></script>
   </body>
 </html>   
