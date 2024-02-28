@@ -91,7 +91,10 @@ function toggleDesktopSubMenus(header) {
 
 function addStylesForHeadrScroll(header) {
   let lastScrollTop = 0;
-  window.onscroll = onScroll;
+
+  if (window.matchMedia("(min-width: 769px)").matches) {
+    window.onscroll = onScroll;
+  }
 
   function onScroll (e) {
     let top = window.pageYOffset;

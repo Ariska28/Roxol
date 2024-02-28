@@ -1,6 +1,7 @@
 import Splide from "@splidejs/splide";
 import { Intersection } from '@splidejs/splide-extension-intersection';
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 
 import { EventInterface } from '@splidejs/splide';
@@ -132,7 +133,6 @@ export function heroSplider(sliderAttr) {
   })
 }
 
-
 export function mobSplider(sliderAttr) {
   const spleders =  document.querySelectorAll(`${sliderAttr}`);
 
@@ -183,8 +183,9 @@ export function desktopSplider(sliderAttr) {
       });
       
       initProgressBar(splide) 
+      gsap.registerPlugin(ScrollTrigger);
       
-      splide.mount();
+      splide.mount({}, MyTransition);
     })
   }
 }

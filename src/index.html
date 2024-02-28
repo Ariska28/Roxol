@@ -1029,11 +1029,16 @@
             </li>
           </ul>
 
-          <a class="catalog-links__btn" href="#">
-            <span>
-              Перейти в каталог
-            </span>
-          </a>
+          <div class="btn-border__wr">
+            <a class="catalog-links__btn btn-border" 
+                href="#"
+                data-btn-appear
+            >
+              <span>
+                Перейти в каталог
+              </span>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -1678,17 +1683,15 @@
       </section>
 
       <section class="work-with-us">
-        <div class="work-with-us__container">
+        <div class="work-with-us__container"  data-pin-slider>
           <h2 class="work-with-us__title">
             Почему вам стоит работать с нами
           </h2>
 
-          <div class="point-slider splide"
-               data-slider-desktop
-          >
-          <div class="point-slider__track splide__track">
-            <ul class="point-slider__list splide__list">
-              <li class="point-slider__list-item  splide__slide">
+          <div class="point-slider">
+          <div class="point-slider__track">
+            <ul class="point-slider__list" data-pin-slider-list>
+              <li class="point-slider__list-item ">
                 <span class="point-slider__list-item__circle">
                 </span>
 
@@ -1697,7 +1700,7 @@
                 </h3>
               </li>
 
-              <li class="point-slider__list-item  splide__slide">
+              <li class="point-slider__list-item">
                 <span class="point-slider__list-item__circle">
                 </span>
 
@@ -1706,7 +1709,7 @@
                 </h3>
               </li>
 
-              <li class="point-slider__list-item  splide__slide">
+              <li class="point-slider__list-item">
                 <span class="point-slider__list-item__circle">
                 </span>
 
@@ -1715,7 +1718,7 @@
                 </h3>
               </li>
 
-              <li class="point-slider__list-item  splide__slide">
+              <li class="point-slider__list-item">
                 <span class="point-slider__list-item__circle">
                 </span>
 
@@ -1724,7 +1727,7 @@
                 </h3>
               </li>
 
-              <li class="point-slider__list-item  splide__slide">
+              <li class="point-slider__list-item">
                 <span class="point-slider__list-item__circle">
                 </span>
 
@@ -1735,9 +1738,9 @@
             </ul>
           </div>
 
-          <div class="point-slider__progress splide__slider-progress">
-            <div class="splide__slider-progress__bar"
-                  data-slider-bar
+          <div class="point-slider__progress">
+            <div class="point-slider__progress__bar"
+                 data-pin-slider-bar
             >
             </div>
           </div>
@@ -1747,8 +1750,10 @@
 
       <section class="cients">
         <div class="cients__container">
-          <h2 class="cients__title">
-            Наши клиенты
+          <h2 class="cients__title" data-title>
+            <span data-title-line>
+              Наши клиенты
+            </span>
           </h2>
 
           <ul class="cients__list">
@@ -1795,17 +1800,37 @@
         </div>
       </section>
 
-      <section class="about-company">
+      <section class="about-company" data-changing-bg-small>
         <div class="about-company__container">
-          <h2 class="about-company__title">
-            <span>О компании</span>
-            Собираясь купить смазочные материалы в компании «Роксол», вы всегда можете рассчитывать на техническую поддержку и помощь наших инженеров и менеджеров в выборе
-          </h2> 
+          <h2 class="about-company__title title" data-title>
+            <span class="about-company__title-descriptor title-descriptor" data-title-descriptor>
+              О компании
+            </span>
 
-          <h2 class="about-company__title about-company__title--mobile">
-            <span>О компании</span>
-            Собираясь купить смазочные материалы в компании «Роксол», вы всегда можете рассчитывать на техническую поддержку и помощь наших инженеров и менеджеров в выборе. Мы всегда готовы предложить лучшие условия
-          </h2>
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line="">
+                Собираясь купить смазочные 
+              </span>
+            </span>
+
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line="">
+                материалы в компании «Роксол», вы всегда можете
+              </span>
+            </span>
+
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line="">
+                рассчитывать на техническую поддержку и помощь
+              </span>
+            </span>
+
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line="">
+                наших инженеров и менеджеров в выборе
+              </span>
+            </span>
+          </h2> 
 
           <div class="about-company__content-wr">
             <div class="about-company__content">
@@ -1813,13 +1838,17 @@
                 Все составы изготовлены из российского сырья, что позволяет компании представить на рынок доступную по стоимости и соответствующую по качеству и характеристикам лучшим иностранным образцам продукцию
               </p>
 
-              <a class="about-company__content-btn"
-                 href=""
-              >
-                <span>
-                  О компании
-                </span>
-              </a>
+              <div class="btn-border__wr">
+                <a class=" btn-border btn-border--hover-white about-company__content-btn"
+                   href=""
+                   data-btn-appear=""
+                >
+                  <span>
+                    О компании
+                  </span>
+                </a>
+              </div>
+ 
             </div>
           </div>
         </div>
@@ -1848,9 +1877,9 @@
             </button>
           </div> 
           
-            <div class="company-news__track splide__track">
+            <div class="company-news__track splide__track" data-appear-card-container-big>
               <ul class="company-news__list splide__list">
-                <li class="company-news__list-item  splide__slide">
+                <li class="company-news__list-item  splide__slide" data-appear-card>
                   <a href="" class="company-news__link">
                     <img class="company-news__link-img" 
                          src="./assets/images/news-1.jpg" 
@@ -1871,7 +1900,7 @@
                   </p>
                 </li>
 
-                <li class="company-news__list-item  splide__slide">
+                <li class="company-news__list-item  splide__slide" data-appear-card>
                   <a href="" class="company-news__link">
                     <img  class="company-news__link-img"
                           src="./assets/images/news-22.png" 
@@ -1891,7 +1920,7 @@
                   </p>
                 </li>
 
-                <li class="company-news__list-item  splide__slide">
+                <li class="company-news__list-item  splide__slide" data-appear-card>
                   <a href="" class="company-news__link">
                     <img class="company-news__link-img"
                          src="./assets/images/news-23.png" 
@@ -1921,11 +1950,16 @@
             </div>
           </div>
 
-        <a class="company-news__btn" href="">
-          <span>
-            Перейти к новостям
-          </span>
-        </a>
+        <div class="btn-border__wr">
+          <a class="btn-border company-news__btn"
+             href=""
+             data-btn-appear
+             >
+            <span>
+              Перейти к новостям
+            </span>
+          </a>
+        </div>
       </section>
     </main>
     

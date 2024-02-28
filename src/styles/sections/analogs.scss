@@ -1,4 +1,5 @@
 .analogs {
+  position: static;
   margin: $s-space-desktop 0 px-to-vw(340); 
 
   @include media-down(sm) {
@@ -20,6 +21,11 @@
 
 .analogs__title-subtitle {  
   margin-right: px-to-vw(435);
+
+  @include media-down(sm) {
+    margin-right: 0;
+    margin-bottom: px-to-vw(24);
+  }
 }
 
 .analogs__list {

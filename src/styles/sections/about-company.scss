@@ -1,32 +1,21 @@
 .about-company__title {
-  @include title-with-text;  
-
   margin-bottom: px-to-vw(45);
 
-  span {
-    margin-right: 33%;
-  }
-
-  &--mobile {
-    display: none;
-  }
-
   @include media-down(sm) {
-    display: none;
     margin-bottom: px-to-vw(20);
-
-    &--mobile {
-      display: block;
-    }
   }
 }
 
+.about-company__title-descriptor {
+  margin-right: 33%;
+}
+
 .about-company {
-  background-color: $c-accent;
   padding-top: $s-space-desktop;
   padding-bottom: $s-space-desktop;
 
   @include media-down(sm) {
+    background-color: $c-accent;
     padding-top: $s-space-mobile;
     padding-bottom: $s-space-mobile;
   }
@@ -61,11 +50,5 @@
 }
 
 .about-company__content-btn {
-  @include button-border;
-
   max-width: px-to-vw(348);
-
-  &::after {
-    background-color: $c-white;
-  }
 }

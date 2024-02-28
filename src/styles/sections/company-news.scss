@@ -46,6 +46,7 @@
 
 .company-news__track {
   margin-right: px-to-vw(-42);
+  overflow: hidden;
 
   @include media-down(sm) {
     margin-right: px-to-vw(-16);
@@ -157,8 +158,6 @@
 }
 
 .company-news__btn {
-  @include button-border;
-
   max-width: px-to-vw(348);
   margin: px-to-vw(60) auto 0;
 

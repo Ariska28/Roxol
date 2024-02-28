@@ -2,9 +2,11 @@
 $height-submenus: px-to-vw(550);
 
 .header {
+  @include container; 
+
   background-color: $c-primary;
   position: relative;
-  @include container; 
+  overflow-x: hidden;
   z-index: 1000;
   position: absolute;
   top: 0;
@@ -27,7 +29,15 @@ $height-submenus: px-to-vw(550);
     top: 0;
     left: 0;
     width: 100%;
+  }
 
+  @include media-down(sm) {
+    position: relative;
+    overflow-x: visible;
+
+    &.is-fixed {
+      position: static;
+    }
   }
 }
 

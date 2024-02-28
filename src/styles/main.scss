@@ -66,14 +66,16 @@
 .title {
   display: flex;
   flex-wrap: wrap;
-
-  @include media-down(sm) {
-    padding-top: px-to-vw(22);
-  }
 }
+
 .title-descriptor {
   @include description;
   display: block;
+
+  @include media-down(sm) {
+    margin-right: 0;
+    margin-bottom: px-to-vw(24);
+  }
 }
 
 .title-line {
@@ -95,6 +97,10 @@
   &:last-child {
     padding-bottom: 0;
   }
+
+  @include media-down(sm) {
+    padding-bottom: 0;
+  }
 }
 
 .btn-border__wr {
@@ -103,4 +109,10 @@
 
 .btn-border {
   @include button-border;
+
+  &--hover-white {
+    &::after {
+      background-color: $c-white;
+    }
+  }
 } 

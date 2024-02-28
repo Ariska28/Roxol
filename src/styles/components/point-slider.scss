@@ -1,3 +1,6 @@
+$slider-item-desktop-height: px-to-vw(400);
+$slider-item-desktop-width: px-to-vw(720);
+
 .point-slider {
   @include media-down(sm) {
     visibility: visible;
@@ -16,6 +19,7 @@
 
 .point-slider__track {
   margin-right: px-to-vw(-42);
+  overflow: hidden;
 
   @include media-down(sm) {
     margin-right: 0;
@@ -23,22 +27,25 @@
 }
 
 .point-slider__list {
-  margin-right: px-to-vw(42) !important;
+  display: flex;
+  width: 100%;
+  margin-right: px-to-vw(42);
 
   @include media-down(sm) {
     display: block;
-    margin-right: 0 !important;
+    margin-right: 0;
   }
 }
 
 .point-slider__list-item  {
-  height: px-to-vw(400);
+  height: $slider-item-desktop-height;
+  width: $slider-item-desktop-width;
   border-radius: $s-border-radius;
   background-color: $c-white;
   padding: px-to-vw(24);
   display: flex;
   flex-direction: column;
-  margin-right: px-to-vw(24) !important;
+  margin-right: px-to-vw(24);
   transition: background-color 0.4s ease-in-out;
 
   &:nth-child(2n){
@@ -47,9 +54,10 @@
 
   @include media-down(sm) {
     border-radius: $s-border-radius-mob;
-    margin-right: 0 !important;
+    margin-right: 0;
     margin-bottom: px-to-vw(20);
     height: px-to-vw(320);
+    width: 100%;
     padding: px-to-vw(16);
 
     &:last-child {
@@ -92,9 +100,17 @@
 }
 
 .point-slider__progress {
+  display: block;
+  background: $c-gray-line;
   margin-top: px-to-vw(40);
 
   @include media-down(sm) {
     display: none;
   }
+}
+
+.point-slider__progress__bar {
+  background: $c-text-dark;
+  height: px-to-vw(2);
+  width: 0;
 }

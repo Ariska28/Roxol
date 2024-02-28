@@ -11,6 +11,10 @@ body {
   &.no-scroll {
     overflow: hidden;
   }
+
+  @include media-down(sm) {
+    margin-top: 0;
+  }
 }
 
 button, a {

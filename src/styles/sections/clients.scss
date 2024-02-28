@@ -15,6 +15,7 @@
 .cients__title {
   @include title-2;
 
+  overflow: hidden;
   margin-bottom: px-to-vw(60);
 
   @include media-down(sm) {
