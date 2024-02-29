@@ -101,6 +101,7 @@ $s-input-height-mobile: px-to-vw(53);
     padding: px-to-vw(21) px-to-vw(24);
     color: $c-text-dark;
     transition: border-color 0.2s ease-in;
+    overflow: hidden;
 
     &::placeholder {
       @include btn-text;
@@ -340,7 +341,6 @@ $s-input-height-mobile: px-to-vw(53);
       border-radius: $s-border-radius $s-border-radius 0 0;
       border-color: $c-text-dark;
       border-bottom: none;
-      padding-left: px-to-vw(32);
     }
 
     .form__dropdown-options {

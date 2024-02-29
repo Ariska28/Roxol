@@ -146,8 +146,11 @@
 
 .article__media {
   display: flex;
-   
-  img {
+  justify-content: center;
+
+  img {      
+    height: px-to-vw(620);
+    object-fit: contain;
     border-radius: $s-border-radius;
   }
 

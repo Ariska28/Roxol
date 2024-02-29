@@ -228,7 +228,7 @@ function pinSliderAnimation() {
     const pointerSliderChildren = pointerSliderList.querySelectorAll('li');
     ScrollTrigger.matchMedia({
       "(min-width: 767px)": function() {
-        const realSliderWidth = pointerSliderChildren.length*720*.0521;
+        const realSliderWidth = (pointerSliderChildren.length+1)*720*.0521;
         pointerSliderList.style.width = `${realSliderWidth}vw`;
 
         gsap.to(pointerSliderList, {

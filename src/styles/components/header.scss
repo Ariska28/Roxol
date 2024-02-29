@@ -6,7 +6,6 @@ $height-submenus: px-to-vw(550);
 
   background-color: $c-primary;
   position: relative;
-  overflow-x: hidden;
   z-index: 1000;
   position: absolute;
   top: 0;
@@ -33,7 +32,6 @@ $height-submenus: px-to-vw(550);
 
   @include media-down(sm) {
     position: relative;
-    overflow-x: visible;
 
     &.is-fixed {
       position: static;
@@ -59,12 +57,21 @@ $height-submenus: px-to-vw(550);
   a {
     display: flex;
     align-items: center;
+
+    &:hover {
+      svg path {
+        fill: $c-text-gray;
+      }
+    }
   }
   
-  img {
+  svg {
     height: px-to-vw(42);
     width: px-to-vw(120);
-    object-fit: contain;
+
+    path {
+      transition: fill 0.2s ease-in-out;
+    }
   }
 
   @include media-down(md) {

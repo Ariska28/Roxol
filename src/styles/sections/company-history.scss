@@ -51,6 +51,14 @@
   }
 }
 
+.company-history__slider {
+  border-radius: $s-border-radius;
+
+  @include media-down(sm) {
+    border-radius: $s-border-radius-mob;
+  }
+}
+
 .company-history__slider-item {
   width: 100%;
   height: px-to-vw(620);
@@ -63,6 +71,7 @@
   @include media-down(sm) {
     padding: px-to-vw(16);
     height: px-to-vw(520);
+    border-radius: $s-border-radius-mob;
   }
 }
 
@@ -158,6 +167,8 @@
 .company-history__progress-bar {
   position: relative;
   height: px-to-vw(1);
+  transition: width 800ms linear;
+
   &::after {
     content: '';
     position: absolute;

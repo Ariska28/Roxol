@@ -5,7 +5,7 @@ body {
   font-weight: 500;
   width:100vw;   
   overflow-x: hidden;
-  margin-top: $s-header-height-desktop;
+  padding-top: $s-header-height-desktop;
   transition: background 0.5s ease-in-out;
 
   &.no-scroll {
@@ -13,7 +13,7 @@ body {
   }
 
   @include media-down(sm) {
-    margin-top: 0;
+    padding-top: 0;
   }
 }
 

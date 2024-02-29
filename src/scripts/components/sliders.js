@@ -275,7 +275,7 @@ export function historySplider(sliderAttr) {
     
     progressBarWithYears(splide) 
     
-    splide.mount();
+    splide.mount({}, MyTransition);
   })
 }
 

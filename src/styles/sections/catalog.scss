@@ -10,10 +10,11 @@ $s-dropdown-height-mob: px-to-vw(60);
 
   position: relative;
   display: inline-block;
-  padding-right: px-to-vw(50);
+  padding-right: px-to-vw(58);
   margin-bottom: px-to-vw(24);
 
   @include media-down(sm) {
+    padding-right: px-to-vw(50);
     margin-bottom: px-to-vw(16);
   }
 }
@@ -74,18 +75,17 @@ $s-dropdown-height-mob: px-to-vw(60);
   flex-direction: column;
   overflow: hidden;
   position: relative;
+  background-color: transparent;
   border-radius: $s-border-radius $s-border-radius  0 0;
 
   &.is-toggle {
+    background-color: $c-brown-2;
+
     .catalog__content-nav__list {
       overflow: hidden;
       transform: translateY(0%);
       position: static;
       z-index: 1;
-    }
-
-    .catalog__content-nav__btn {
-      border-radius: $s-border-radius $s-border-radius 0 0;
     }
   }
 
@@ -96,6 +96,7 @@ $s-dropdown-height-mob: px-to-vw(60);
     border-radius: $s-border-radius-mob; 
 
     &.is-toggle {
+      background-color: transparent;
       height: px-to-vw(60);
 
       .catalog__content-nav__list {
@@ -122,6 +123,11 @@ $s-dropdown-height-mob: px-to-vw(60);
   background-color: $c-brown-2;
   border-radius: $s-border-radius;
   z-index: 2;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $c-brown;
+  }
 
   @include media-down(sm) {
     border-radius: $s-border-radius-mob $s-border-radius-mob 0 0;
@@ -216,6 +222,11 @@ $s-dropdown-height-mob: px-to-vw(60);
   background-color: $c-brown-2;
   padding: px-to-vw(15.5) px-to-vw(24);
   border-radius: $s-border-radius;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $c-brown;
+  }
 
   @include media-down(sm) {
     min-width: 100%;
@@ -260,7 +271,8 @@ $s-dropdown-height-mob: px-to-vw(60);
       color: $c-gray-2;
     }
 
-    &:focus {
+    &:focus, 
+    &:hover {
       border-color: $c-text-dark;
       outline: none;
 
@@ -277,7 +289,7 @@ $s-dropdown-height-mob: px-to-vw(60);
     height: px-to-vw(24);
     position: absolute;
     left: px-to-vw(24);
-    top: px-to-vw(18.5);
+    top: px-to-vw(20.5);
 
     * {
       transition: stroke 0.2s ease-in;
@@ -638,6 +650,19 @@ $s-dropdown-height-mob: px-to-vw(60);
     top: 0;
     left: 0;
     user-select: none;
+    transition: background-color 0.2s ease-in-out;
+
+
+    &:hover {
+      background-color: $c-brown;
+    }   
+    
+    &::placeholder {
+      @include link-text;
+
+      color: $c-text-dark;
+    }
+
   }
 
   @include media-down(sm) {
@@ -653,6 +678,7 @@ $s-dropdown-height-mob: px-to-vw(60);
 
     input {
       height: $s-dropdown-height-mob;
+      border-radius: $s-border-radius-mob;
     }
 
     &.is-open {

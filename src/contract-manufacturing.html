@@ -884,9 +884,8 @@
                           readonly 
                   />
                   <ul class="form__dropdown-options">
-                    <li class="form__dropdown-option" data-dropdown-option>организация 1</li>
-                    <li class="form__dropdown-option" data-dropdown-option>организация 2</li>
-                    <li class="form__dropdown-option" data-dropdown-option>организация 3</li>
+                    <li class="form__dropdown-option" data-dropdown-option>Физическое лицо</li>
+                    <li class="form__dropdown-option" data-dropdown-option>Торгово-коммерческая организация</li>
                   </ul>
                 </div>
                 <button class="form__btn" 
@@ -1348,8 +1347,8 @@
             <div class="industry__box" data-matches>
               <div class="industry__box-media">
                 <img class="is-visible" data-matches-img="chemistry-industry" src="./assets/images/industry-1.png" alt="">
-                <img data-matches-img="mineral-wool" src="./assets/images/industry-2.png" alt="">
-                <img data-matches-img="bottling-drinks" src="./assets/images/industry-33.png" alt="">
+                <img data-matches-img="mineral-wool" src="./assets/images/industry-33.png" alt="">
+                <img data-matches-img="bottling-drinks" src="./assets/images/industry-2.png" alt="">
                 <img data-matches-img="baking-industry" src="./assets/images/industry-4.png" alt="">
                 <img data-matches-img="wood-industry" src="./assets/images/industry-5.png" alt="">
                 <img data-matches-img="food-industry" src="./assets/images/industry-6.png" alt="">
@@ -1470,7 +1469,7 @@
                 </li>
 
                 <li class="industry__box-links__item"
-                    data-matches-item="metallurgical-industry"
+                    data-matches-item="pulp-paper-industry"
                 >
                   <a class="industry__box-links__item-link" href="/">
                     Целлюлозно-бумажная отрасль
@@ -2062,57 +2061,71 @@
         </div>
       </section>
 
-      <section class="feedback"> 
-        <div class="feedback__container">
-          <span class="feedback__text">
-            Форма обратной связи
-          </span>
-
-          <h2 class="feedback__title">
-            Вы можете задать любой интересующий вас вопрос и наши менеджеры проведут бесплатную  консультацию по контрактному производству
+      <section class="application">
+        <div class="application__container">
+          <div class="application__text application__text--mobile">
+            Разработка аналогов
+          </div>
+          <h2 class="application__title">
+            Вы можете задать любой интересующий вас вопрос <br> и наши менеджеры проведут бесплатную <br> консультацию по продукту
           </h2>
 
-          <form class="form form--light">
-            <div class="form__item form__item--50">
-              <label for="name4"></label>
-              <input type="text" 
-                     name="name4" 
-                     id="name4" 
-                     placeholder="Ваше имя*"
-                     required 
-              />
-            </div>
-            <div class="form__item form__item--50">
-              <label for="tel4"></label>
-              <input type="tel" 
-                     name="tel4" 
-                     id="tel4" 
-                     placeholder="Телефон*"
-                     required 
-              />
-            </div>
-            <div class="form__item">
-              <label for="email4"></label>
-              <input type="email" 
-                     name="email4" 
-                     id="email4" 
-                     placeholder="Email"
-              />
-            </div>
-            <div class="form__item">
-              <label for="message4"></label>
-              <textarea name="message4" 
-                        id="message4" 
-                        placeholder="Ваше сообщение"></textarea>
-            </div>
-            <button class="form__btn" 
-                    type="submit"
-            >
-              <span>
-                Отправить
-              </span>
-            </button>
-          </form>
+          <div class="application__text">
+            Контактная информация
+          </div>
+
+          <div class="application__form">
+            <form class="form form--light">
+              <div class="form__item form__item">
+                <label for="name5"></label>
+                <input type="text" 
+                       name="name5" 
+                       id="name5" 
+                       placeholder="Ваше имя*"
+                       required 
+                />
+              </div>
+              <div class="form__item form__item">
+                <label for="tel5"></label>
+                <input type="tel" 
+                       name="tel5" 
+                       id="tel5" 
+                       placeholder="Телефон*"
+                       required 
+                />
+              </div>
+              <div class="form__item">
+                <label for="email5"></label>
+                <input type="email" 
+                       name="email5" 
+                       id="email5" 
+                       placeholder="Email"
+                />
+              </div>
+              <div class="form__item">
+                <label for="city"></label>
+                <input type="text" 
+                       name="city" 
+                       id="city" 
+                       placeholder="Город" 
+                />
+              </div>
+
+              <div class="form__item">
+                <label for="message4"></label>
+                <textarea name="message4" 
+                          id="message4" 
+                          placeholder="Ваше сообщение"></textarea>
+              </div>
+              <button class="form__btn" 
+                      type="submit"
+              >
+                <span>
+                  Отправить
+                </span>
+              </button>
+            </form>
+          </div>
         </div>
       </section>
     </main>
@@ -2307,7 +2320,7 @@
           </a>
 
           <span class="footer__bottom-item">
-            Создано в Славный дизайн
+            Создано в <a href="">Славный дизайн</a>
           </span>
         </div>
       </div>
