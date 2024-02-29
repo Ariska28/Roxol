@@ -18,17 +18,39 @@ export function appearAnimations() {
   titleAnimation();
   buttonAnimation();
 
+  const footerAppearItemWrappers = document.querySelectorAll('[data-footer-appear-wr]');
+
+  footerAppearItemWrappers.forEach((footerAppearItemWrapper) => {
+    const footerAppearItem = footerAppearItemWrapper.querySelector('[data-footer-appear]');
+
+    gsap.from(footerAppearItem, {
+      scrollTrigger: {
+        trigger: footerAppearItemWrapper,
+        start: "30% bottom",
+      }, 
+      delay: 0.1,
+      duration: 0.2,
+      y: 100,
+      opacity: 0,
+      ease: "power1.inOut",
+    })
+  })
+
   ScrollTrigger.matchMedia({
     "(min-width: 767px)": function() {
-      gsap.to('[data-fix-cards]', {
-        scrollTrigger: {
-          trigger: "[data-fix-cards]",
-          start: "top bottom",
-          end: "bottom bottom",
-          toggleActions: "play reset play reset",
-          toggleClass: 'is-active'
-        },
-      })
+      const fixCards = document.querySelector('[data-fix-cards]');
+
+      if(fixCards) {
+        gsap.to(fixCards, {
+          scrollTrigger: {
+            trigger: fixCards,
+            start: "top bottom",
+            end: "bottom bottom",
+            toggleActions: "play reset play reset",
+            toggleClass: 'is-active'
+          },
+        })
+      }
 
       changingBgContainersSmall?.forEach(changingBgContainer => {
         //changing-bg-small-block
@@ -67,7 +89,7 @@ export function appearAnimations() {
   const cardContainersBig = document.querySelectorAll('[data-appear-card-container-big]');
 
   cardContainersBig?.forEach(cardContainer => {
-    const dataCards = cardContainer.querySelectorAll('[data-appear-card]');
+    const dataCards = cardContainer?.querySelectorAll('[data-appear-card]');
     gsap.from(dataCards, {
       scrollTrigger: {
         trigger: cardContainer,
@@ -89,11 +111,13 @@ export function appearAnimations() {
     duration: 0.3,
   })
 
-  tl.from(splider, {
-    opacity: 0,
-    delay: 0.05,
-    duration: 0.2,
-  })
+  if(splider) {
+    tl.from(splider, {
+      opacity: 0,
+      delay: 0.05,
+      duration: 0.2,
+    })
+  }
 
   //header
   headerElements.forEach((headerElement) => {
@@ -176,47 +200,50 @@ function cardsAnimation() {
 }
 
 function tickerAnimation() {
+  const ticker = document.querySelector('[data-ticker]');
 
-  gsap.from('[data-ticker-left]', {
-    scrollTrigger: {
-      trigger: "[data-ticker]",
-      start: "top bottom",
-      end: "bottom top",
-      toggleActions: "play reset play reset",
-      scrub: true,
-    },
-    x: -500,
-  })
-
-  gsap.to('[data-ticker-right]', {
-    scrollTrigger: {
-      trigger: "[data-ticker]",
-      start: "top bottom",
-      end: "bottom top",
-      toggleActions: "play reset play reset",
-      scrub: true,
-    },
-    x: -500,
-  })
-
-  ScrollTrigger.matchMedia({
-    "(min-width: 767px)": function() {
-      gsap.to('[data-ticker-media]', {
-        scrollTrigger: {
-          trigger: "[data-ticker]",
-          start: "50% 50%",
-          toggleActions: "play reset play reset",
-          scrub: true,
-          pin: true,
-          end: "+=140%"
-        },
-        ease: "power1.inOut",
-        width: '100%',
-        height: '100%',
-      })
+  if(ticker) {
+    gsap.from('[data-ticker-left]', {
+      scrollTrigger: {
+        trigger: ticker,
+        start: "top bottom",
+        end: "bottom top",
+        toggleActions: "play reset play reset",
+        scrub: true,
+      },
+      x: -500,
+    })
   
-    }
-  })
+    gsap.to('[data-ticker-right]', {
+      scrollTrigger: {
+        trigger: ticker,
+        start: "top bottom",
+        end: "bottom top",
+        toggleActions: "play reset play reset",
+        scrub: true,
+      },
+      x: -500,
+    })
+  
+    ScrollTrigger.matchMedia({
+      "(min-width: 767px)": function() {
+        gsap.to('[data-ticker-media]', {
+          scrollTrigger: {
+            trigger: ticker,
+            start: "50% 50%",
+            toggleActions: "play reset play reset",
+            scrub: true,
+            pin: true,
+            end: "+=140%"
+          },
+          ease: "power1.inOut",
+          width: '100%',
+          height: '100%',
+        })
+    
+      }
+    })
+  }
 }
 
 function pinSliderAnimation() {
@@ -228,7 +255,7 @@ function pinSliderAnimation() {
     const pointerSliderChildren = pointerSliderList.querySelectorAll('li');
     ScrollTrigger.matchMedia({
       "(min-width: 767px)": function() {
-        const realSliderWidth = (pointerSliderChildren.length+1)*720*.0521;
+        const realSliderWidth = (pointerSliderChildren.length)*720*.0521;
         pointerSliderList.style.width = `${realSliderWidth}vw`;
 
         gsap.to(pointerSliderList, {
@@ -240,7 +267,7 @@ function pinSliderAnimation() {
             pin: true,
             end: '+=400%'
           },
-          x: `-${(realSliderWidth) - 100}vw`,
+          x: `-${(realSliderWidth+(60*.0521)) - 100}vw`,
           ease: "power1.inOut",
         })
       

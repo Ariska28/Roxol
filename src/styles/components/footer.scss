@@ -11,6 +11,10 @@ $column-width-3: 29%;
       color: $c-text-gray;
     }
   }
+
+  [data-footer-appear-wr] {
+    overflow: hidden
+  }
 }
 
 .footer__container {
@@ -32,6 +36,7 @@ $column-width-3: 29%;
 .footer__title {
   @include title-4;
 
+  display: block;
   margin-bottom: px-to-vw(32);
 
   @include media-down(sm) {

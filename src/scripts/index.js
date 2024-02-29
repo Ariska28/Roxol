@@ -7,7 +7,7 @@ import { initSideBar } from "./components/sidebar";
 import { toggleCardList } from "./components/toggleCardsList";
 import { matchImagesWithLinks } from "./components/matchImagesWithLinks";
 import { switchPrice } from "./components/switchPrice";
-// import { appearAnimations } from "./components/appeareAnimations";
+import { appearAnimations } from "./components/appeareAnimations";
 
 document.addEventListener("DOMContentLoaded", () => {
   header();
@@ -30,6 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
   spliderVertical('[data-slider-vertical]');
   switchPrice('[data-product]'); 
 
-  // appearAnimations();
+  appearAnimations();
 });
 
