@@ -142,6 +142,7 @@
   margin-bottom: px-to-vw(12);
 
   @include media-down(sm) {
+    margin-bottom: px-to-vw(8);
     width: 100%;
   }
 }

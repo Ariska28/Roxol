@@ -17,8 +17,10 @@
   .splide__arrow {
     transition: border-color 0.2s ease-in;
 
-    &:hover {
-      border-color: $c-text-dark;
+    @include media-up(sm) {
+      &:hover {
+        border-color: $c-text-dark;
+      }
     }
   }
 
@@ -240,7 +242,7 @@
 
   @include media-down(sm) {
     height: px-to-vw(360);
-    padding: px-to-vw(20) px-to-vw(16);
+    padding: px-to-vw(16);
   }
 }
 
@@ -259,13 +261,13 @@
   svg {
     width: px-to-vw(24);
     height: px-to-vw(24);
-    margin-right: px-to-vw(4);
   }
 
   @include media-down(sm) {
     position: absolute;
     top: px-to-vw(16);
     left: px-to-vw(16);
+    padding: 0;
   }
 }
 
@@ -312,7 +314,7 @@
   @include media-down(sm) {
     display: flex;
     width: 100%;
-    overflow: auto;
+    transition: transform 0.2s linear;
     margin-bottom: px-to-vw(32);
   }
 }
@@ -500,7 +502,7 @@
     }
 
     textarea {
-      padding: px-to-vw(18) px-to-vw(20);
+      padding: px-to-vw(16) px-to-vw(18);
       height: px-to-vw(140);
     }
 

@@ -5,7 +5,9 @@ export function header() {
   const sublistsMob = headerMob?.querySelectorAll('[data-header-mobile-sublist]');
   const elementsForHiding = document?.querySelectorAll('[data-header-hide-mobile]');
   
-  addStylesForHeadrScroll(headerDesktop);
+  if (window.matchMedia("(min-width: 769px)").matches) {
+    addStylesForHeadrScroll(headerDesktop);
+  }
 
   burgerMob?.addEventListener("click", ()=> {
     toggleMobileMenu(headerMob);
@@ -92,9 +94,8 @@ function toggleDesktopSubMenus(header) {
 function addStylesForHeadrScroll(header) {
   let lastScrollTop = 0;
 
-  if (window.matchMedia("(min-width: 769px)").matches) {
-    window.onscroll = onScroll;
-  }
+
+  window.onscroll = onScroll;
 
   function onScroll (e) {
     let top = window.pageYOffset;

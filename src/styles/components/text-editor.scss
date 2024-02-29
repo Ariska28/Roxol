@@ -117,6 +117,7 @@
       @include media-down(sm) {
         width: 58%;
         padding-bottom: px-to-vw(14);
+        vertical-align: top;
       }
     }
   }

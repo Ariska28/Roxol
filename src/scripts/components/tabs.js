@@ -19,8 +19,19 @@ export function initTabs(attr) {
             tabContainer.classList.add('is-active')
           } else {
             tabContainer.classList.remove('is-active')
-          }
+          }          
         }) 
+
+        //for moving btns on mobile
+        if (window.matchMedia("(max-width: 769px)").matches) {
+          const tabsHeader = tabsConainer.querySelector('[data-tabs-header]');
+
+          if (tabBtn.hasAttribute('data-tabs-btn-left')) {
+            tabsHeader.style.transform = 'translateX(0)';
+          } else if (tabBtn.hasAttribute('data-tabs-btn-right')) {
+            tabsHeader.style.transform = 'translateX(-20%)';
+          }
+        } 
       })
     })
   })

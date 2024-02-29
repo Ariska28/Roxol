@@ -1,5 +1,5 @@
 export function initRangeFunctional(attr) {
-  let rangeMin = 100;
+  let rangeMin = 1;
   const rangeContainers = document.querySelectorAll(attr);
   
   rangeContainers.forEach((rangeContainer) => {
@@ -11,7 +11,10 @@ export function initRangeFunctional(attr) {
       input.addEventListener("input", (e) => {
         let minRange = parseInt(rangeInput[0].value);
         let maxRange = parseInt(rangeInput[1].value);
-        if (maxRange - minRange < rangeMin) {     
+        console.log(maxRange, 'max')
+        console.log(minRange, 'min')
+        console.log(maxRange - minRange < rangeMin) 
+        if (maxRange - minRange < rangeMin) {    
           if (e.target.className === "min") {
             rangeInput[0].value = maxRange - rangeMin;        
           } else {

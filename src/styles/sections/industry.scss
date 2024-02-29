@@ -247,6 +247,7 @@
   @include media-down(sm) {
     @include title-3;
 
+    word-wrap: break-word;
     position: relative;
     z-index: 2;
   }

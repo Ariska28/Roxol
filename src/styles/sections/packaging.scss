@@ -61,7 +61,7 @@
   margin: 0 px-to-vw(12);
 
   &:nth-child(2) {
-    margin-left:  calc(20% + calc(24 * var(--fz)));
+    margin-left:  calc(20% + calc(12 * var(--fz)));
   }
 
   @include media-down(sm) {
@@ -77,7 +77,7 @@
 .packaging__list-item__title {
   @include title-4;
 
-  margin-top: px-to-vw(20);
+  margin-top: px-to-vw(12);
 }
 
 .packaging__list-item__text {

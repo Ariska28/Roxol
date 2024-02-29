@@ -33,6 +33,8 @@
   }
 
   &--big-space {
+    min-height: auto;
+
     .point-card__text {
       @include media-down(sm) {
         margin-top: px-to-vw(60);

@@ -25,11 +25,13 @@
       stroke: $c-white;
     }
 
-    &:hover {
-      background-color: $c-white;
-
-      svg path {
-        stroke: $c-text-dark;
+    @include media-up(sm) {
+      &:hover {
+        background-color: $c-white;
+  
+        svg path {
+          stroke: $c-text-dark;
+        }
       }
     }
   }
@@ -140,7 +142,7 @@
   position: relative;
   margin-top: px-to-vw(35);
   margin-bottom: px-to-vw(10);
-  transition: transform 0.1s linear;
+  transition: transform 0.8s linear;
 
   span {
     @include paragraf-small;

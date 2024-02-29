@@ -477,6 +477,7 @@ $height-submenus: px-to-vw(550);
   transition: 0.2s top ease-in-out;
 
   @include media-down(sm) {
+    border-radius: 0 0 $s-border-radius-mob $s-border-radius-mob;
     padding: px-to-vw(52) px-to-vw(16) px-to-vw(20);
     flex-direction: column;
   }
@@ -507,6 +508,7 @@ $height-submenus: px-to-vw(550);
   @include media-down(sm) {
     width: 100%;
     height: px-to-vw(58);
+    border-radius: $s-border-radius-mob;
   }
 }
 
@@ -742,6 +744,12 @@ $height-submenus: px-to-vw(550);
     }
   }
   }
+
+  @include media-down(sm) {
+    &:hover {
+      border-bottom: px-to-vw(1) solid $c-gray-line;
+    }
+  }
 }
 
 .header__nav-mobile__sublist,
@@ -824,6 +832,12 @@ $height-submenus: px-to-vw(550);
       @include media-down(sm) {
         left: 0;
       }
+    }
+  }
+
+  @include media-down(sm) {
+    &:hover {
+      border-bottom: px-to-vw(1) solid $c-gray-line;
     }
   }
 }

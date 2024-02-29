@@ -313,11 +313,15 @@ function progressBarWithYears(slider) {
     if (window.matchMedia("(max-width: 767px)").matches) {
       slider.on('mounted',() => {
         let sliderEnd  = slider.Components.Controller.getEnd();
-        line.style.width = `${(sliderEnd + 1)*50}vw` 
+        line.style.width = `${(sliderEnd + 1)*38}vw` 
       });
 
-      slider.on('mounted move', function (prevIndex, newIndex) {        
-        line.style.transform = `translateX(-${slider.index*50}vw)` 
+      slider.on('mounted move', function (prevIndex, newIndex) { 
+        if(prevIndex > newIndex && newIndex % 2) {
+          line.style.transform = `translateX(-${slider.index*43.5}vw)` 
+        }  else if (prevIndex < newIndex) {
+          line.style.transform = `translateX(-${slider.index*43.5}vw)` 
+        }  
       });
     }
   }

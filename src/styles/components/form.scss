@@ -389,6 +389,7 @@ $s-input-height-mobile: px-to-vw(53);
 
   @include media-down(sm) {
     border-radius: $s-border-radius-mob;
+
     min-width: 100%;
     height: $s-input-height-mobile;
     overflow: hidden;
@@ -396,13 +397,15 @@ $s-input-height-mobile: px-to-vw(53);
 
     input {
       height: $s-input-height-mobile;
+      background-color: $c-primary;
+      position: absolute;
+      z-index: 10000;
       padding-left: px-to-vw(16);
       padding-right: px-to-vw(40);
     }
 
     &.is-open {
       height: auto;
-      overflow: visible;
 
       .form__dropdown-options {
         position: static;
@@ -432,6 +435,7 @@ $s-input-height-mobile: px-to-vw(53);
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  z-index: 10001;
   transition: transform 0.2s ease-in;
 
   svg {
@@ -445,7 +449,7 @@ $s-input-height-mobile: px-to-vw(53);
   }
 
   @include media-down(sm) {
-    top: px-to-vw(18);
+    top: px-to-vw(16);
     right: px-to-vw(16);
   }
 }
@@ -465,7 +469,7 @@ $s-input-height-mobile: px-to-vw(53);
   opacity: 0;
   transform: translateY(px-to-vw(-50));
   visibility: hidden;
-  z-index: 3;
+  z-index: 1;
 }
 
 .form__dropdown-option {

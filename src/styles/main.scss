@@ -110,9 +110,11 @@
 .btn-border {
   @include button-border;
 
-  &--hover-white {
-    &::after {
-      background-color: $c-white;
-    } 
+  @include media-up(sm) {
+    &--hover-white {
+      &::after {
+        background-color: $c-white;
+      } 
+    }
   }
 } 

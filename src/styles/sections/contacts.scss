@@ -80,9 +80,9 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  position: relative;
 
   @include media-down(sm) {
-    margin-top: px-to-vw(40);
     width: 100%;
   }
 }
@@ -122,11 +122,15 @@
   background-color: aquamarine;
   width: 100%;
   height: px-to-vw(760);
+  position: sticky;
+  top: px-to-vw(42);
 
   @include media-down(sm) {
+    position: static;
     height: px-to-vw(480);
     min-height: auto;
     border-radius: $s-border-radius-mob;
+    margin-top: px-to-vw(40);
   }
 }
 
@@ -227,8 +231,8 @@
   }
 
   svg {
-    height: px-to-vw(17);
-    width: px-to-vw(21);
+    height: px-to-vw(16);
+    width: px-to-vw(18);
 
     path {
       transition: stroke 0.2s ease-in;
@@ -249,6 +253,11 @@
 
   @include media-down(sm) {
     margin-top: px-to-vw(4);
+
+    svg {
+      height: px-to-vw(16);
+      width: px-to-vw(15);
+    }
   }
 }
 

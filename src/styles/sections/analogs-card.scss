@@ -283,9 +283,11 @@
       padding-right: 0;
       padding-top: px-to-vw(20);
       padding-bottom: px-to-vw(20);
+      vertical-align: top;
 
       &:first-child {
         padding-left: px-to-vw(20);
+        padding-right: px-to-vw(30);
         width: 28.3%;
       }
     }

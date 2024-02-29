@@ -10,7 +10,7 @@
 
   @include media-down(sm) {
     flex-direction: column;
-    margin-bottom: px-to-vw(32);
+    margin-bottom: px-to-vw(16);
   }
 }
 
@@ -79,7 +79,7 @@
   justify-content: center;
   border-radius: 50%;
   border: px-to-vw(1) solid $c-gray-line;
-  margin-right: px-to-vw(14);
+  margin-right: px-to-vw(10);
   transition: border-color 0.2s ease-in, background-color 0.2s ease-in;
 
   &:last-child {
@@ -88,7 +88,7 @@
 
   svg {
     height: px-to-vw(17);
-    width: px-to-vw(21);
+    width: px-to-vw(18);
 
     path {
       transition: stroke 0.2s ease-in;
@@ -114,8 +114,8 @@
     border-color: $c-gray-2;
 
     svg {
-      max-height: px-to-vw(15);
-      max-width: px-to-vw(14);
+      height: px-to-vw(15);
+      width: px-to-vw(17);
     }
   }
 }

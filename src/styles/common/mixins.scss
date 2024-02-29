@@ -245,23 +245,25 @@
     }
   }
 
-  &:hover {
-    background-color: $c-accent;
-    border-color: $c-accent;
-
-    &::after {
-      right: 0;
-    }
-
-    span {
-      transform: translateX(10px);
-
+  @include media-up(sm) {
+    &:hover {
+      background-color: $c-accent;
+      border-color: $c-accent;
+  
       &::after {
-        transform: scale(0);
+        right: 0;
       }
   
-      &::before {
-        transform: scale(1);
+      span {
+        transform: translateX(10px);
+  
+        &::after {
+          transform: scale(0);
+        }
+    
+        &::before {
+          transform: scale(1);
+        }
       }
     }
   }

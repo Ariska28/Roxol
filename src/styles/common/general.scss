@@ -17,6 +17,14 @@ body {
   }
 }
 
+@include media-down(sm) {
+  a {
+    &:hover {
+      color: inherit;
+    }
+  }
+}
+
 button, a {
   cursor: pointer;
 }

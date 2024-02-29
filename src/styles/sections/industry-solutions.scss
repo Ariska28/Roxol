@@ -157,6 +157,14 @@
     }
   }
 
+  .industry-solutions__card-arrow {
+    svg {
+      path {
+        stroke-width: px-to-vw(1.2);
+      }
+    }
+  }
+
   &--white {
     display: flex;
     background: $c-white;

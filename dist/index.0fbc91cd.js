@@ -588,7 +588,7 @@ var _sidebar = require("./components/sidebar");
 var _toggleCardsList = require("./components/toggleCardsList");
 var _matchImagesWithLinks = require("./components/matchImagesWithLinks");
 var _switchPrice = require("./components/switchPrice");
-var _appeareAnimations = require("./components/appeareAnimations");
+// import { appearAnimations } from "./components/appeareAnimations";
 document.addEventListener("DOMContentLoaded", ()=>{
     (0, _header.header)();
     (0, _sliders.heroSplider)("[data-hero-slider]");
@@ -608,10 +608,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     (0, _sliders.spliderWithArrowsDesktop)("[data-slider-cards]");
     (0, _sliders.spliderVertical)("[data-slider-vertical]");
     (0, _switchPrice.switchPrice)("[data-product]");
-    (0, _appeareAnimations.appearAnimations)();
+// appearAnimations();
 });
 
-},{"./components/header":"d8aIH","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl","./components/tabs":"hfO9E","./components/sidebar":"5agWS","./components/toggleCardsList":"g9K2D","./components/matchImagesWithLinks":"gAZf2","./components/switchPrice":"2Bdls","./components/appeareAnimations":"hsp1p"}],"d8aIH":[function(require,module,exports) {
+},{"./components/header":"d8aIH","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl","./components/tabs":"hfO9E","./components/sidebar":"5agWS","./components/toggleCardsList":"g9K2D","./components/matchImagesWithLinks":"gAZf2","./components/switchPrice":"2Bdls"}],"d8aIH":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "header", ()=>header);
@@ -621,7 +621,7 @@ function header() {
     const burgerMob = headerMob?.querySelector("[data-header-mobile-burger]");
     const sublistsMob = headerMob?.querySelectorAll("[data-header-mobile-sublist]");
     const elementsForHiding = document?.querySelectorAll("[data-header-hide-mobile]");
-    addStylesForHeadrScroll(headerDesktop);
+    if (window.matchMedia("(min-width: 769px)").matches) addStylesForHeadrScroll(headerDesktop);
     burgerMob?.addEventListener("click", ()=>{
         toggleMobileMenu(headerMob);
         document.body.classList.add("no-scroll");
@@ -687,7 +687,7 @@ function toggleDesktopSubMenus(header) {
 }
 function addStylesForHeadrScroll(header) {
     let lastScrollTop = 0;
-    if (window.matchMedia("(min-width: 769px)").matches) window.onscroll = onScroll;
+    window.onscroll = onScroll;
     function onScroll(e) {
         let top = window.pageYOffset;
         if (lastScrollTop > 1000) header.classList.add("is-fixed");
@@ -993,10 +993,11 @@ function progressBarWithYears(slider) {
         if (window.matchMedia("(max-width: 767px)").matches) {
             slider.on("mounted", ()=>{
                 let sliderEnd = slider.Components.Controller.getEnd();
-                line.style.width = `${(sliderEnd + 1) * 50}vw`;
+                line.style.width = `${(sliderEnd + 1) * 38}vw`;
             });
             slider.on("mounted move", function(prevIndex, newIndex) {
-                line.style.transform = `translateX(-${slider.index * 50}vw)`;
+                if (prevIndex > newIndex && newIndex % 2) line.style.transform = `translateX(-${slider.index * 43.5}vw)`;
+                else if (prevIndex < newIndex) line.style.transform = `translateX(-${slider.index * 43.5}vw)`;
             });
         }
     }
@@ -10571,7 +10572,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "initRangeFunctional", ()=>initRangeFunctional);
 parcelHelpers.export(exports, "initDropdown", ()=>initDropdown);
 function initRangeFunctional(attr) {
-    let rangeMin = 100;
+    let rangeMin = 1;
     const rangeContainers = document.querySelectorAll(attr);
     rangeContainers.forEach((rangeContainer)=>{
         const range = rangeContainer.querySelector("[data-selected]");
@@ -10581,6 +10582,9 @@ function initRangeFunctional(attr) {
             input.addEventListener("input", (e)=>{
                 let minRange = parseInt(rangeInput[0].value);
                 let maxRange = parseInt(rangeInput[1].value);
+                console.log(maxRange, "max");
+                console.log(minRange, "min");
+                console.log(maxRange - minRange < rangeMin);
                 if (maxRange - minRange < rangeMin) {
                     if (e.target.className === "min") rangeInput[0].value = maxRange - rangeMin;
                     else rangeInput[1].value = minRange + rangeMin;
@@ -10697,6 +10701,12 @@ function initTabs(attr) {
                     if (tabBtn.getAttribute("data-tabs-btn") === tabContainer.getAttribute("data-tabs-container")) tabContainer.classList.add("is-active");
                     else tabContainer.classList.remove("is-active");
                 });
+                //for moving btns on mobile
+                if (window.matchMedia("(max-width: 769px)").matches) {
+                    const tabsHeader = tabsConainer.querySelector("[data-tabs-header]");
+                    if (tabBtn.hasAttribute("data-tabs-btn-left")) tabsHeader.style.transform = "translateX(0)";
+                    else if (tabBtn.hasAttribute("data-tabs-btn-right")) tabsHeader.style.transform = "translateX(-20%)";
+                }
             });
         });
     });
@@ -10799,243 +10809,6 @@ function switchPrice(attr) {
     });
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hsp1p":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "appearAnimations", ()=>appearAnimations);
-var _gsap = require("gsap");
-var _scrollTrigger = require("gsap/ScrollTrigger");
-function appearAnimations() {
-    const splider = document.querySelector("[data-hero-slider]");
-    const header = document.querySelector("[data-header]");
-    const headerElements = header.querySelectorAll("[data-header-appear]");
-    const changingBgContainers = document.querySelectorAll("[data-changing-bg]");
-    const changingBgContainersSmall = document.querySelectorAll("[data-changing-bg-small]");
-    (0, _gsap.gsap).registerPlugin((0, _scrollTrigger.ScrollTrigger));
-    (0, _scrollTrigger.ScrollTrigger).normalizeScroll(true);
-    cardsAnimation();
-    tickerAnimation();
-    pinSliderAnimation();
-    titleAnimation();
-    buttonAnimation();
-    (0, _scrollTrigger.ScrollTrigger).matchMedia({
-        "(min-width: 767px)": function() {
-            (0, _gsap.gsap).to("[data-fix-cards]", {
-                scrollTrigger: {
-                    trigger: "[data-fix-cards]",
-                    start: "top bottom",
-                    end: "bottom bottom",
-                    toggleActions: "play reset play reset",
-                    toggleClass: "is-active"
-                }
-            });
-            changingBgContainersSmall.forEach((changingBgContainer)=>{
-                //changing-bg-small-block
-                (0, _gsap.gsap).to("body", {
-                    scrollTrigger: {
-                        trigger: changingBgContainer,
-                        start: "0% center",
-                        end: "bottom 50%",
-                        toggleActions: "play reset play reset"
-                    },
-                    delay: 0.1,
-                    duration: 0.5,
-                    background: "#FFDF00",
-                    ease: "power1.inOut"
-                });
-            });
-            changingBgContainers.forEach((changingBgContainer)=>{
-                //changing-bg
-                (0, _gsap.gsap).to("body", {
-                    scrollTrigger: {
-                        trigger: changingBgContainer,
-                        start: "18% 90%",
-                        end: "bottom 20%",
-                        toggleActions: "play reset play reset"
-                    },
-                    delay: 0.1,
-                    duration: 0.5,
-                    background: "#FFDF00",
-                    ease: "power1.inOut"
-                });
-            });
-        }
-    });
-    const cardContainersBig = document.querySelectorAll("[data-appear-card-container-big]");
-    cardContainersBig?.forEach((cardContainer)=>{
-        const dataCards = cardContainer.querySelectorAll("[data-appear-card]");
-        (0, _gsap.gsap).from(dataCards, {
-            scrollTrigger: {
-                trigger: cardContainer,
-                start: "top 90%"
-            },
-            y: 200,
-            opacity: 0,
-            duration: 0.3,
-            ease: "power1.inOut"
-        });
-    });
-    //timeline
-    const tl = (0, _gsap.gsap).timeline({});
-    tl.from(header, {
-        opacity: 0,
-        delay: 0.2,
-        duration: 0.3
-    });
-    tl.from(splider, {
-        opacity: 0,
-        delay: 0.05,
-        duration: 0.2
-    });
-    //header
-    headerElements.forEach((headerElement)=>{
-        (0, _gsap.gsap).from(headerElement, {
-            opacity: 0,
-            y: 10,
-            delay: 0.2,
-            ease: "power1.inOut",
-            duration: 0.3
-        });
-    });
-}
-function titleAnimation() {
-    const titleContainers = document.querySelectorAll("[data-title]");
-    titleContainers?.forEach((titleContainer)=>{
-        const title = titleContainer.querySelectorAll("[data-title-line]");
-        const descriptor = titleContainer.querySelector("[data-title-descriptor]");
-        (0, _gsap.gsap).from(title, {
-            scrollTrigger: {
-                trigger: titleContainer,
-                start: "top 90%"
-            },
-            delay: 0.1,
-            duration: 0.3,
-            y: 100,
-            opacity: 0,
-            stagger: 0.2,
-            ease: "power1.inOut"
-        });
-        (0, _gsap.gsap).from(descriptor, {
-            scrollTrigger: {
-                trigger: titleContainer,
-                start: "top 90%"
-            },
-            delay: 0.1,
-            duration: 0.2,
-            opacity: 0,
-            ease: "power1.inOut"
-        });
-    });
-}
-function buttonAnimation() {
-    const btns = document.querySelectorAll("[data-btn-appear]");
-    btns?.forEach((btn)=>{
-        (0, _gsap.gsap).from(btn, {
-            scrollTrigger: {
-                trigger: btn,
-                start: "top 95%",
-                end: "+=500"
-            },
-            delay: 0.1,
-            duration: 0.2,
-            y: 100,
-            ease: "power1.inOut"
-        });
-    });
-}
-function cardsAnimation() {
-    const cardContainers = document.querySelectorAll("[data-appear-card-container]");
-    cardContainers?.forEach((cardContainer)=>{
-        const dataCards = cardContainer.querySelectorAll("[data-appear-card]");
-        (0, _gsap.gsap).from(dataCards, {
-            scrollTrigger: {
-                trigger: cardContainer,
-                start: "top 90%"
-            },
-            y: 200,
-            opacity: 0,
-            duration: 0.3,
-            ease: "power1.inOut"
-        });
-    });
-}
-function tickerAnimation() {
-    (0, _gsap.gsap).from("[data-ticker-left]", {
-        scrollTrigger: {
-            trigger: "[data-ticker]",
-            start: "top bottom",
-            end: "bottom top",
-            toggleActions: "play reset play reset",
-            scrub: true
-        },
-        x: -500
-    });
-    (0, _gsap.gsap).to("[data-ticker-right]", {
-        scrollTrigger: {
-            trigger: "[data-ticker]",
-            start: "top bottom",
-            end: "bottom top",
-            toggleActions: "play reset play reset",
-            scrub: true
-        },
-        x: -500
-    });
-    (0, _scrollTrigger.ScrollTrigger).matchMedia({
-        "(min-width: 767px)": function() {
-            (0, _gsap.gsap).to("[data-ticker-media]", {
-                scrollTrigger: {
-                    trigger: "[data-ticker]",
-                    start: "50% 50%",
-                    toggleActions: "play reset play reset",
-                    scrub: true,
-                    pin: true,
-                    end: "+=140%"
-                },
-                ease: "power1.inOut",
-                width: "100%",
-                height: "100%"
-            });
-        }
-    });
-}
-function pinSliderAnimation() {
-    const dataSliders = document.querySelectorAll("[data-pin-slider]");
-    dataSliders?.forEach((dataSlider)=>{
-        const pointerSliderList = dataSlider.querySelector("[data-pin-slider-list]");
-        const pointerSliderBar = dataSlider.querySelector("[data-pin-slider-bar]");
-        const pointerSliderChildren = pointerSliderList.querySelectorAll("li");
-        (0, _scrollTrigger.ScrollTrigger).matchMedia({
-            "(min-width: 767px)": function() {
-                const realSliderWidth = (pointerSliderChildren.length + 1) * 720 * .0521;
-                pointerSliderList.style.width = `${realSliderWidth}vw`;
-                (0, _gsap.gsap).to(pointerSliderList, {
-                    scrollTrigger: {
-                        trigger: dataSlider,
-                        start: "50% 50%",
-                        toggleActions: "play reset play reset",
-                        scrub: true,
-                        pin: true,
-                        end: "+=400%"
-                    },
-                    x: `-${realSliderWidth - 100}vw`,
-                    ease: "power1.inOut"
-                });
-                (0, _gsap.gsap).to(pointerSliderBar, {
-                    scrollTrigger: {
-                        trigger: dataSlider,
-                        start: "50% 50%",
-                        toggleActions: "play reset play reset",
-                        scrub: true,
-                        end: "+=400%"
-                    },
-                    width: "100%",
-                    ease: "power1.inOut"
-                });
-            }
-        });
-    });
-}
-
-},{"gsap":"fPSuC","gsap/ScrollTrigger":"7wnFk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")
 
 //# sourceMappingURL=index.0fbc91cd.js.map

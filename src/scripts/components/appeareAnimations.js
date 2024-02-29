@@ -30,7 +30,7 @@ export function appearAnimations() {
         },
       })
 
-      changingBgContainersSmall.forEach(changingBgContainer => {
+      changingBgContainersSmall?.forEach(changingBgContainer => {
         //changing-bg-small-block
         gsap.to('body', {
           scrollTrigger: {
@@ -46,7 +46,7 @@ export function appearAnimations() {
         })
       }) 
       
-      changingBgContainers.forEach(changingBgContainer => {
+      changingBgContainers?.forEach(changingBgContainer => {
         //changing-bg
         gsap.to('body', {
           scrollTrigger: {
