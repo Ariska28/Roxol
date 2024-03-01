@@ -262,7 +262,7 @@ export function spliderWithArrowsDesktop(sliderAttr) {
 export function historySplider(sliderAttr) {
   const spleders =  document.querySelectorAll(`${sliderAttr}`);
   gsap.registerPlugin(ScrollTrigger);
-  ScrollTrigger.normalizeScroll(true);
+  // ScrollTrigger.normalizeScroll(true);
 
   spleders.forEach((el) => {
     const splide = new Splide(el, {

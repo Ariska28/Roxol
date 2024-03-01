@@ -73,8 +73,15 @@
   overflow: hidden;
 }
 
-[data-text-appear-wr] {
+[data-text-appear-wr],
+[data-btn-appear-wr] {
   overflow: hidden;
+}
+
+[data-btn-appear-wr] {
+  @include media-down(sm) {
+    overflow: visible;
+  }
 }
 
 [data-title-line] {

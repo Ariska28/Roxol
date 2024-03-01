@@ -1,8 +1,8 @@
 .producing-products__container {
   @include container;
 
-  margin-top: $s-space-desktop;
-  margin-bottom: $s-space-desktop;
+  padding-top: $s-space-desktop;
+  padding-bottom: $s-space-desktop;
 
   @include media-down(sm) {
     margin-top: $s-space-mobile;

@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   desktopSplider('[data-slider-desktop]');
   spliderWithArrows('[data-slider]');
   historySplider('[data-slider-history]');
-  productSplider('[data-slider-product]')
+  productSplider('[data-slider-product]');
   
   initRangeFunctional('[data-range]');
   toggleFilters('[data-catalog-header]'); 

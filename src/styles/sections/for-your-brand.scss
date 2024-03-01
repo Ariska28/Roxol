@@ -37,7 +37,7 @@
   display: flex;
   align-items: flex-start;
   padding: px-to-vw(24) 0;
-  transition: 0.2s padding ease-in;
+  transition: 0.7s padding ease-in-out;
   position: relative;
   color: $c-text-dark;
 
@@ -50,7 +50,7 @@
     height: 0;
     background-color: $c-accent;
     z-index: -1;
-    transition: 0.3s height ease-in;
+    transition: 0.8s height ease-in-out;
   }
 
   &:hover {
@@ -95,7 +95,7 @@
   position: absolute;
   left: 0;
   top: px-to-vw(25);
-  transition: left 0.2s ease-in;
+  transition: left 0.7s ease-in-out;
 
   @include media-down(sm) {
     display: none;
@@ -125,7 +125,7 @@
   margin-left: auto;
   position: absolute;
   right: 0;
-  transition: background-color 0.2s ease-in, border-color 0.2s ease-in, right 0.2s ease-in;
+  transition: background-color 0.2s ease-in, border-color 0.2s ease-in, right 0.7s ease-in-out;
   
   img {
     width: px-to-vw(9);

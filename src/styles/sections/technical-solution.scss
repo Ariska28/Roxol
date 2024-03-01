@@ -11,21 +11,15 @@
 }
 
 .technical-solutions__title {
-  @include title-with-text;
-
-  span {
-    margin-right: 18%;
-  }
-
   margin-bottom: px-to-vw(60);
 
   @include media-down(sm) {
     margin-bottom: px-to-vw(40);
-
-    span {
-      margin-right: 0;
-    }
   }
+}
+
+.technical-solutions__title-subtitle {
+  margin-right: 18%;
 }
 
 .technical-solutions__content {

@@ -7,6 +7,7 @@ body {
   overflow-x: hidden;
   padding-top: $s-header-height-desktop;
   transition: background 0.5s ease-in-out;
+  touch-action: none !important;
 
   &.no-scroll {
     overflow: hidden;
@@ -14,6 +15,10 @@ body {
 
   @include media-down(sm) {
     padding-top: 0;
+
+    &.no-scroll {
+      overflow: hidden;
+    }
   }
 }
 

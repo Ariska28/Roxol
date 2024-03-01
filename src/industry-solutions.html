@@ -818,11 +818,13 @@
           </div>
 
           <div class="industry__content">
-            <h1 class="industry__title">
-              Отраслевые решения
+            <h1 data-title data-title-line-wr="">
+              <span class="industry__title" data-title-line>
+                Отраслевые решения
 
-              <span>
-                (11)
+                <span>
+                  (11)
+                </span>
               </span>
             </h1>
 
@@ -1192,25 +1194,48 @@
 
       <section class="technical-solutions">
         <div class="technical-solutions__container">
-          <h2 class="technical-solutions__title">
-            <span>
+          <h2 class="technical-solutions__title title" data-title>
+            <span class="technical-solutions__title-subtitle title-descriptor" data-title-descriptor>
               Технические решения для каждой отрасли
             </span>
 
-            Все отрасли промышленности нуждаются в использовании смазочных материалов, разработанных в соответствии с их специфичными требованиями
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line>
+                Все отрасли промышленности
+              </span>
+            </span>
+
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line>
+                нуждаются в использовании смазочных материалов,
+              </span>
+            </span>
+
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line>
+                разработанных в соответствии с их специфичными 
+              </span>
+            </span>
+
+            <span class="title-line-wr">
+              <span class="title-line" data-title-line>
+                требованиями
+              </span>
+            </span>
           </h2>
 
           <div class="technical-solutions__content">
-            <div class="technical-solutions__content-text">
+            <div class="technical-solutions__content-text" data-text-appear>
               Компания «Роксол» предлагает решения для оборудования различных отраслей промышленности:
             </div>
 
             <div class="technical-solutions__slider splide"
                  data-mobile-slider
+                 data-appear-card-container
             >
               <div class="technical-solutions__track splide__track">
                 <ul class="technical-solutions__content-list splide__list">
-                  <li class="technical-solutions__content-item splide__slide">
+                  <li class="technical-solutions__content-item splide__slide" data-appear-card>
                     <div class="point-card">
                       <h3 class="point-card__title">
                         Химическая
@@ -1222,7 +1247,7 @@
                     </div>
                   </li>
 
-                  <li class="technical-solutions__content-item splide__slide">
+                  <li class="technical-solutions__content-item splide__slide" data-appear-card>
                     <div class="point-card">
                       <h3 class="point-card__title">
                         Пищевая
@@ -1233,7 +1258,7 @@
                     </div>
                   </li>
 
-                  <li class="technical-solutions__content-item splide__slide">
+                  <li class="technical-solutions__content-item splide__slide" data-appear-card>
                     <div class="point-card">
 
                       <h3 class="point-card__title">
@@ -1246,7 +1271,7 @@
                     </div>
                   </li>
 
-                  <li class="technical-solutions__content-item splide__slide">
+                  <li class="technical-solutions__content-item splide__slide" data-appear-card>
                     <div class="point-card">
                       <h3 class="point-card__title">
                         Деревообрабатывающая
@@ -1258,7 +1283,7 @@
                     </div>
                   </li>
 
-                  <li class="technical-solutions__content-item splide__slide">
+                  <li class="technical-solutions__content-item splide__slide" data-appear-card>
                     <div class="point-card">
                       <h3 class="point-card__title">
                         Другие сферы
@@ -1283,7 +1308,7 @@
         </div>
       </section>
 
-      <section class="economy">
+      <section class="economy" data-changing-bg>
         <div class="economy__container">
           <span class="economy__text">
             Экономия средств
@@ -1293,14 +1318,14 @@
             Применение смазочных материалов компании Роксол позволит вашему предприятию сократить затраты на обслуживание.
           </h2>
 
-          <figure class="economy__media">
+          <figure class="economy__media" data-media-fix>
             <img src="./assets/images/economy.jpg" alt="">
           </figure>
         </div>
       </section>
 
       <section class="producing-products">
-        <div class="producing-products__container">
+        <div class="producing-products__container" data-pin-slider-industry-solutions>
           <span class="producing-producrs__text-mobile">
             Производим смазки на высоком уровне
           </span>
@@ -1309,58 +1334,56 @@
             Производим и улучшаем свои продукты
           </h2>
 
-          <div class="point-slider point-slider--colors-mobile splide"
-              data-slider-desktop
-          >
-          <div class="point-slider__track splide__track">
-            <ul class="point-slider__list splide__list">
-              <li class="point-slider__list-item  splide__slide">
-                <span class="point-slider__list-item__circle">
-                </span>
+          <div class="point-slider point-slider--colors-mobile">
+            <div class="point-slider__track">
+              <ul class="point-slider__list" data-pin-slider-list>
+                <li class="point-slider__list-item ">
+                  <span class="point-slider__list-item__circle">
+                  </span>
 
-                <h3 class="point-slider__list-item__title">
-                  Производство смазок
-                </h3>
+                  <h3 class="point-slider__list-item__title">
+                    Производство смазок
+                  </h3>
 
-                <p class="point-slider__list-item__text">
-                  Мы производим литиевые многоцелевые смазки, полимочевинные смазки для долговременного смазывания особо ответственных узлов трения, беззольные смазки на основе синтетических базовых масел и другие смазочные материалы направленные на продление срок службы и эксплуатации вашего оборудования
-                </p>
-              </li>
+                  <p class="point-slider__list-item__text">
+                    Мы производим литиевые многоцелевые смазки, полимочевинные смазки для долговременного смазывания особо ответственных узлов трения, беззольные смазки на основе синтетических базовых масел и другие смазочные материалы направленные на продление срок службы и эксплуатации вашего оборудования
+                  </p>
+                </li>
 
-              <li class="point-slider__list-item  splide__slide">
-                <span class="point-slider__list-item__circle">
-                </span>
+                <li class="point-slider__list-item">
+                  <span class="point-slider__list-item__circle">
+                  </span>
 
-                <h3 class="point-slider__list-item__title">
-                  Исследования
-                </h3>
+                  <h3 class="point-slider__list-item__title">
+                    Исследования
+                  </h3>
 
-                <p class="point-slider__list-item__text">
-                  Мы постоянно проводим лабораторные и опытно-промышленные исследования направленные на улучшение и разработку смазочных материалов соответствующих требованиям потребителя
-                </p>
-              </li>
+                  <p class="point-slider__list-item__text">
+                    Мы постоянно проводим лабораторные и опытно-промышленные исследования направленные на улучшение и разработку смазочных материалов соответствующих требованиям потребителя
+                  </p>
+                </li>
 
-              <li class="point-slider__list-item  splide__slide">
-                <span class="point-slider__list-item__circle">
-                </span>
+                <li class="point-slider__list-item">
+                  <span class="point-slider__list-item__circle">
+                  </span>
 
-                <h3 class="point-slider__list-item__title">
-                  Линейка продуктов
-                </h3>
+                  <h3 class="point-slider__list-item__title">
+                    Линейка продуктов
+                  </h3>
 
-                <p class="point-slider__list-item__text">
-                  В линейке продуктов компании представлены высокотемпературные смазки и пасты, смазочные материалы с допуском к применению в пищевой промышленности, специальные химическистойкие смазки, масла для цепей и редукторов.
-                </p>
-              </li>
-            </ul>
-          </div>
-
-          <div class="point-slider__progress splide__slider-progress">
-            <div class="splide__slider-progress__bar"
-                  data-slider-bar
-            >
+                  <p class="point-slider__list-item__text">
+                    В линейке продуктов компании представлены высокотемпературные смазки и пасты, смазочные материалы с допуском к применению в пищевой промышленности, специальные химическистойкие смазки, масла для цепей и редукторов.
+                  </p>
+                </li>
+              </ul>
             </div>
-          </div>
+
+            <div class="point-slider__progress">
+              <div class="point-slider__progress__bar"
+                  data-pin-slider-bar
+              >
+              </div>
+            </div>
           </div>
         </div>
       </section>
