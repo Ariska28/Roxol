@@ -16,10 +16,7 @@ export function MyTransition( Splide, Components ) {
   function mount() {
     bind( list, 'transitionend', e => {
       if ( e.target === list && endCallback ) {
-        // Removes the transition property
         cancel();
-
-        // Calls the `done` callback
         endCallback();
       }
     } );
@@ -264,6 +261,8 @@ export function spliderWithArrowsDesktop(sliderAttr) {
 
 export function historySplider(sliderAttr) {
   const spleders =  document.querySelectorAll(`${sliderAttr}`);
+  gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.normalizeScroll(true);
 
   spleders.forEach((el) => {
     const splide = new Splide(el, {
@@ -272,6 +271,18 @@ export function historySplider(sliderAttr) {
       gap : '0px',
       perMove: 1,
     });
+
+    splide.on('move', function (index) {
+      const slide = splide.Components.Slides.get()[index].slide;
+      const elements = slide.querySelectorAll('[history-appear-element]');
+  
+      gsap.from(elements, {
+        opacity: 0,
+        delay: 0.7,
+        duration: 0.4,
+        stagger: 0.2
+      })
+    })
     
     progressBarWithYears(splide) 
     

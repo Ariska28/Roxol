@@ -755,9 +755,7 @@ function MyTransition(Splide, Components) {
     function mount() {
         bind(list, "transitionend", (e)=>{
             if (e.target === list && endCallback) {
-                // Removes the transition property
                 cancel();
-                // Calls the `done` callback
                 endCallback();
             }
         });
@@ -948,12 +946,24 @@ function spliderWithArrowsDesktop(sliderAttr) {
 }
 function historySplider(sliderAttr) {
     const spleders = document.querySelectorAll(`${sliderAttr}`);
+    (0, _gsap.gsap).registerPlugin((0, _scrollTrigger.ScrollTrigger));
+    (0, _scrollTrigger.ScrollTrigger).normalizeScroll(true);
     spleders.forEach((el)=>{
         const splide = new (0, _splideDefault.default)(el, {
             pagination: false,
             fixedWidth: "100%",
             gap: "0px",
             perMove: 1
+        });
+        splide.on("move", function(index) {
+            const slide = splide.Components.Slides.get()[index].slide;
+            const elements = slide.querySelectorAll("[history-appear-element]");
+            (0, _gsap.gsap).from(elements, {
+                opacity: 0,
+                delay: 0.7,
+                duration: 0.4,
+                stagger: 0.2
+            });
         });
         progressBarWithYears(splide);
         splide.mount({}, MyTransition);
@@ -10823,11 +10833,34 @@ function appearAnimations() {
     const changingBgContainersSmall = document.querySelectorAll("[data-changing-bg-small]");
     (0, _gsap.gsap).registerPlugin((0, _scrollTrigger.ScrollTrigger));
     (0, _scrollTrigger.ScrollTrigger).normalizeScroll(true);
-    cardsAnimation();
     tickerAnimation();
     pinSliderAnimation();
+    cardsAnimation();
     titleAnimation();
     buttonAnimation();
+    textAnimation();
+    const sliderContainers = document.querySelectorAll("[data-appear-slider]");
+    sliderContainers?.forEach((sliderContainer)=>{
+        const elemets = sliderContainer.querySelectorAll(".splide__slide")[0].querySelectorAll("[history-appear-element]");
+        (0, _gsap.gsap).from(sliderContainer, {
+            scrollTrigger: {
+                trigger: sliderContainer,
+                start: "top 80%"
+            },
+            opacity: 0,
+            duration: 0.4,
+            delay: 0.2
+        });
+        (0, _gsap.gsap).from(elemets, {
+            scrollTrigger: {
+                trigger: sliderContainer
+            },
+            opacity: 0,
+            duration: 0.2,
+            delay: 0.8,
+            stagger: 0.2
+        });
+    });
     const footerAppearItemWrappers = document.querySelectorAll("[data-footer-appear-wr]");
     footerAppearItemWrappers.forEach((footerAppearItemWrapper)=>{
         const footerAppearItem = footerAppearItemWrapper.querySelector("[data-footer-appear]");
@@ -10846,6 +10879,16 @@ function appearAnimations() {
     (0, _scrollTrigger.ScrollTrigger).matchMedia({
         "(min-width: 767px)": function() {
             const fixCards = document.querySelector("[data-fix-cards]");
+            const growImage = document.querySelector("[data-media-fix]");
+            if (growImage) (0, _gsap.gsap).to(growImage, {
+                scrollTrigger: {
+                    trigger: growImage,
+                    start: "top 70%",
+                    end: "+=90%",
+                    scrub: true
+                },
+                height: `${57.31}vw`
+            });
             if (fixCards) (0, _gsap.gsap).to(fixCards, {
                 scrollTrigger: {
                     trigger: fixCards,
@@ -10929,7 +10972,7 @@ function titleAnimation() {
     titleContainers?.forEach((titleContainer)=>{
         const title = titleContainer.querySelectorAll("[data-title-line]");
         const descriptor = titleContainer.querySelector("[data-title-descriptor]");
-        (0, _gsap.gsap).from(title, {
+        if (title) (0, _gsap.gsap).from(title, {
             scrollTrigger: {
                 trigger: titleContainer,
                 start: "top 90%"
@@ -10941,7 +10984,7 @@ function titleAnimation() {
             stagger: 0.2,
             ease: "power1.inOut"
         });
-        (0, _gsap.gsap).from(descriptor, {
+        if (descriptor) (0, _gsap.gsap).from(descriptor, {
             scrollTrigger: {
                 trigger: titleContainer,
                 start: "top 90%"
@@ -10967,6 +11010,20 @@ function buttonAnimation() {
             y: 100,
             ease: "power1.inOut"
         });
+    });
+}
+function textAnimation() {
+    const text = document.querySelectorAll("[data-text-appear]");
+    (0, _gsap.gsap).from(text, {
+        scrollTrigger: {
+            trigger: text,
+            start: "top 95%"
+        },
+        delay: 0.4,
+        duration: 0.4,
+        opacity: 0,
+        stagger: 0.1,
+        ease: "power1.inOut"
     });
 }
 function cardsAnimation() {
@@ -11044,7 +11101,7 @@ function pinSliderAnimation() {
                         toggleActions: "play reset play reset",
                         scrub: true,
                         pin: true,
-                        end: "+=400%"
+                        end: `+=400%`
                     },
                     x: `-${realSliderWidth + 60 * .0521 - 100}vw`,
                     ease: "power1.inOut"
@@ -11055,7 +11112,7 @@ function pinSliderAnimation() {
                         start: "50% 50%",
                         toggleActions: "play reset play reset",
                         scrub: true,
-                        end: "+=400%"
+                        end: `+=400%`
                     },
                     width: "100%",
                     ease: "power1.inOut"

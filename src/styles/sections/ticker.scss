@@ -49,6 +49,7 @@
   height: 20px;
   transform: translate(-50%, -50%) ;
   z-index: 5;
+  will-change: width, height;
 
   @include media-down(sm) {
     width: 100%;

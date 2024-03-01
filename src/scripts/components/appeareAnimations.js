@@ -12,11 +12,37 @@ export function appearAnimations() {
   gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.normalizeScroll(true);
 
-  cardsAnimation();
   tickerAnimation();
   pinSliderAnimation();
+  cardsAnimation();
   titleAnimation();
   buttonAnimation();
+  textAnimation();
+
+  const sliderContainers = document.querySelectorAll('[data-appear-slider]');
+  sliderContainers?.forEach(sliderContainer => {
+    const elemets = sliderContainer.querySelectorAll('.splide__slide')[0].querySelectorAll('[history-appear-element]');
+
+    gsap.from(sliderContainer, {
+      scrollTrigger: {
+        trigger: sliderContainer,
+        start: "top 80%",
+      }, 
+      opacity: 0,
+      duration: 0.4,
+      delay: 0.2
+    });
+
+    gsap.from(elemets, {
+      scrollTrigger: {
+        trigger: sliderContainer,
+      }, 
+      opacity: 0,
+      duration: 0.2,
+      delay: 0.8,
+      stagger: 0.2
+    });
+  })
 
   const footerAppearItemWrappers = document.querySelectorAll('[data-footer-appear-wr]');
 
@@ -39,6 +65,19 @@ export function appearAnimations() {
   ScrollTrigger.matchMedia({
     "(min-width: 767px)": function() {
       const fixCards = document.querySelector('[data-fix-cards]');
+      const growImage = document.querySelector('[data-media-fix]');
+
+      if(growImage) {
+        gsap.to(growImage, {
+          scrollTrigger: {
+            trigger: growImage,
+            start: "top 70%",
+            end: "+=90%",
+            scrub: true
+          },
+          height: `${1100*.0521}vw`
+        })
+      }
 
       if(fixCards) {
         gsap.to(fixCards, {
@@ -138,29 +177,33 @@ function titleAnimation() {
     const title = titleContainer.querySelectorAll('[data-title-line]');
     const descriptor = titleContainer.querySelector('[data-title-descriptor]');
 
-    gsap.from(title, {
-      scrollTrigger: {
-        trigger: titleContainer,
-        start: "top 90%",
-      }, 
-      delay: 0.1,
-      duration: 0.3,
-      y: 100,
-      opacity: 0,
-      stagger: 0.2,
-      ease: "power1.inOut",
-    })
-  
-    gsap.from(descriptor, {
-      scrollTrigger: {
-        trigger: titleContainer,
-        start: "top 90%",
-      }, 
-      delay: 0.1,
-      duration: 0.2,
-      opacity:0,
-      ease: "power1.inOut",
-    })
+    if(title) {
+      gsap.from(title, {
+        scrollTrigger: {
+          trigger: titleContainer,
+          start: "top 90%",
+        }, 
+        delay: 0.1,
+        duration: 0.3,
+        y: 100,
+        opacity: 0,
+        stagger: 0.2,
+        ease: "power1.inOut",
+      })
+    }
+
+    if(descriptor) {
+      gsap.from(descriptor, {
+        scrollTrigger: {
+          trigger: titleContainer,
+          start: "top 90%",
+        }, 
+        delay: 0.1,
+        duration: 0.2,
+        opacity:0,
+        ease: "power1.inOut",
+      })
+    }
   })
 }
 
@@ -181,6 +224,21 @@ function buttonAnimation() {
   })
 }
 
+function textAnimation() {
+  const text = document.querySelectorAll('[data-text-appear]');
+    gsap.from(text, {
+      scrollTrigger: {
+        trigger: text,
+        start: "top 95%",
+      }, 
+      delay: 0.4,
+      duration: 0.4,
+      opacity: 0,
+      stagger: 0.1,
+      ease: "power1.inOut",
+    })
+}
+
 function cardsAnimation() {
   const cardContainers = document.querySelectorAll('[data-appear-card-container]');
       cardContainers?.forEach(cardContainer => {
@@ -196,7 +254,6 @@ function cardsAnimation() {
           ease: "power1.inOut",
         });
       })
-
 }
 
 function tickerAnimation() {
@@ -265,7 +322,7 @@ function pinSliderAnimation() {
             toggleActions: "play reset play reset",
             scrub: true,
             pin: true,
-            end: '+=400%'
+            end: `+=400%`
           },
           x: `-${(realSliderWidth+(60*.0521)) - 100}vw`,
           ease: "power1.inOut",
@@ -277,7 +334,7 @@ function pinSliderAnimation() {
             start: "50% 50%",
             toggleActions: "play reset play reset",
             scrub: true,
-            end: '+=400%'
+            end: `+=400%`
           },
           width: '100%',
           ease: "power1.inOut",

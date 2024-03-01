@@ -66,6 +66,34 @@
 .title {
   display: flex;
   flex-wrap: wrap;
+ }
+
+ [data-title-line-wr] {
+  display: inline-block;
+  overflow: hidden;
+}
+
+[data-text-appear-wr] {
+  overflow: hidden;
+}
+
+[data-title-line] {
+  display: inline-block;
+}
+
+[data-media-fix] {
+  position: position absolute;
+}
+
+[data-appear-slider] {
+  will-change: opacity;
+}
+
+.line {
+  width: 100%;
+  height: px-to-vw(1);
+  background-color: $c-gray-line;
+  color: $c-gray-line;
 }
 
 .title-descriptor {

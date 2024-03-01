@@ -13,19 +13,14 @@
 }
 
 .experience__title {
-  @include title-with-text;  
   margin-bottom: px-to-vw(60);
-
-  span {
-    margin-right: 30%;
-  }
 
   @include media-down(sm) {
     padding-top: px-to-vw(20);
     margin-bottom: px-to-vw(40);
-
-    span {
-      width: 100%;
-    }
   }
 } 
+
+.experience__title-subtitle {
+  margin-right: 30%;
+}
