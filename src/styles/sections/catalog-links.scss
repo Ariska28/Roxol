@@ -183,6 +183,8 @@
 }
 
 .catalog-links__btn {
+  @include button-border();
+  
   max-width: px-to-vw(348);
   margin: px-to-vw(74) 0 0 px-to-vw(746);
 

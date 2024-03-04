@@ -62,6 +62,10 @@
    }
 }
 
+.industry__box-splide {
+  margin-top: px-to-vw(40);
+}
+
 .industry__box-track {
   @include media-down(sm) {
     margin-right: px-to-vw(-16) !important;

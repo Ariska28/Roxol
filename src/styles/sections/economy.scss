@@ -1,13 +1,13 @@
 .economy__container {
   @include container;
 
-  padding-top: $s-space-desktop;
-  padding-bottom: px-to-vw(60);
+  margin-top: $s-space-desktop;
+  margin-bottom: px-to-vw(60);
   text-align: center;
 
   @include media-down(sm) {
-    padding-top: $s-space-mobile;
-    padding-bottom: $s-space-mobile;
+    margin-top: $s-space-mobile;
+    margin-bottom: $s-space-mobile;
     text-align: left;
   }
 }

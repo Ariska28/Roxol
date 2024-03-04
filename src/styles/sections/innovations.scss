@@ -3,6 +3,10 @@
 
   @include media-down(sm) {
     margin-bottom: $s-space-mobile;
+
+    .line {
+      display: none;
+    }
   }
 }
 

@@ -1,13 +1,15 @@
-.producing-products__container {
-  @include container;
-
-  padding-top: $s-space-desktop;
-  padding-bottom: $s-space-desktop;
+.producing-products {
+  margin-top: $s-space-desktop;
+  margin-bottom: $s-space-desktop;
 
   @include media-down(sm) {
     margin-top: $s-space-mobile;
     margin-bottom: $s-space-mobile;
   }
+}
+
+.producing-products__container {
+  @include container;
 }
 
 .producing-producrs__title {

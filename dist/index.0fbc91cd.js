@@ -10912,7 +10912,7 @@ function appearAnimations() {
             }
         });
     });
-    //pinverticalSlider
+    //pinVerticalSlider
     const dataVerticalSliders = document.querySelectorAll("[data-pin-vertical-slider]");
     dataVerticalSliders?.forEach((dataVerticalSlider)=>{
         const switchVerticalSliderBtns = document.querySelectorAll("[data-pin-vertical-slider-tab]");
@@ -10958,36 +10958,18 @@ function appearAnimations() {
     const cardContainers = document.querySelectorAll("[data-appear-card-container]");
     cardContainers?.forEach((cardContainer)=>{
         const dataCards = cardContainer.querySelectorAll("[data-appear-card]");
-        (0, _gsap.gsap).from(dataCards, {
-            scrollTrigger: {
-                trigger: cardContainer,
-                start: "top 90%"
-            },
-            y: 200,
-            opacity: 0,
-            duration: 0.6,
-            ease: "power1.inOut"
+        dataCards.forEach((dataCard)=>{
+            (0, _gsap.gsap).from(dataCard, {
+                scrollTrigger: {
+                    trigger: dataCard,
+                    start: "top 90%"
+                },
+                y: 200,
+                opacity: 0,
+                duration: 0.6,
+                ease: "power1.inOut"
+            });
         });
-    });
-    //movingCards
-    const dataMovingCards = document.querySelector("[data-moving-cards-container]");
-    (0, _gsap.gsap).to("[data-moving-card-left]", {
-        scrollTrigger: {
-            trigger: dataMovingCards,
-            start: "45% 90%"
-        },
-        y: "-100%",
-        duration: 5,
-        ease: "power1.inOut"
-    });
-    (0, _gsap.gsap).to("[data-moving-card-right]", {
-        scrollTrigger: {
-            trigger: dataMovingCards,
-            start: "45% 90%"
-        },
-        y: "-160%",
-        duration: 7,
-        ease: "power1.inOut"
     });
     //buttonAnimation
     const btns = document.querySelectorAll("[data-btn-appear]");
@@ -11059,6 +11041,7 @@ function appearAnimations() {
             ease: "power1.inOut"
         });
     });
+    //onlyDesktopAnimations
     (0, _scrollTrigger.ScrollTrigger).matchMedia({
         "(min-width: 767px)": function() {
             const tl1 = (0, _gsap.gsap).timeline({});
@@ -11073,6 +11056,52 @@ function appearAnimations() {
                 },
                 height: `${57.31}vw`,
                 width: "100%"
+            });
+            changingBgContainers?.forEach((changingBgContainer)=>{
+                //changing-bg
+                (0, _gsap.gsap).to("body", {
+                    scrollTrigger: {
+                        trigger: changingBgContainer,
+                        start: "18% 90%",
+                        end: "bottom 20%",
+                        toggleActions: "play reset play reset"
+                    },
+                    delay: 0.1,
+                    duration: 0.5,
+                    background: "#FFDF00",
+                    ease: "power1.inOut"
+                });
+            });
+            //movingCards
+            const dataMovingCards = document.querySelector("[data-moving-cards-container]");
+            if (dataMovingCards) {
+                (0, _gsap.gsap).to("[data-moving-card-left]", {
+                    scrollTrigger: {
+                        trigger: dataMovingCards,
+                        start: "45% 90%"
+                    },
+                    y: "-100%",
+                    duration: 5,
+                    ease: "power1.inOut"
+                });
+                (0, _gsap.gsap).to("[data-moving-card-right]", {
+                    scrollTrigger: {
+                        trigger: dataMovingCards,
+                        start: "45% 90%"
+                    },
+                    y: "-160%",
+                    duration: 7,
+                    ease: "power1.inOut"
+                });
+            }
+            if (fixCards) (0, _gsap.gsap).to(fixCards, {
+                scrollTrigger: {
+                    trigger: fixCards,
+                    start: "top bottom",
+                    end: "bottom bottom",
+                    toggleActions: "play reset play reset",
+                    toggleClass: "is-active"
+                }
             });
             //pinSlider for industry-solutions page
             const dataSlider = document.querySelector("[data-pin-slider-industry-solutions]");
@@ -11089,7 +11118,6 @@ function appearAnimations() {
                         toggleActions: "play reset play reset",
                         scrub: true,
                         pin: true,
-                        delay: 0.2,
                         end: `+=400%`
                     },
                     y: 0,
@@ -11108,30 +11136,6 @@ function appearAnimations() {
                     ease: "power1.inOut"
                 });
             }
-            changingBgContainers?.forEach((changingBgContainer)=>{
-                //changing-bg
-                (0, _gsap.gsap).to("body", {
-                    scrollTrigger: {
-                        trigger: changingBgContainer,
-                        start: "18% 90%",
-                        end: "bottom 20%",
-                        toggleActions: "play reset play reset"
-                    },
-                    delay: 0.1,
-                    duration: 0.5,
-                    background: "#FFDF00",
-                    ease: "power1.inOut"
-                });
-            });
-            if (fixCards) (0, _gsap.gsap).to(fixCards, {
-                scrollTrigger: {
-                    trigger: fixCards,
-                    start: "top bottom",
-                    end: "bottom bottom",
-                    toggleActions: "play reset play reset",
-                    toggleClass: "is-active"
-                }
-            });
             changingBgContainersSmall?.forEach((changingBgContainer)=>{
                 //changing-bg-small-block
                 (0, _gsap.gsap).to("body", {

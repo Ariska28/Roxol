@@ -1,0 +1,33 @@
+.title-descriptor {
+  @include description;
+  display: block;
+
+  @include media-down(sm) {
+    margin-right: 0;
+    margin-bottom: px-to-vw(24);
+  }
+}
+
+.title-line {
+  @include title-2;
+
+  display: block;
+}
+
+.title-line-wr {
+  @include title-2;
+  overflow: hidden;
+  display: block;
+
+  &:first-child {
+    text-align: end;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  @include media-down(sm) {
+    padding-bottom: 0;
+  }
+}

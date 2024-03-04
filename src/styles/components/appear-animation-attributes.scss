@@ -1,0 +1,35 @@
+
+.title {
+  display: flex;
+  flex-wrap: wrap;
+ }
+
+ [data-title-line-wr] {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: px-to-vw(3);
+}
+
+[data-text-appear-wr],
+[data-btn-appear-wr],
+[data-appear-card-container] {
+  overflow: hidden;
+}
+
+[data-btn-appear-wr] {
+  @include media-down(sm) {
+    overflow: visible;
+  }
+}
+
+[data-title-line] {
+  display: inline-block;
+}
+
+[data-media-fix] {
+  position: position absolute;
+}
+
+[data-appear-slider] {
+  will-change: opacity;
+}

@@ -16,8 +16,20 @@
   line-height: 90%;
   letter-spacing: -.06em;
 
+  [data-title-line] {
+    font-family: $font-base;
+    font-weight: 500;
+    font-size: px-to-vw(96);
+    line-height: 90%;
+    letter-spacing: -.06em;
+  }
+
   @include media-down(sm) {
     font-size: px-to-vw(38);
+
+    [data-title-line] {
+      font-size: px-to-vw(38);
+    }
   }
 }
 
@@ -28,8 +40,19 @@
   line-height: 100%;
   letter-spacing: -.06em;
 
+  [data-title-line] {
+    font-family: $font-base;
+    font-weight: 400;
+    font-size: px-to-vw(75);
+    letter-spacing: -.06em;
+  }
+
   @include media-down(sm) {
     font-size: px-to-vw(32);
+
+    [data-title-line] {
+      font-size: px-to-vw(32);
+    }
   }
 }
 
@@ -40,10 +63,22 @@
   line-height: 100%;
   letter-spacing: -.06em;
 
+  [data-title-line] {
+    font-family: $font-base;
+    font-weight: 400;
+    font-size: px-to-vw(40);
+    letter-spacing: -.06em;
+  }
+
   @include media-down(sm) {
     font-size: px-to-vw(26);
     line-height: 110%;
     letter-spacing: -.03em;
+
+    [data-title-line] {
+      font-size: px-to-vw(26);
+      letter-spacing: -.03em;
+    }
   }
 }
 
@@ -54,8 +89,19 @@
   line-height: 115%;
   letter-spacing: -.03em;
 
+  [data-title-line] {
+    font-family: $font-base;
+    font-weight: 500;
+    font-size: px-to-vw(24);
+    letter-spacing: -.03em;
+  }
+
   @include media-down(sm) {
     font-size: px-to-vw(20);
+
+    [data-title-line] {
+      font-size: px-to-vw(20);
+    }
   }
 }
 
@@ -66,8 +112,19 @@
   line-height: 120%;
   letter-spacing: -.03em;
 
+  [data-title-line] {
+    font-family: $font-base;
+    font-weight: 500;
+    font-size: px-to-vw(20);
+    letter-spacing: -.03em;
+  }
+
   @include media-down(sm) {
     font-size: px-to-vw(18);
+
+    [data-title-line] {
+      font-size: px-to-vw(18);
+    }
   }
 }
 
@@ -301,25 +358,5 @@
 
   &::after {
     background-color: $c-accent-hover;
-  }
-}
-
-@mixin title-with-text {
-  @include title-2;
-
-  span {
-    @include description;
-    margin-right: 20%;
-    position: relative;
-    top: px-to-vw(-45);
-  }
-
-  @include media-down(sm) {
-    padding-top: px-to-vw(22);
-
-    span {
-      display: block;
-      top: px-to-vw(-20);
-    }
   }
 }

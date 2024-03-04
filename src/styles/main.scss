@@ -19,6 +19,9 @@
 @import './components/form.scss';     
 @import './components/sidebar.scss';  
 @import './components/filter-btn.scss'; 
+@import './components/title-with-text.scss'; 
+@import './components/line.scss'; 
+@import './components/appear-animation-attributes.scss'; 
    
 @import './sections/hero.scss'; 
 @import './sections/catalog-links.scss';    
@@ -62,97 +65,3 @@
 @import './sections/buy-in.scss'; 
 @import './sections/questionnaire.scss'; 
 @import './sections/error.scss'; 
-
-.title {
-  display: flex;
-  flex-wrap: wrap;
- }
-
- [data-title-line-wr] {
-  display: inline-block;
-  overflow: hidden;
-}
-
-[data-text-appear-wr],
-[data-btn-appear-wr],
-[data-appear-card-container] {
-  overflow: hidden;
-}
-
-[data-btn-appear-wr] {
-  @include media-down(sm) {
-    overflow: visible;
-  }
-}
-
-[data-title-line] {
-  display: inline-block;
-}
-
-[data-media-fix] {
-  position: position absolute;
-}
-
-[data-appear-slider] {
-  will-change: opacity;
-}
-
-.line {
-  width: 100%;
-  height: px-to-vw(1);
-  background-color: $c-gray-line;
-  color: $c-gray-line;
-  border-color: transparent;
-  margin: 0;
-}
-
-.title-descriptor {
-  @include description;
-  display: block;
-
-  @include media-down(sm) {
-    margin-right: 0;
-    margin-bottom: px-to-vw(24);
-  }
-}
-
-.title-line {
-  @include title-2;
-
-  display: block;
-}
-
-.title-line-wr {
-  @include title-2;
-  overflow: hidden;
-  display: block;
-  padding-bottom: px-to-vw(3);
-
-  &:first-child {
-    text-align: end;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  @include media-down(sm) {
-    padding-bottom: 0;
-  }
-}
-
-.btn-border__wr {
-  overflow: hidden
-}
-
-.btn-border {
-  @include button-border;
-
-  @include media-up(sm) {
-    &--hover-white {
-      &::after {
-        background-color: $c-white;
-      } 
-    }
-  }
-} 

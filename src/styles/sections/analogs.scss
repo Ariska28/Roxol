@@ -65,6 +65,8 @@
 }
 
 .analogs__btn {
+  @include button-border();
+  
   max-width: px-to-vw(348);
   margin: auto;
 }

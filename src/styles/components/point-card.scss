@@ -34,6 +34,7 @@
 
   &--big-space {
     min-height: auto;
+    height: 100%;
 
     .point-card__text {
       @include media-down(sm) {

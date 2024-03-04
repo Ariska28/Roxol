@@ -50,5 +50,11 @@
 }
 
 .about-company__content-btn {
+  @include button-border;
+
   max-width: px-to-vw(348);
+
+  &::after {
+    background-color: $c-white;
+  }
 }
