@@ -14,8 +14,13 @@ export function appearAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
   if (window.matchMedia("(max-width: 769px)").matches) {
-    ScrollTrigger.normalizeScroll(true);
-  }
+    ScrollTrigger.normalizeScroll({
+      allowNestedScroll: true,
+      lockAxis: false,
+      momentum: self => Math.min(3, self.velocityY / 1000),
+      type: "touch,wheel,pointer",
+  })
+}
 
   //ticker
   const ticker = document.querySelector('[data-ticker]');
@@ -212,22 +217,21 @@ export function appearAnimations() {
  //textanimation
  const text = document.querySelectorAll('[data-text-appear]');
 
- if(text.length) {
-  text.forEach((textItem) => {
-    gsap.from(textItem, {
-      scrollTrigger: {
-        trigger: textItem,
-        start: "top 90%",
-      }, 
-      delay: 0.4,
-      duration: 0.6,
-      opacity: 0,
-      stagger: 0.3,
-      ease: "power1.inOut",
+  if(text.length) {
+    text.forEach((textItem) => {
+      gsap.from(textItem, {
+        scrollTrigger: {
+          trigger: textItem,
+          start: "top 90%",
+        }, 
+        delay: 0.4,
+        duration: 0.6,
+        opacity: 0,
+        stagger: 0.3,
+        ease: "power1.inOut",
+      })
     })
-  })
- }
-
+  }
 
  //slider
   const sliderContainers = document.querySelectorAll('[data-appear-slider]');
