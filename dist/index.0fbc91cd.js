@@ -10832,7 +10832,7 @@ function appearAnimations() {
     const changingBgContainers = document.querySelectorAll("[data-changing-bg]");
     const changingBgContainersSmall = document.querySelectorAll("[data-changing-bg-small]");
     (0, _gsap.gsap).registerPlugin((0, _scrollTrigger.ScrollTrigger));
-    // ScrollTrigger.normalizeScroll(true);
+    if (window.matchMedia("(max-width: 769px)").matches) (0, _scrollTrigger.ScrollTrigger).normalizeScroll(true);
     //ticker
     const ticker = document.querySelector("[data-ticker]");
     if (ticker) {
@@ -10874,32 +10874,6 @@ function appearAnimations() {
             }
         });
     }
-    //titleAnimation
-    const titleContainers = document.querySelectorAll("[data-title]");
-    titleContainers?.forEach((titleContainer)=>{
-        const title = titleContainer.querySelectorAll("[data-title-line]");
-        const descriptor = titleContainer.querySelector("[data-title-descriptor]");
-        if (title) (0, _gsap.gsap).from(title, {
-            scrollTrigger: {
-                trigger: titleContainer,
-                start: "top 90%"
-            },
-            duration: 0.6,
-            y: 30,
-            opacity: 0,
-            stagger: 0.2,
-            ease: "power1.inOut"
-        });
-        if (descriptor) (0, _gsap.gsap).from(descriptor, {
-            scrollTrigger: {
-                trigger: titleContainer,
-                start: "top 90%"
-            },
-            duration: 0.2,
-            opacity: 0,
-            ease: "power1.inOut"
-        });
-    });
     //pinSlider
     const dataSliders = document.querySelectorAll("[data-pin-slider]");
     dataSliders?.forEach((dataSlider)=>{
@@ -10950,6 +10924,32 @@ function appearAnimations() {
                     });
                 });
             }
+        });
+    });
+    //titleAnimation
+    const titleContainers = document.querySelectorAll("[data-title]");
+    titleContainers?.forEach((titleContainer)=>{
+        const title = titleContainer.querySelectorAll("[data-title-line]");
+        const descriptor = titleContainer.querySelector("[data-title-descriptor]");
+        if (title) (0, _gsap.gsap).from(title, {
+            scrollTrigger: {
+                trigger: titleContainer,
+                start: "top 90%"
+            },
+            duration: 0.6,
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power1.inOut"
+        });
+        if (descriptor) (0, _gsap.gsap).from(descriptor, {
+            scrollTrigger: {
+                trigger: titleContainer,
+                start: "top 90%"
+            },
+            duration: 0.2,
+            opacity: 0,
+            ease: "power1.inOut"
         });
     });
     //cardAnimation
