@@ -16,7 +16,8 @@ export function initTabs(attr) {
         tabContainers.forEach((tabContainer) => {
           console.log(tabContainer.getAttribute('data-tabs-container'))
           if (tabBtn.getAttribute('data-tabs-btn') === tabContainer.getAttribute('data-tabs-container')) {
-            tabContainer.classList.add('is-active')
+            tabContainer.classList.add('is-active');
+            
           } else {
             tabContainer.classList.remove('is-active')
           }          

@@ -10910,6 +10910,22 @@ function appearAnimations() {
             }
         });
     });
+    //pinverticalSlider
+    const dataVerticalSliders = document.querySelectorAll("[data-pin-vertical-slider]");
+    dataVerticalSliders?.forEach((dataVerticalSlider)=>{
+        const switchVerticalSliderBtns = document.querySelectorAll("[data-pin-vertical-slider-tab]");
+        (0, _scrollTrigger.ScrollTrigger).matchMedia({
+            "(min-width: 767px)": function() {
+                verticalSliderInit(dataVerticalSlider);
+                switchVerticalSliderBtns.forEach((btn)=>{
+                    (0, _scrollTrigger.ScrollTrigger).refresh();
+                    btn.addEventListener("click", ()=>{
+                        verticalSliderInit(dataVerticalSlider);
+                    });
+                });
+            }
+        });
+    });
     //cardAnimation
     const cardContainers = document.querySelectorAll("[data-appear-card-container]");
     cardContainers?.forEach((cardContainer)=>{
@@ -11166,6 +11182,36 @@ function appearAnimations() {
             ease: "power1.inOut",
             duration: 0.3
         });
+    });
+}
+function verticalSliderInit(dataVerticalSlider) {
+    const pointerSliderList = dataVerticalSlider.querySelector("[data-pin-vertical-slider-list]");
+    const pointerSliderBar = dataVerticalSlider.querySelectorAll("[data-pin-vertical-slider-bar]");
+    const pointerSliderChildren = pointerSliderList.querySelectorAll("li");
+    const realSliderHeight = pointerSliderChildren.length * 19.6938;
+    pointerSliderList.style.height = `${realSliderHeight}vw`;
+    (0, _gsap.gsap).to(pointerSliderList, {
+        scrollTrigger: {
+            trigger: dataVerticalSlider,
+            start: "50% 50%",
+            toggleActions: "play reverse play reverse",
+            scrub: true,
+            pin: true,
+            end: `+=700%`
+        },
+        y: `-${realSliderHeight - 20}vw`,
+        ease: "power1.inOut"
+    });
+    (0, _gsap.gsap).to(pointerSliderBar, {
+        scrollTrigger: {
+            trigger: dataVerticalSlider,
+            start: "50% 50%",
+            toggleActions: "play reverse play reverse",
+            scrub: true,
+            end: `+=700%`
+        },
+        width: "100%",
+        ease: "power1.inOut"
     });
 }
 

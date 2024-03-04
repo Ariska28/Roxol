@@ -11102,10 +11102,10 @@ ul {
     width: calc(17 * var(--fz));
     height: calc(17 * var(--fz));
   }
-}
 
-.contract {
-  background-color: #ffdf00;
+  .contract {
+    background-color: #ffdf00;
+  }
 }
 
 .contract__container {
@@ -11174,20 +11174,15 @@ ul {
 }
 
 .contract__info {
-  opacity: 0;
-  z-index: -100;
+  margin-top: calc(80 * var(--fz));
   justify-content: space-between;
-  height: 0;
-  display: flex;
-  position: absolute;
+  height: 64.5vh;
+  display: none;
+  transform: translate(0) !important;
 }
 
 .contract__info.is-active {
-  margin-top: calc(80 * var(--fz));
-  opacity: 1;
-  z-index: 1;
-  height: 64.5vh;
-  position: relative;
+  display: flex;
 }
 
 @media (width <= 767px) {
@@ -11266,8 +11261,9 @@ ul {
 }
 
 .contract__info-slider__track {
+  height: 100%;
   position: static;
-  height: 100% !important;
+  overflow: hidden;
 }
 
 @media (width <= 767px) {
@@ -11277,13 +11273,16 @@ ul {
 }
 
 .contract__info-slider__slide {
-  height: auto !important;
+  height: calc(354 * var(--fz));
+  width: calc(596 * var(--fz));
+  margin-bottom: calc(24 * var(--fz));
 }
 
 @media (width <= 767px) {
   .contract__info-slider__slide {
     margin-bottom: calc(20 * var(--fz));
     width: 100%;
+    height: auto;
   }
 
   .contract__info-slider__slide:last-child {
