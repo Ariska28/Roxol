@@ -10,17 +10,15 @@
 }
 
 .brand__title {
-  @include title-with-text;
-
-  span {
-    margin-right: 29.5%;
-  }
-
   margin-bottom: px-to-vw(60);
 
   @include media-down(sm) {
     margin-bottom: px-to-vw(40);
   }
+}
+
+.brand__title-subtitle {
+  margin-right: 29.5%;
 }
 
 .brand__content {

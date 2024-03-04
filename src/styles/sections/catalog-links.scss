@@ -39,7 +39,7 @@
   display: flex;
   align-items: center;
   padding: px-to-vw(32) 0 px-to-vw(40);
-  transition: 0.7s padding ease-in-out;
+  transition: 0.5s padding ease-in-out;
   position: relative;
 
   &::before {
@@ -51,7 +51,7 @@
     height: 0;
     background-color: $c-accent;
     z-index: 0;
-    transition: 0.8s height ease-in-out;
+    transition: 0.5s height ease-in-out;
   }
 
   &:hover {
@@ -112,7 +112,7 @@
     z-index: 2;
   }
   
-  transition:color 0.7s ease-in-out, left 0.7s ease-in-out;
+  transition:color 0.5s ease-in-out, left 0.5s ease-in-out;
 
   span {
     @include description;
@@ -153,7 +153,7 @@
   margin-left: auto;
   position: absolute;
   right: 0;
-  transition: background-color 0.2s ease-in, border-color 0.2s ease-in, right 0.7s ease-in-out; 
+  transition: background-color 0.2s ease-in, border-color 0.2s ease-in, right 0.5s ease-in-out; 
 
   @include media-down(sm) {
     position: static;

@@ -30,7 +30,6 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: px-to-vw(40);
-  border-bottom: px-to-vw(1) solid $c-gray-line;
 
   @include media-down(sm) {
     flex-direction: column;

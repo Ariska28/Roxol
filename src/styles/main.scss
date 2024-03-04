@@ -74,7 +74,8 @@
 }
 
 [data-text-appear-wr],
-[data-btn-appear-wr] {
+[data-btn-appear-wr],
+[data-appear-card-container] {
   overflow: hidden;
 }
 
@@ -101,6 +102,8 @@
   height: px-to-vw(1);
   background-color: $c-gray-line;
   color: $c-gray-line;
+  border-color: transparent;
+  margin: 0;
 }
 
 .title-descriptor {

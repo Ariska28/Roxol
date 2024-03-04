@@ -4166,7 +4166,7 @@ ul {
 .catalog-links__item-link {
   padding: calc(32 * var(--fz)) 0 calc(40 * var(--fz));
   align-items: center;
-  transition: padding .7s ease-in-out;
+  transition: padding .5s ease-in-out;
   display: flex;
   position: relative;
 }
@@ -4177,7 +4177,7 @@ ul {
   background-color: #ffdf00;
   width: 100%;
   height: 0;
-  transition: height .8s ease-in-out;
+  transition: height .5s ease-in-out;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -4229,7 +4229,7 @@ ul {
   letter-spacing: -.06em;
   color: #9d9d9d;
   line-height: 100%;
-  transition: color .7s ease-in-out, left .7s ease-in-out;
+  transition: color .5s ease-in-out, left .5s ease-in-out;
 }
 
 @media (width <= 767px) {
@@ -4290,7 +4290,7 @@ ul {
   justify-content: center;
   align-items: center;
   margin-left: auto;
-  transition: background-color .2s ease-in, border-color .2s ease-in, right .7s ease-in-out;
+  transition: background-color .2s ease-in, border-color .2s ease-in, right .5s ease-in-out;
   display: flex;
   position: absolute;
   right: 0;
@@ -8268,7 +8268,6 @@ ul {
 
 .analogs-hero__main {
   padding-bottom: calc(40 * var(--fz));
-  border-bottom: calc(1 * var(--fz)) solid #c1c1c1;
   justify-content: space-between;
   display: flex;
 }
@@ -8329,55 +8328,17 @@ ul {
 }
 
 .brands__title {
-  font-family: Int, Arial, sans-serif;
-  font-weight: 400;
-  font-size: calc(75 * var(--fz));
-  letter-spacing: -.06em;
   margin-bottom: calc(60 * var(--fz));
-  line-height: 100%;
-}
-
-@media (width <= 767px) {
-  .brands__title {
-    font-size: calc(32 * var(--fz));
-  }
-}
-
-.brands__title span {
-  font-family: Int, Arial, sans-serif;
-  font-weight: 500;
-  font-size: calc(20 * var(--fz));
-  letter-spacing: -.03em;
-  top: calc(-45 * var(--fz));
-  margin-right: 20%;
-  line-height: 130%;
-  position: relative;
-}
-
-@media (width <= 767px) {
-  .brands__title span {
-    font-size: calc(14 * var(--fz));
-    letter-spacing: -.02em;
-  }
-
-  .brands__title {
-    padding-top: calc(22 * var(--fz));
-  }
-
-  .brands__title span {
-    top: calc(-20 * var(--fz));
-    display: block;
-  }
-}
-
-.brands__title span {
-  margin-right: 27%;
 }
 
 @media (width <= 767px) {
   .brands__title {
     margin-bottom: calc(20 * var(--fz));
   }
+}
+
+.brands__title-descriptor {
+  margin-right: 27%;
 }
 
 .brands__list {
@@ -9917,7 +9878,6 @@ ul {
   font-size: calc(96 * var(--fz));
   letter-spacing: -.06em;
   padding-right: calc(41 * var(--fz));
-  margin-bottom: calc(60 * var(--fz));
   line-height: 90%;
   position: relative;
 }
@@ -9963,7 +9923,6 @@ ul {
   .industry__title {
     width: calc(252 * var(--fz));
     padding-right: calc(31 * var(--fz));
-    margin-bottom: calc(40 * var(--fz));
   }
 
   .industry__title--h2 {
@@ -9973,6 +9932,7 @@ ul {
 }
 
 .industry__box {
+  margin-top: calc(60 * var(--fz));
   justify-content: space-between;
   width: 100%;
   display: flex;
@@ -10105,6 +10065,7 @@ ul {
 
 @media (width <= 767px) {
   .industry__box-mobile {
+    margin-top: calc(40 * var(--fz));
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
@@ -10787,55 +10748,17 @@ ul {
 }
 
 .brand__title {
-  font-family: Int, Arial, sans-serif;
-  font-weight: 400;
-  font-size: calc(75 * var(--fz));
-  letter-spacing: -.06em;
   margin-bottom: calc(60 * var(--fz));
-  line-height: 100%;
-}
-
-@media (width <= 767px) {
-  .brand__title {
-    font-size: calc(32 * var(--fz));
-  }
-}
-
-.brand__title span {
-  font-family: Int, Arial, sans-serif;
-  font-weight: 500;
-  font-size: calc(20 * var(--fz));
-  letter-spacing: -.03em;
-  top: calc(-45 * var(--fz));
-  margin-right: 20%;
-  line-height: 130%;
-  position: relative;
-}
-
-@media (width <= 767px) {
-  .brand__title span {
-    font-size: calc(14 * var(--fz));
-    letter-spacing: -.02em;
-  }
-
-  .brand__title {
-    padding-top: calc(22 * var(--fz));
-  }
-
-  .brand__title span {
-    top: calc(-20 * var(--fz));
-    display: block;
-  }
-}
-
-.brand__title span {
-  margin-right: 29.5%;
 }
 
 @media (width <= 767px) {
   .brand__title {
     margin-bottom: calc(40 * var(--fz));
   }
+}
+
+.brand__title-subtitle {
+  margin-right: 29.5%;
 }
 
 .brand__content {
@@ -12214,7 +12137,7 @@ ul {
   overflow: hidden;
 }
 
-[data-text-appear-wr], [data-btn-appear-wr] {
+[data-text-appear-wr], [data-btn-appear-wr], [data-appear-card-container] {
   overflow: hidden;
 }
 
@@ -12240,7 +12163,9 @@ ul {
   height: calc(1 * var(--fz));
   color: #c1c1c1;
   background-color: #c1c1c1;
+  border-color: #0000;
   width: 100%;
+  margin: 0;
 }
 
 .title-descriptor {

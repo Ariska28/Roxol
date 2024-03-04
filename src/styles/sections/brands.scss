@@ -14,17 +14,15 @@
 }
 
 .brands__title {
-  @include title-with-text;  
-
   margin-bottom: px-to-vw(60);
-
-  span {
-    margin-right: 27%;
-  }
 
   @include media-down(sm) {
     margin-bottom: px-to-vw(20);
   }
+}
+
+.brands__title-descriptor {
+  margin-right: 27%;
 }
 
 .brands__list {

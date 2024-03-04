@@ -23,7 +23,6 @@
 
   padding-right: px-to-vw(41);
   position: relative;
-  margin-bottom: px-to-vw(60);
 
   span {
     @include description;
@@ -43,7 +42,6 @@
   @include media-down(sm) {
     width: px-to-vw(252);
     padding-right: px-to-vw(31);
-    margin-bottom: px-to-vw(40);
 
     &--h2 {
       max-width: 100%;
@@ -56,6 +54,7 @@
    display: flex;
    justify-content: space-between;
    position: relative;
+   margin-top: px-to-vw(60);
    width: 100%;
 
    @include media-down(sm) {
@@ -171,6 +170,7 @@
   display: none;
 
   @include media-down(sm) {
+    margin-top: px-to-vw(40);
     display: flex;
     width: 100%;
     flex-wrap: wrap;
