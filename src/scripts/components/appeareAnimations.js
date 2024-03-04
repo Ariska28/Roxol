@@ -13,7 +13,7 @@ export function appearAnimations() {
   gsap.registerPlugin(ScrollTrigger);
 
   if (window.matchMedia("(max-width: 769px)").matches) {
-    ScrollTrigger.normalizeScroll({ allowNestedScroll: true});
+    ScrollTrigger.normalizeScroll({ allowNestedScroll: true, type: "wheel"});
   }
 
   //ticker

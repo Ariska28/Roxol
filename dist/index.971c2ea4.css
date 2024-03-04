@@ -5372,7 +5372,6 @@ ul {
 
 .ticker {
   margin-bottom: calc(220 * var(--fz));
-  scroll-behavior: smooth;
 }
 
 @media (width <= 767px) {

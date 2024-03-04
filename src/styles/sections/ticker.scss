@@ -1,7 +1,6 @@
 
 .ticker {
   margin-bottom: $s-space-desktop;
-  scroll-behavior: smooth;
 
   @include media-down(sm) {
     margin-bottom: $s-space-mobile;
