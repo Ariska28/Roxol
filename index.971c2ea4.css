@@ -119,7 +119,6 @@ body {
   font-weight: 500;
   transition: background .5s ease-in-out;
   overflow-x: hidden;
-  touch-action: none !important;
 }
 
 body.no-scroll {

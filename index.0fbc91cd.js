@@ -10832,10 +10832,6 @@
       const changingBgContainers = document.querySelectorAll("[data-changing-bg]");
       const changingBgContainersSmall = document.querySelectorAll("[data-changing-bg-small]");
       (0, _gsap.gsap).registerPlugin((0, _scrollTrigger.ScrollTrigger));
-      if (window.matchMedia("(max-width: 769px)").matches) (0, _scrollTrigger.ScrollTrigger).normalizeScroll({
-          allowNestedScroll: true,
-          type: "wheel"
-      });
       //ticker
       const ticker = document.querySelector("[data-ticker]");
       if (ticker) {
