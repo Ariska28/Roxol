@@ -25,6 +25,19 @@
     border-radius: $s-border-radius-mob;
     padding: px-to-vw(16);
     height: px-to-vw(461);
+
+    &:hover {
+      .card__arrow {
+        border-color: $c-text-gray;
+        background-color: transparent;
+      }
+  
+      .card__media {
+        img {
+          transform: scale(1);
+        }
+      }
+    }
   }
 }
 

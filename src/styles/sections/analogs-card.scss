@@ -83,12 +83,18 @@
   align-items: center;
   flex-direction: column;
   position: relative;
+  margin-left: px-to-vw(24);
+
+  &:first-child {
+    margin-left: 0;
+  }
 
   &--no-link {
     padding: px-to-vw(31) px-to-vw(24) px-to-vw(24);
   }
 
   @include media-down(sm) {
+    margin-left: 0;
     width: 100%;
     height: px-to-vw(340);
     margin-bottom: px-to-vw(20);

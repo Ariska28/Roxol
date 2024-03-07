@@ -61,6 +61,7 @@ $s-dropdown-height-mob: px-to-vw(60);
 .catalog__content {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: $s-space-desktop;
 
   @include media-down(sm) {
@@ -76,7 +77,7 @@ $s-dropdown-height-mob: px-to-vw(60);
   overflow: hidden;
   position: relative;
   background-color: transparent;
-  border-radius: $s-border-radius $s-border-radius  0 0;
+  border-radius: $s-border-radius;
 
   &.is-toggle {
     background-color: $c-brown-2;
@@ -285,6 +286,18 @@ $s-dropdown-height-mob: px-to-vw(60);
     border: px-to-vw(1) solid $c-gray-line;
     padding: px-to-vw(20) px-to-vw(20) px-to-vw(20) px-to-vw(56);
     transition: border-color 0.2s ease-in;
+    
+    &[type="search"] {
+      &::-webkit-search-cancel-button {
+        position:relative;
+        right: px-to-vw(-10);
+        -webkit-appearance: none;
+        height: px-to-vw(37);
+        width: px-to-vw(37);
+        background-image: url('../assets/images/cross.svg');
+        background-size: 100%;
+      }
+    }
 
     &::placeholder {
       @include link-text;
@@ -418,14 +431,17 @@ $s-dropdown-height-mob: px-to-vw(60);
 .catalog__content-header__settings-select__btn {
   @include button-reset-styles;
 
-  padding: px-to-vw(16) px-to-vw(32) px-to-vw(13.5) px-to-vw(24);
+  padding: px-to-vw(16) px-to-vw(32) px-to-vw(16) px-to-vw(24);
   border-radius: $s-border-radius;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: transparent;
   border: px-to-vw(1) solid $c-gray-line;
   transition: background-color 0.2s ease-in;
 
   svg {
-    margin-left: px-to-vw(5);
+    margin-left: px-to-vw(12);
   }
 
   &:hover,
@@ -460,7 +476,7 @@ $s-dropdown-height-mob: px-to-vw(60);
   width: 100%;
   background-color: $c-select-hover;
   border-radius: $s-border-radius;
-  padding: px-to-vw(26) px-to-vw(24) px-to-vw(24) px-to-vw(20);
+  padding: px-to-vw(32) px-to-vw(24) px-to-vw(24) px-to-vw(20);
   box-shadow: 0 px-to-vw(18) px-to-vw(30) 0 rgb(94, 94, 94, 0.16);
   z-index: 3;
 
@@ -480,12 +496,13 @@ $s-dropdown-height-mob: px-to-vw(60);
   @include button-reset-styles;
 
   position: absolute;
-  right: px-to-vw(6);
-  top: px-to-vw(6);
+  right: 0;
+  top: 0;
+  padding: 0;
 
   svg {
-    width: px-to-vw(24);
-    height: px-to-vw(24);
+    width: px-to-vw(36);
+    height: px-to-vw(36);
 
     * {
       stroke: $c-gray-2;

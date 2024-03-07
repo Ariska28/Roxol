@@ -36,6 +36,7 @@
 .feedback__title {
   @include title-2;
 
+  font-size: 0;
   margin-bottom: px-to-vw(60);
 
   @include media-down(sm) {

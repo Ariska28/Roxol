@@ -144,6 +144,16 @@ $s-input-height-mobile: px-to-vw(53);
     input, textarea { 
       border-radius: $s-border-radius-mob;
       padding: px-to-vw(18) px-to-vw(19);
+
+      &:hover {
+        border-color: $c-text-gray;
+        outline: none;
+      }
+
+      &:focus {
+        border:px-to-vw(1) solid $c-text-dark;
+        outline: none;
+      }
     }
 
     input {
@@ -394,6 +404,16 @@ $s-input-height-mobile: px-to-vw(53);
     height: $s-input-height-mobile;
     overflow: hidden;
     margin-bottom: px-to-vw(12);
+
+    &:hover {
+      input {
+        border-color: $c-text-gray;
+      }
+  
+      svg path {
+        stroke: $c-text-gray;
+      }
+    }
 
     input {
       height: $s-input-height-mobile;

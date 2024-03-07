@@ -2,6 +2,12 @@
 .ticker {
   margin-bottom: $s-space-desktop;
 
+  &.is-active {
+    .ticker__group {
+      opacity: 0.5;
+    }
+  }
+
   @include media-down(sm) {
     margin-bottom: $s-space-mobile;
   }
@@ -31,10 +37,27 @@
   margin-left:  px-to-vw(-42);
   margin-right: px-to-vw(-42);
 
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: $c-primary;
+    opacity: 0;
+    z-index: 10;
+    transition: opacity 1s ease-in-out;
+  }
+
   @include media-down(sm) {
     margin-left:  px-to-vw(-16);
     margin-right: px-to-vw(-16);
     padding-bottom: px-to-vw(40);
+
+    &::before {
+      display: none;
+    }
   }
 }
 
@@ -44,11 +67,15 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 20px;
-  height: 20px;
+  width: 0px;
+  height: 0px;
   transform: translate(-50%, -50%) ;
-  z-index: 5;
+  z-index: 12;
   will-change: width, height;
+
+  img {
+    border-radius: $s-border-radius;
+  }
 
   @include media-down(sm) {
     width: 100%;

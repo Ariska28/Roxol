@@ -157,10 +157,22 @@
     }
   }
 
+  &:hover {
+    color: $c-white;
+  }
+
   .industry-solutions__card-arrow {
     svg {
       path {
-        stroke-width: px-to-vw(1.2);
+        stroke-width: px-to-vw(1.5);
+      }
+    }
+
+    @include media-down(sm) {
+      svg {
+        path {
+          stroke-width: px-to-vw(3);
+        }
       }
     }
   }
@@ -174,9 +186,14 @@
       display: none;
     }
 
+    .industry-solutions__card-title {
+      margin-bottom: auto;
+      max-width: px-to-vw(389);
+    }
+
     .industry-solutions__card-arrow {
-      background-color: $c-accent;
-      border-color: $c-accent;
+      background-color: transparent;
+      border-color: $c-text-gray;
 
       transition: background-color 0.2s ease-in, border-color 0.2s ease-in;
 
@@ -189,8 +206,8 @@
 
     &:hover {
       .industry-solutions__card-arrow {
-        background-color: transparent;
-        border-color: $c-text-gray;
+        background-color: $c-accent;
+        border-color: $c-accent;
       }
     }
   }

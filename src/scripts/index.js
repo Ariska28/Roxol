@@ -8,9 +8,17 @@ import { toggleCardList } from "./components/toggleCardsList";
 import { matchImagesWithLinks } from "./components/matchImagesWithLinks";
 import { switchPrice } from "./components/switchPrice";
 import { appearAnimations } from "./components/appeareAnimations";
+import { LineWrapper } from "./components/linesWrapper";
 
 document.addEventListener("DOMContentLoaded", () => {
   header();
+
+  (function(){
+    for(const node of document.getElementsByClassName('line-splitting')) { 
+      LineWrapper(node); 
+    }
+  })();
+
   heroSplider('[data-hero-slider]');
   mobSplider('[data-mobile-slider]');
   desktopSplider('[data-slider-desktop]');

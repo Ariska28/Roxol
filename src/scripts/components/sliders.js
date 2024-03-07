@@ -61,10 +61,10 @@ export function heroSplider(sliderAttr) {
       type: 'loop',
       interval: 4000,
       perPage : 1,
-      arrows: false,
       pagination: false,
       pauseOnHover: false,
-      autoplay: 'pause',
+      pauseOnFocus: false,
+      autoplay: "play",
       intersection: {
         inView: {
           autoplay: "play",
@@ -144,7 +144,7 @@ export function mobSplider(sliderAttr) {
       
       initProgressBar(splide) 
       
-      splide.mount();
+      splide.mount({}, MyTransition);
     })
   }
 }
@@ -158,7 +158,7 @@ export function productSplider(sliderAttr) {
         pagination: true,
       });
       
-      splide.mount();
+      splide.mount({}, MyTransition);
     })
 }
 
@@ -206,7 +206,7 @@ export function spliderWithArrows(sliderAttr) {
       
       initProgressBar(splide) 
       
-      splide.mount();
+      splide.mount({}, MyTransition);
     })
 }
 
@@ -328,11 +328,13 @@ function progressBarWithYears(slider) {
       });
 
       slider.on('mounted move', function (prevIndex, newIndex) { 
-        if(prevIndex > newIndex && newIndex % 2) {
+        let sliderEnd  = slider.Components.Controller.getEnd();
+
+        if(prevIndex > newIndex && newIndex % 2 && newIndex !== sliderEnd - 1) {
           line.style.transform = `translateX(-${slider.index*43.5}vw)` 
-        }  else if (prevIndex < newIndex) {
+        }  else if (prevIndex < newIndex && prevIndex !== sliderEnd - 1) {
           line.style.transform = `translateX(-${slider.index*43.5}vw)` 
-        }  
+        } 
       });
     }
   }

@@ -1,6 +1,7 @@
 .producing-products {
   margin-top: $s-space-desktop;
   margin-bottom: $s-space-desktop;
+  position: relative;
 
   @include media-down(sm) {
     margin-top: $s-space-mobile;
@@ -10,6 +11,8 @@
 
 .producing-products__container {
   @include container;
+
+  background-color: $c-primary;
 }
 
 .producing-producrs__title {

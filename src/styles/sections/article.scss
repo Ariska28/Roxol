@@ -150,7 +150,8 @@
 
   img {      
     height: px-to-vw(620);
-    object-fit: contain;
+    width: 100%;
+    object-fit: cover;
     border-radius: $s-border-radius;
   }
 

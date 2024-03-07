@@ -589,8 +589,12 @@ var _toggleCardsList = require("./components/toggleCardsList");
 var _matchImagesWithLinks = require("./components/matchImagesWithLinks");
 var _switchPrice = require("./components/switchPrice");
 var _appeareAnimations = require("./components/appeareAnimations");
+var _linesWrapper = require("./components/linesWrapper");
 document.addEventListener("DOMContentLoaded", ()=>{
     (0, _header.header)();
+    (function() {
+        for (const node of document.getElementsByClassName("line-splitting"))(0, _linesWrapper.LineWrapper)(node);
+    })();
     (0, _sliders.heroSplider)("[data-hero-slider]");
     (0, _sliders.mobSplider)("[data-mobile-slider]");
     (0, _sliders.desktopSplider)("[data-slider-desktop]");
@@ -611,7 +615,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     (0, _appeareAnimations.appearAnimations)();
 });
 
-},{"./components/header":"d8aIH","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl","./components/tabs":"hfO9E","./components/sidebar":"5agWS","./components/toggleCardsList":"g9K2D","./components/matchImagesWithLinks":"gAZf2","./components/switchPrice":"2Bdls","./components/appeareAnimations":"hsp1p"}],"d8aIH":[function(require,module,exports) {
+},{"./components/header":"d8aIH","./components/sliders":"cxLY0","./components/controls":"hB6A6","./components/catalog":"j0LXl","./components/tabs":"hfO9E","./components/sidebar":"5agWS","./components/toggleCardsList":"g9K2D","./components/matchImagesWithLinks":"gAZf2","./components/switchPrice":"2Bdls","./components/appeareAnimations":"hsp1p","./components/linesWrapper":"77mIW"}],"d8aIH":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "header", ()=>header);
@@ -791,10 +795,10 @@ function heroSplider(sliderAttr) {
             type: "loop",
             interval: 4000,
             perPage: 1,
-            arrows: false,
             pagination: false,
             pauseOnHover: false,
-            autoplay: "pause",
+            pauseOnFocus: false,
+            autoplay: "play",
             intersection: {
                 inView: {
                     autoplay: "play"
@@ -860,7 +864,7 @@ function mobSplider(sliderAttr) {
             gap: "0px"
         });
         initProgressBar(splide);
-        splide.mount();
+        splide.mount({}, MyTransition);
     });
 }
 function productSplider(sliderAttr) {
@@ -870,7 +874,7 @@ function productSplider(sliderAttr) {
             perPage: 1,
             pagination: true
         });
-        splide.mount();
+        splide.mount({}, MyTransition);
     });
 }
 function desktopSplider(sliderAttr) {
@@ -908,7 +912,7 @@ function spliderWithArrows(sliderAttr) {
             }
         });
         initProgressBar(splide);
-        splide.mount();
+        splide.mount({}, MyTransition);
     });
 }
 function spliderVertical(sliderAttr) {
@@ -1006,8 +1010,9 @@ function progressBarWithYears(slider) {
                 line.style.width = `${(sliderEnd + 1) * 38}vw`;
             });
             slider.on("mounted move", function(prevIndex, newIndex) {
-                if (prevIndex > newIndex && newIndex % 2) line.style.transform = `translateX(-${slider.index * 43.5}vw)`;
-                else if (prevIndex < newIndex) line.style.transform = `translateX(-${slider.index * 43.5}vw)`;
+                let sliderEnd = slider.Components.Controller.getEnd();
+                if (prevIndex > newIndex && newIndex % 2 && newIndex !== sliderEnd - 1) line.style.transform = `translateX(-${slider.index * 43.5}vw)`;
+                else if (prevIndex < newIndex && prevIndex !== sliderEnd - 1) line.style.transform = `translateX(-${slider.index * 43.5}vw)`;
             });
         }
     }
@@ -10755,7 +10760,9 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "toggleCardList", ()=>toggleCardList);
 function toggleCardList(attr) {
     const cards = document.querySelectorAll(attr);
+    let cardsCount = Array.from(cards).length;
     cards.forEach((card)=>{
+        card.style.zIndex = cardsCount;
         const openBtn = card.querySelector("[data-card-open]");
         const list = card.querySelector("[data-card-list]");
         const listLength = Array.from(list.querySelectorAll("li")).length;
@@ -10772,6 +10779,7 @@ function toggleCardList(attr) {
         window.addEventListener("click", function(e) {
             if (!list.contains(e.target)) card.classList.remove("is-open");
         });
+        cardsCount = cardsCount - 1;
     });
 }
 
@@ -10835,26 +10843,6 @@ function appearAnimations() {
     //ticker
     const ticker = document.querySelector("[data-ticker]");
     if (ticker) {
-        (0, _gsap.gsap).from("[data-ticker-left]", {
-            scrollTrigger: {
-                trigger: ticker,
-                start: "top bottom",
-                end: "bottom top",
-                toggleActions: "play reset play reset",
-                scrub: true
-            },
-            x: -500
-        });
-        (0, _gsap.gsap).to("[data-ticker-right]", {
-            scrollTrigger: {
-                trigger: ticker,
-                start: "top bottom",
-                end: "bottom top",
-                toggleActions: "play reset play reset",
-                scrub: true
-            },
-            x: -500
-        });
         (0, _scrollTrigger.ScrollTrigger).matchMedia({
             "(min-width: 767px)": function() {
                 (0, _gsap.gsap).to("[data-ticker-media]", {
@@ -10864,13 +10852,34 @@ function appearAnimations() {
                         toggleActions: "play reset play reset",
                         scrub: true,
                         pin: true,
-                        end: "+=140%"
+                        end: "+=140%",
+                        toggleClass: "is-active"
                     },
                     ease: "power1.inOut",
                     width: "100%",
                     height: "100%"
                 });
             }
+        });
+        (0, _gsap.gsap).from("[data-ticker-left]", {
+            scrollTrigger: {
+                trigger: ticker,
+                start: "top bottom",
+                end: "+=300%",
+                toggleActions: "play reset play reset",
+                scrub: true
+            },
+            x: -1000
+        });
+        (0, _gsap.gsap).to("[data-ticker-right]", {
+            scrollTrigger: {
+                trigger: ticker,
+                start: "top bottom",
+                end: "+=300%",
+                toggleActions: "play reset play reset",
+                scrub: true
+            },
+            x: -1000
         });
     }
     //pinSlider
@@ -10890,7 +10899,7 @@ function appearAnimations() {
                         toggleActions: "play reset play reset",
                         scrub: true,
                         pin: true,
-                        end: `+=400%`
+                        end: `+=${pointerSliderChildren.length * 58}%`
                     },
                     x: `-${realSliderWidth + 60 * .0521 - 100}vw`,
                     ease: "power1.inOut"
@@ -10901,7 +10910,7 @@ function appearAnimations() {
                         start: "50% 50%",
                         toggleActions: "play reset play reset",
                         scrub: true,
-                        end: `+=400%`
+                        end: `+=${pointerSliderChildren.length * 58}%`
                     },
                     width: "100%",
                     ease: "power1.inOut"
@@ -10962,6 +10971,23 @@ function appearAnimations() {
                     start: "top 90%"
                 },
                 y: 200,
+                opacity: 0,
+                duration: 0.6,
+                ease: "power1.inOut"
+            });
+        });
+    });
+    //cardAnimation
+    const brandContainers = document.querySelectorAll("[data-appear-brand-container]");
+    brandContainers?.forEach((cardContainer)=>{
+        const dataCards = cardContainer.querySelectorAll("[data-appear-brand]");
+        dataCards.forEach((dataCard)=>{
+            (0, _gsap.gsap).from(dataCard, {
+                scrollTrigger: {
+                    trigger: dataCard,
+                    start: "top 90%"
+                },
+                top: 100,
                 opacity: 0,
                 duration: 0.6,
                 ease: "power1.inOut"
@@ -11041,10 +11067,9 @@ function appearAnimations() {
     //onlyDesktopAnimations
     (0, _scrollTrigger.ScrollTrigger).matchMedia({
         "(min-width: 767px)": function() {
-            const tl1 = (0, _gsap.gsap).timeline({});
             const fixCards = document.querySelector("[data-fix-cards]");
             const growImage = document.querySelector("[data-media-fix]");
-            if (growImage) tl1.to(growImage, {
+            if (growImage) (0, _gsap.gsap).to(growImage, {
                 scrollTrigger: {
                     trigger: growImage,
                     start: "top 70%",
@@ -11052,8 +11077,55 @@ function appearAnimations() {
                     scrub: true
                 },
                 height: `${57.31}vw`,
-                width: "100%"
+                width: "100vw"
             });
+            changingBgContainersSmall?.forEach((changingBgContainer)=>{
+                //changing-bg-small-block
+                (0, _gsap.gsap).to("body", {
+                    scrollTrigger: {
+                        trigger: changingBgContainer,
+                        start: "0% center",
+                        end: "bottom 50%",
+                        toggleActions: "play reset play reset"
+                    },
+                    delay: 0.1,
+                    duration: 0.5,
+                    background: "#FFDF00",
+                    ease: "power1.inOut"
+                });
+            });
+            //pinSlider for industry-solutions page
+            const dataSlider = document.querySelector("[data-pin-slider-industry-solutions]");
+            if (dataSlider) {
+                const pointerSliderList = dataSlider.querySelector("[data-pin-slider-list]");
+                const pointerSliderBar = dataSlider.querySelector("[data-pin-slider-bar]");
+                const pointerSliderChildren = pointerSliderList.querySelectorAll("li");
+                const realSliderWidth = pointerSliderChildren.length * 37.512;
+                pointerSliderList.style.width = `${realSliderWidth}vw`;
+                (0, _gsap.gsap).to(pointerSliderList, {
+                    scrollTrigger: {
+                        trigger: dataSlider,
+                        start: "50% 50%",
+                        toggleActions: "play reset play reset",
+                        scrub: true,
+                        pin: true,
+                        end: `+=400%`
+                    },
+                    x: `-${realSliderWidth + 3.126 - 100}vw`,
+                    ease: "power1.inOut"
+                });
+                (0, _gsap.gsap).to(pointerSliderBar, {
+                    scrollTrigger: {
+                        trigger: dataSlider,
+                        start: "50% 50%",
+                        scrub: true,
+                        toggleActions: "play reset play reset",
+                        end: `+=400%`
+                    },
+                    width: "100%",
+                    ease: "power1.inOut"
+                });
+            }
             changingBgContainers?.forEach((changingBgContainer)=>{
                 //changing-bg
                 (0, _gsap.gsap).to("body", {
@@ -11075,19 +11147,19 @@ function appearAnimations() {
                 (0, _gsap.gsap).to("[data-moving-card-left]", {
                     scrollTrigger: {
                         trigger: dataMovingCards,
-                        start: "45% 90%"
+                        start: "45% 90%",
+                        scrub: true
                     },
-                    y: "-100%",
-                    duration: 5,
+                    bottom: "100%",
                     ease: "power1.inOut"
                 });
                 (0, _gsap.gsap).to("[data-moving-card-right]", {
                     scrollTrigger: {
                         trigger: dataMovingCards,
+                        scrub: true,
                         start: "45% 90%"
                     },
-                    y: "-160%",
-                    duration: 7,
+                    bottom: "100%",
                     ease: "power1.inOut"
                 });
             }
@@ -11099,54 +11171,6 @@ function appearAnimations() {
                     toggleActions: "play reset play reset",
                     toggleClass: "is-active"
                 }
-            });
-            //pinSlider for industry-solutions page
-            const dataSlider = document.querySelector("[data-pin-slider-industry-solutions]");
-            if (dataSlider) {
-                const pointerSliderList = dataSlider.querySelector("[data-pin-slider-list]");
-                const pointerSliderBar = dataSlider.querySelector("[data-pin-slider-bar]");
-                const pointerSliderChildren = pointerSliderList.querySelectorAll("li");
-                const realSliderWidth = pointerSliderChildren.length * 37.512;
-                pointerSliderList.style.width = `${realSliderWidth}vw`;
-                tl1.to(pointerSliderList, {
-                    scrollTrigger: {
-                        trigger: dataSlider,
-                        start: "50% 50%",
-                        toggleActions: "play reset play reset",
-                        scrub: true,
-                        pin: true,
-                        end: `+=400%`
-                    },
-                    y: 0,
-                    x: `-${realSliderWidth + 3.126 - 100}vw`,
-                    ease: "power1.inOut"
-                });
-                (0, _gsap.gsap).to(pointerSliderBar, {
-                    scrollTrigger: {
-                        trigger: dataSlider,
-                        start: "50% 50%",
-                        scrub: true,
-                        toggleActions: "play reset play reset",
-                        end: `+=400%`
-                    },
-                    width: "100%",
-                    ease: "power1.inOut"
-                });
-            }
-            changingBgContainersSmall?.forEach((changingBgContainer)=>{
-                //changing-bg-small-block
-                (0, _gsap.gsap).to("body", {
-                    scrollTrigger: {
-                        trigger: changingBgContainer,
-                        start: "0% center",
-                        end: "bottom 50%",
-                        toggleActions: "play reset play reset"
-                    },
-                    delay: 0.1,
-                    duration: 0.5,
-                    background: "#FFDF00",
-                    ease: "power1.inOut"
-                });
             });
         }
     });
@@ -11218,6 +11242,31 @@ function verticalSliderInit(dataVerticalSlider) {
     });
 }
 
-},{"gsap":"fPSuC","gsap/ScrollTrigger":"7wnFk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")
+},{"gsap":"fPSuC","gsap/ScrollTrigger":"7wnFk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"77mIW":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "LineWrapper", ()=>LineWrapper);
+function LineWrapper(node) {
+    const paragraphContent = node.innerHTML.replace(/^\s+|\s+$/gm, "");
+    const paragrapthWrappedWords = paragraphContent.replace(/(\S+)/g, '<span class="item"> $1 </span>');
+    node.innerHTML = paragrapthWrappedWords;
+    const wrappedWords = node.querySelectorAll(".item");
+    const arrayOfWordNodes = Object.keys(wrappedWords).map((k)=>wrappedWords[k]);
+    let currLineTop = 0;
+    let finalHTML = " ";
+    arrayOfWordNodes.forEach((node, index)=>{
+        let nodeTop = node.offsetTop;
+        let br = node.querySelectorAll("br");
+        if (br.length) {
+            if (arrayOfWordNodes[index + 1]) nodeTop = arrayOfWordNodes[index + 1].offsetTop;
+            else nodeTop = -1;
+        }
+        finalHTML += " " + (index !== 0 && currLineTop !== nodeTop ? "</span></span></span> " : " ") + (index === 0 || currLineTop !== nodeTop ? '<span class="line"><span class="words"><span class="word"> ' : " ") + node.innerHTML;
+        currLineTop = nodeTop;
+    });
+    node.innerHTML = finalHTML.trim();
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["150yF","fFaKF"], "fFaKF", "parcelRequire716c")
 
 //# sourceMappingURL=index.0fbc91cd.js.map

@@ -1,7 +1,9 @@
 export function toggleCardList(attr) {
   const cards = document.querySelectorAll(attr);
+  let cardsCount = Array.from(cards).length;
 
   cards.forEach((card) => {
+    card.style.zIndex= cardsCount;
     const openBtn = card.querySelector('[data-card-open]');
     const list = card.querySelector('[data-card-list]');
     const listLength = Array.from(list.querySelectorAll('li')).length;
@@ -23,6 +25,8 @@ export function toggleCardList(attr) {
       if (!list.contains(e.target)) {
           card.classList.remove('is-open');
       }
-  });
+    });
+
+    cardsCount = cardsCount - 1;
   })
 }

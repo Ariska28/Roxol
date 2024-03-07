@@ -13,7 +13,7 @@
   border-bottom: px-to-vw(1) solid $c-gray-line;
 
   @include media-down(sm) {
-    padding-bottom: px-to-vw(44);
+    padding-bottom: px-to-vw(35);
   }
 }
 

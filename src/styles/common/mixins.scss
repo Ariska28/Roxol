@@ -40,9 +40,14 @@
   line-height: 100%;
   letter-spacing: -.06em;
 
+  [data-title-line-wr] {
+    line-height: 100%;
+  }
+
   [data-title-line] {
     font-family: $font-base;
     font-weight: 400;
+    line-height: 100%;
     font-size: px-to-vw(75);
     letter-spacing: -.06em;
   }

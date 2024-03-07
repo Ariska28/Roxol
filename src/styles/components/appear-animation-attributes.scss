@@ -7,7 +7,6 @@
  [data-title-line-wr] {
   display: inline-block;
   overflow: hidden;
-  padding-bottom: px-to-vw(3);
 }
 
 [data-text-appear-wr],
@@ -24,6 +23,7 @@
 
 [data-title-line] {
   display: inline-block;
+  padding-bottom: 5px;
 }
 
 [data-media-fix] {

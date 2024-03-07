@@ -572,6 +572,7 @@ $height-submenus: px-to-vw(550);
 
   @include media-down(xxl) {
     display: flex;
+    margin-left: px-to-vw(34);
   }
 }
 
@@ -639,7 +640,7 @@ $height-submenus: px-to-vw(550);
   overflow: auto;
   background-color: $c-primary;
   padding: px-to-vw(16) px-to-vw(42) px-to-vw(42);
-  transition: left 0.4s ease-in-out;
+  transition: left .6s cubic-bezier(0.83, 0, 0.17, 1);
 
   @include media-down(xxl) {
     width: 50%;
@@ -678,15 +679,14 @@ $height-submenus: px-to-vw(550);
 
   @include media-down(sm) {
     top: $s-header-height-mob;
-    padding: px-to-vw(16) px-to-vw(16) px-to-vw(64);
+    padding: px-to-vw(16) px-to-vw(16) px-to-vw(32);
   }
 }
 
 .header__nav-mobile__list {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - calc(16 * var(--fz)));
-  padding-bottom: px-to-vw(70);
+  height: calc(100vh - calc(69 * var(--fz)));
 }
 
 .header__nav-mobile__list-item {

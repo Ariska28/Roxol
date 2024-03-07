@@ -1,3 +1,31 @@
+.hero {
+  .splide__arrows {
+    position: absolute;
+    right: px-to-vw(52);
+    bottom: px-to-vw(38);
+
+    svg path {
+      stroke: $c-white;
+    }
+  }
+
+  .splide__arrow {
+    &:hover {
+      background-color: $c-white;
+
+      svg path {
+        stroke: $c-text-dark;
+      }
+    }
+  }
+
+  @include media-down(sm) {
+    .splide__arrows {
+      display: none;
+    }
+  }
+}
+
 .hero__container {
   @include container;
 
@@ -8,13 +36,6 @@
     margin-bottom: 0;
   }
 }
-
-// .hero__slider {
-//   @include media-down(sm) {
-//     margin-left: px-to-vw(-16);
-//     margin-right:px-to-vw(-16);
-//   }
-// }
 
 .hero__track  {
   border-radius: $s-border-radius;
@@ -33,6 +54,7 @@
     min-height: 100%;
     padding: px-to-vw(40) px-to-vw(16)  px-to-vw(74);
     overflow: visible;
+    justify-content: flex-start;
     height:  calc(100vh - 69 * var(--fz));
   }
 }
@@ -86,7 +108,11 @@
 }
 
 .hero__slider-btn-wr {
-  overflow: hidden
+  overflow: hidden;
+
+  @include media-down(sm) {
+    margin-top: auto;
+  }
 }
 
 .hero__slider-btn {
@@ -96,7 +122,6 @@
 
   @include media-down(sm) {
     width: 100%;
-    margin-top: auto;
 
     span {
       transform: translateX(0);

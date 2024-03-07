@@ -4,8 +4,12 @@
   margin-top: $s-space-desktop;
   margin-bottom: px-to-vw(60);
   text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 
   @include media-down(sm) {
+    display: block;
     margin-top: $s-space-mobile;
     margin-bottom: $s-space-mobile;
     text-align: left;
@@ -37,11 +41,13 @@
 .economy__media {
   width: px-to-vw(820);
   height: px-to-vw(680);
-  margin: auto;
 
   img {
     width: 100%;
     height: 100%;
+    margin-left: px-to-vw(-42);
+    margin-right: px-to-vw(-42);
+  
     object-fit: cover;
     border-radius: $s-border-radius;
   }
@@ -50,6 +56,11 @@
     width: 100%;
     height: px-to-vw(320);
     border-radius: $s-border-radius-mob;
+
+    img {
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 }
 

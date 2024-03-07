@@ -50,5 +50,30 @@
     font-size: px-to-vw(14);
     padding: px-to-vw(6) px-to-vw(12);
     border-radius: $s-border-radius-mob;
+
+    &:hover, 
+    &:focus,
+    &.is-active {
+      background-color: transparent;
+      border-color: $c-gray-line;
+    }
+
+    &--white-hover {
+      &:hover, 
+      &:focus,
+      &.is-active {
+        background-color: transparent;
+        border-color: $c-gray-line;
+      }
+    }
+
+    &--dark {
+      &:hover, 
+      &:focus,
+      &.is-active {
+        border-color: $c-text-dark;
+        color: $c-text-dark;
+      }
+    }
   }
 }

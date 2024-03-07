@@ -143,6 +143,7 @@
 .product__columns-main__title {
   @include title-3;
 
+  font-weight: 500;
   margin-bottom: px-to-vw(40);
 
   @include media-down(sm) {
@@ -303,6 +304,7 @@
   margin: px-to-vw(55) auto $s-space-desktop;
 
   @include media-down(sm) {
+    overflow: hidden;
     margin: px-to-vw(12) auto $s-space-mobile;
   }
 }
@@ -481,11 +483,18 @@
     background-color: transparent;
     padding: px-to-vw(21) px-to-vw(24) px-to-vw(27);
     margin-bottom: px-to-vw(40);
+    outline: none;
+    transition: border-color 0.2s linear;
 
     &::placeholder {
       @include btn-text;
 
       color: $c-text-gray;
+    }
+
+    &:hover,
+    &:focus {
+      border-color: $c-text-dark;
     }
   }
 

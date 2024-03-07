@@ -14,11 +14,16 @@
   padding: px-to-vw(10) px-to-vw(17);
   border-radius: px-to-vw(6);
   font-size: px-to-vw(18);
+  transition: border-color 0.2s ease-in, background-color 0.2s ease-in,color 0.2s ease-in;
 
   &--prev {
     svg {
       transform: rotate(90deg);
       margin-right: px-to-vw(8);
+      
+      path {
+        transition: stroke 0.2s ease-in-out;
+      }
     }
   }
 
@@ -26,6 +31,20 @@
     svg {
       transform: rotate(-90deg);
       margin-left: px-to-vw(8);
+
+      path {
+        transition: stroke 0.2s ease-in-out;
+      }
+    }
+  }
+
+  &:hover {
+    background-color:  $c-text-dark;
+    border-color: px-to-vw(1) solid  $c-text-dark;
+    color: $c-brown-2;
+
+    svg path {
+      stroke: $c-primary;
     }
   }
 
