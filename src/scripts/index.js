@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   header();
 
   (function(){
-    for(const node of document.getElementsByClassName('line-splitting')) { 
+    for(const node of document.querySelectorAll('[line-splitting]')) { 
       LineWrapper(node); 
     }
   })();

@@ -32,8 +32,16 @@
 
   width: 90%;
 
+  [data-title-line-wr] {
+    padding-bottom: px-to-vw(6);
+  }
+
   @include media-down(sm) {
     width: 100%;
+
+    [data-title-line-wr] {
+      padding-bottom: px-to-vw(2);
+    }
   }
 }
 

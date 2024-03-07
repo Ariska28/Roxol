@@ -3966,6 +3966,10 @@ ul {
   display: block;
 }
 
+.title-line[data-title] {
+  line-height: 60%;
+}
+
 .title-line [data-title-line-wr] {
   line-height: 100%;
 }
@@ -3992,6 +3996,10 @@ ul {
   line-height: 100%;
   display: block;
   overflow: hidden;
+}
+
+.title-line-wr[data-title] {
+  line-height: 60%;
 }
 
 .title-line-wr [data-title-line-wr] {
@@ -4036,8 +4044,49 @@ ul {
 }
 
 .title {
+  font-family: Int, Arial, sans-serif;
+  font-weight: 400;
+  font-size: calc(75 * var(--fz));
+  letter-spacing: -.06em;
   flex-wrap: wrap;
+  line-height: 100%;
   display: flex;
+}
+
+.title[data-title] {
+  line-height: 60%;
+}
+
+.title [data-title-line-wr] {
+  line-height: 100%;
+}
+
+.title [data-title-line] {
+  font-family: Int, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 100%;
+  font-size: calc(75 * var(--fz));
+  letter-spacing: -.06em;
+}
+
+@media (width <= 767px) {
+  .title, .title [data-title-line] {
+    font-size: calc(32 * var(--fz));
+  }
+
+  .title {
+    display: none;
+  }
+}
+
+.title--mobile {
+  display: none;
+}
+
+@media (width <= 767px) {
+  .title--mobile {
+    display: flex;
+  }
 }
 
 [data-title-line-wr] {
@@ -4542,6 +4591,10 @@ ul {
   transition: color .5s ease-in-out, left .5s ease-in-out;
 }
 
+.catalog-links__item-text[data-title] {
+  line-height: 60%;
+}
+
 .catalog-links__item-text [data-title-line-wr] {
   line-height: 100%;
 }
@@ -4801,6 +4854,10 @@ ul {
   letter-spacing: -.06em;
   margin-bottom: calc(52 * var(--fz));
   line-height: 100%;
+}
+
+.popular-purchase__title[data-title] {
+  line-height: 60%;
 }
 
 .popular-purchase__title [data-title-line-wr] {
@@ -5141,7 +5198,14 @@ ul {
   letter-spacing: -.06em;
   text-align: center;
   max-width: calc(1340 * var(--fz));
+  flex-wrap: wrap;
+  justify-content: center;
   line-height: 100%;
+  display: flex;
+}
+
+.industry-solutions__title[data-title] {
+  line-height: 60%;
 }
 
 .industry-solutions__title [data-title-line-wr] {
@@ -5163,6 +5227,17 @@ ul {
 
   .industry-solutions__title {
     text-align: left;
+    display: none;
+  }
+}
+
+.industry-solutions__title--mobile {
+  display: none;
+}
+
+@media (width <= 767px) {
+  .industry-solutions__title--mobile {
+    display: block;
   }
 }
 
@@ -5613,6 +5688,10 @@ ul {
   display: flex;
 }
 
+.ticker__group-line[data-title] {
+  line-height: 60%;
+}
+
 .ticker__group-line [data-title-line-wr] {
   line-height: 100%;
 }
@@ -5697,6 +5776,10 @@ ul {
   line-height: 100%;
 }
 
+.work-with-us__title[data-title] {
+  line-height: 60%;
+}
+
 .work-with-us__title [data-title-line-wr] {
   line-height: 100%;
 }
@@ -5753,6 +5836,10 @@ ul {
   margin-bottom: calc(60 * var(--fz));
   line-height: 100%;
   overflow: hidden;
+}
+
+.cients__title[data-title] {
+  line-height: 60%;
 }
 
 .cients__title [data-title-line-wr] {
@@ -6058,6 +6145,10 @@ ul {
   letter-spacing: -.06em;
   margin-bottom: calc(60 * var(--fz));
   line-height: 100%;
+}
+
+.company-news__title[data-title] {
+  line-height: 60%;
 }
 
 .company-news__title [data-title-line-wr] {
@@ -6428,9 +6519,19 @@ ul {
   .innovations__header-title, .innovations__header-title [data-title-line] {
     font-size: calc(38 * var(--fz));
   }
+}
 
+.innovations__header-title [data-title-line-wr] {
+  padding-bottom: calc(6 * var(--fz));
+}
+
+@media (width <= 767px) {
   .innovations__header-title {
     width: 100%;
+  }
+
+  .innovations__header-title [data-title-line-wr] {
+    padding-bottom: calc(2 * var(--fz));
   }
 }
 
@@ -6628,6 +6729,10 @@ ul {
   letter-spacing: -.06em;
   margin-bottom: calc(60 * var(--fz));
   line-height: 100%;
+}
+
+.company-history__title[data-title] {
+  line-height: 60%;
 }
 
 .company-history__title [data-title-line-wr] {
@@ -6881,6 +6986,10 @@ ul {
   line-height: 100%;
 }
 
+.why-work__title[data-title] {
+  line-height: 60%;
+}
+
 .why-work__title [data-title-line-wr] {
   line-height: 100%;
 }
@@ -7015,6 +7124,10 @@ ul {
   letter-spacing: -.06em;
   max-width: calc(664 * var(--fz));
   line-height: 100%;
+}
+
+.map__title[data-title] {
+  line-height: 60%;
 }
 
 .map__title [data-title-line-wr] {
@@ -9308,8 +9421,11 @@ ul {
   font-size: calc(75 * var(--fz));
   letter-spacing: -.06em;
   margin-bottom: calc(60 * var(--fz));
-  font-size: 0;
   line-height: 100%;
+}
+
+.feedback__title[data-title] {
+  line-height: 60%;
 }
 
 .feedback__title [data-title-line-wr] {
@@ -9742,8 +9858,11 @@ ul {
   color: #fff;
   margin-bottom: calc(60 * var(--fz));
   width: 100%;
-  font-size: 0;
   line-height: 100%;
+}
+
+.application__title[data-title] {
+  line-height: 60%;
 }
 
 .application__title [data-title-line-wr] {
@@ -11138,7 +11257,7 @@ ul {
   }
 }
 
-.industry__title span {
+.industry__title-tooltip {
   font-family: Int, Arial, sans-serif;
   font-weight: 500;
   font-size: calc(20 * var(--fz));
@@ -11150,7 +11269,7 @@ ul {
 }
 
 @media (width <= 767px) {
-  .industry__title span {
+  .industry__title-tooltip {
     font-size: calc(14 * var(--fz));
     letter-spacing: -.02em;
   }
@@ -11163,6 +11282,10 @@ ul {
   letter-spacing: -.06em;
   max-width: 40%;
   line-height: 100%;
+}
+
+.industry__title--h2[data-title] {
+  line-height: 60%;
 }
 
 .industry__title--h2 [data-title-line-wr] {
@@ -11654,6 +11777,10 @@ ul {
   line-height: 100%;
 }
 
+.economy__title[data-title] {
+  line-height: 60%;
+}
+
 .economy__title [data-title-line-wr] {
   line-height: 100%;
 }
@@ -11738,6 +11865,10 @@ ul {
   max-width: calc(720 * var(--fz));
   margin-bottom: calc(60 * var(--fz));
   line-height: 100%;
+}
+
+.producing-producrs__title[data-title] {
+  line-height: 60%;
 }
 
 .producing-producrs__title [data-title-line-wr] {
@@ -11844,6 +11975,10 @@ ul {
   letter-spacing: -.06em;
   margin-bottom: calc(60 * var(--fz));
   line-height: 100%;
+}
+
+.purchases__title[data-title] {
+  line-height: 60%;
 }
 
 .purchases__title [data-title-line-wr] {
@@ -12263,6 +12398,10 @@ ul {
   line-height: 100%;
 }
 
+.for-your-brand__title[data-title] {
+  line-height: 60%;
+}
+
 .for-your-brand__title [data-title-line-wr] {
   line-height: 100%;
 }
@@ -12492,6 +12631,10 @@ ul {
   max-width: calc(1342 * var(--fz));
   margin: 0 auto calc(40 * var(--fz));
   line-height: 100%;
+}
+
+.contract__content-title[data-title] {
+  line-height: 60%;
 }
 
 .contract__content-title [data-title-line-wr] {
@@ -12827,6 +12970,10 @@ ul {
   max-width: calc(720 * var(--fz));
   margin-bottom: calc(60 * var(--fz));
   line-height: 100%;
+}
+
+.packaging__title[data-title] {
+  line-height: 60%;
 }
 
 .packaging__title [data-title-line-wr] {

@@ -131,10 +131,10 @@ export function appearAnimations() {
           trigger: titleContainer,
           start: "top 90%",
         }, 
-        duration: 0.6,
-        y: 30,
+        duration: 0.7,
+        y: 60,
         opacity: 0,
-        stagger: 0.2,
+        stagger: 0.1,
         ease: "power1.inOut",
       })
     }

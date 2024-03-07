@@ -15,7 +15,7 @@
   font-size: px-to-vw(96);
   line-height: 90%;
   letter-spacing: -.06em;
-
+  
   [data-title-line] {
     font-family: $font-base;
     font-weight: 500;
@@ -39,6 +39,10 @@
   font-size: px-to-vw(75);
   line-height: 100%;
   letter-spacing: -.06em;
+
+  &[data-title] {
+    line-height: 60%;
+  }
 
   [data-title-line-wr] {
     line-height: 100%;
@@ -67,6 +71,7 @@
   font-size: px-to-vw(40);
   line-height: 100%;
   letter-spacing: -.06em;
+
 
   [data-title-line] {
     font-family: $font-base;

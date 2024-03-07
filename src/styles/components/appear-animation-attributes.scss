@@ -2,7 +2,22 @@
 .title {
   display: flex;
   flex-wrap: wrap;
+
+  @include title-2;
+
+  @include media-down(sm) {
+    display: none;
+  }
+
+  &--mobile {
+    display: none;
+
+    @include media-down(sm) {
+      display: flex;
+    }
+  }
  }
+
 
  [data-title-line-wr] {
   display: inline-block;

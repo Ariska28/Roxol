@@ -593,7 +593,7 @@ var _linesWrapper = require("./components/linesWrapper");
 document.addEventListener("DOMContentLoaded", ()=>{
     (0, _header.header)();
     (function() {
-        for (const node of document.getElementsByClassName("line-splitting"))(0, _linesWrapper.LineWrapper)(node);
+        for (const node of document.querySelectorAll("[line-splitting]"))(0, _linesWrapper.LineWrapper)(node);
     })();
     (0, _sliders.heroSplider)("[data-hero-slider]");
     (0, _sliders.mobSplider)("[data-mobile-slider]");
@@ -10944,10 +10944,10 @@ function appearAnimations() {
                 trigger: titleContainer,
                 start: "top 90%"
             },
-            duration: 0.6,
-            y: 30,
+            duration: 0.7,
+            y: 60,
             opacity: 0,
-            stagger: 0.2,
+            stagger: 0.1,
             ease: "power1.inOut"
         });
         if (descriptor) (0, _gsap.gsap).from(descriptor, {
@@ -11261,7 +11261,7 @@ function LineWrapper(node) {
             if (arrayOfWordNodes[index + 1]) nodeTop = arrayOfWordNodes[index + 1].offsetTop;
             else nodeTop = -1;
         }
-        finalHTML += " " + (index !== 0 && currLineTop !== nodeTop ? "</span></span></span> " : " ") + (index === 0 || currLineTop !== nodeTop ? '<span class="line"><span class="words"><span class="word"> ' : " ") + node.innerHTML;
+        finalHTML += " " + (index !== 0 && currLineTop !== nodeTop ? "</span></span></span> " : " ") + (index === 0 || currLineTop !== nodeTop ? "<span data-title-line-wr><span data-title-line> " : " ") + node.innerHTML;
         currLineTop = nodeTop;
     });
     node.innerHTML = finalHTML.trim();

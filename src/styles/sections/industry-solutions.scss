@@ -47,11 +47,23 @@
 .industry-solutions__title {
   @include title-2;
 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   text-align: center;
   max-width: px-to-vw(1340);
 
   @include media-down(sm) {
     text-align: left;
+    display: none;
+  }
+
+  &--mobile {
+    display: none;
+
+    @include media-down(sm) {
+      display: block;
+    }
   }
 }
 

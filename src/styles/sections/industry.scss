@@ -24,7 +24,7 @@
   padding-right: px-to-vw(41);
   position: relative;
 
-  span {
+  &-tooltip {
     @include description;
 
     position: absolute;

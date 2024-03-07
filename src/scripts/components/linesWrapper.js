@@ -19,7 +19,7 @@ export function LineWrapper(node) {
 		}
 		finalHTML += ' '
 		+ ( index !== 0 && (currLineTop !== nodeTop) ? '</span></span></span> ' : ' ' )
-		+ ( index === 0 || (currLineTop !== nodeTop) ? '<span class="line"><span class="words"><span class="word"> ' : ' ' )
+		+ ( index === 0 || (currLineTop !== nodeTop) ? '<span data-title-line-wr><span data-title-line> ' : ' ' )
 		+ node.innerHTML;
 		currLineTop = nodeTop;
 	});
